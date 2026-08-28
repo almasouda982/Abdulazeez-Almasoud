@@ -8,7 +8,7 @@
     <title>تواصل معنا</title>
 </head>
 <body>
-    <header>
+<header style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background-color: #f8f9fa;">
         <h1>تواصل معنا</h1>
         <nav>
             <a href="../index/index.html">الصفحة الرئيسية</a>
@@ -16,32 +16,32 @@
     </header>
 
     <main>
-        <section>
+        <section st class="p-5 myclass my-5 border bg-secondary">
             <h2>نحن هنا من أجلك</h2>
             <p>إذا كان لديك أي استفسار أو اقتراح، لا تتردد في التواصل معنا عبر النموذج التالي:</p>
         </section>
 
-        <section>
-            <h3>نموذج التواصل</h3>
+        <section class="card">
+            <h3 class="mb-4">نموذج التواصل</h3>
             <form>
                 <label for="name">الاسم الكامل:</label><br>
-                <input type="text" id="name" name="name" required><br><br>
+                <input class = "form-control" type="text" id="name" name="name" required><br><br>
 
                 <label for="email">البريد الإلكتروني:</label><br>
-                <input type="email" id="email" name="email" required><br><br>
+                <input class = "form-control" type="email" id="email" name="email" required><br><br>
 
                 <label for="subject">الموضوع:</label><br>
-                <input type="text" id="subject" name="subject"><br><br>
+                <input class = "form-control" type="text" id="subject" name="subject"><br><br>
 
                 <label for="message">الرسالة:</label><br>
-                <textarea id="message" name="message" rows="5" cols="40" required></textarea><br><br>
+                <textarea class = "form-control" id="message" name="message" rows="5" cols="40" required></textarea><br><br>
 
-                <button type="submit">إرسال الرسالة</button>
+                <button type="submit" class="btn btn-outline-success">إرسال الرسالة</button>
             </form>
         </section>
 
-        <section>
-            <h3>معلومات التواصل</h3>
+        <section class="card border mt-3">
+            <h3 class="mt-3">معلومات التواصل</h3>
             <p>📧 البريد الإلكتروني: contact@academy.com</p>
             <p>📞 الهاتف: +966 123 456 789</p>
             <p>📍 العنوان: الرياض، المملكة العربية السعودية</p>
@@ -49,7 +49,7 @@
     </main>
 
     <footer>
-        <p>© 2025 أكاديمية البرمجة - جميع الحقوق محفوظة</p>
+        <p class="navbar navbar-expand-sm bg-light justify-content-center">© 2025 أكاديمية البرمجة - جميع الحقوق محفوظة</p>
     </footer>
 </body>
 </html>
