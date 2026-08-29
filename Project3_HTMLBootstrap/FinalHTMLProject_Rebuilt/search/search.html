@@ -7,31 +7,34 @@
     <title>بحث</title>
 </head>
 <body>
-    <header>
-        <h1>ابحث في الموقع</h1>
-        <nav><a href="../index/index.html">الصفحة الرئيسية</a></nav>
-    </header>
+<header class="navbar navbar-expand bg-dark navbar-dark px-4 py-3 shadow-sm d-flex justify-content-between align-items-center">
+    <h1 class="h3 mb-0 text-white fw-bold">ابحث في الموقع</h1>
+    <nav><a class="btn btn-primary" href="../index/index.html">الصفحة الرئيسية</a></nav>
+</header>
 
-    <main>
-        <section>
-            <form>
-                <input type="text" placeholder="اكتب كلمة البحث...">
-                <button>بحث</button>
-            </form>
-        </section>
+<main class="container my-5 text-end dir-rtl">
+    <section class="card p-4 shadow-sm mb-4 border-0">
+        <form class="d-flex gap-2 align-items-center">
+            <div class="form-floating flex-grow-1 text-end" dir="rtl">
+                <input type="text" class="form-control text-end" id="searchQuery" name="query" placeholder="اكتب كلمة البحث..." dir="rtl">
+                <label for="searchQuery" class="text-end pe-0" style="right: 0; left: auto;">اكتب كلمة البحث...</label>
+            </div>
+            <button type="submit" class="btn btn-primary px-4 py-3 fw-bold">بحث</button>
+        </form>
+    </section>
 
-        <section>
-            <h2>نتائج البحث:</h2>
-            <ul>
-                <li><a href="#">نتيجة 1: تعلم HTML</a></li>
-                <li><a href="#">نتيجة 2: أفضل كورسات CSS</a></li>
-                <li><a href="#">نتيجة 3: مشاريع JavaScript</a></li>
-            </ul>
-        </section>
-    </main>
+    <section class="card p-4 shadow-sm border-0">
+        <h2 class="h4 fw-bold mb-4 border-bottom pb-2">نتائج البحث:</h2>
+        <ul class="list-group list-group-flush ps-0">
+            <li class="list-group-item bg-transparent"><a href="#" class="text-decoration-none fw-bold">نتيجة 1: تعلم HTML</a></li>
+            <li class="list-group-item bg-transparent"><a href="#" class="text-decoration-none fw-bold">نتيجة 2: أفضل كورسات CSS</a></li>
+            <li class="list-group-item bg-transparent"><a href="#" class="text-decoration-none fw-bold">نتيجة 3: مشاريع JavaScript</a></li>
+        </ul>
+    </section>
+</main>
 
-    <footer>
-        <p>© 2025 نتائج البحث</p>
-    </footer>
+<footer class="bg-dark text-white text-center py-3 mt-5">
+    <p class="mb-0">© 2025 نتائج البحث</p>
+</footer>
 </body>
 </html>

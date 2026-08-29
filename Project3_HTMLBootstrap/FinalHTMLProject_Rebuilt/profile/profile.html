@@ -7,36 +7,46 @@
     <title>الملف الشخصي</title>
 </head>
 <body>
-    <header>
-        <h1>الملف الشخصي</h1>
-        <nav><a href="../index/index.html">الصفحة الرئيسية</a></nav>
-    </header>
+<header class="navbar navbar-expand bg-dark navbar-dark px-4 py-3 shadow-sm d-flex justify-content-between align-items-center">
+    <h1 class="h3 mb-0 text-white fw-bold">الملف الشخصي</h1>
+    <nav>
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="btn btn-primary" href="../index/index.html">الصفحة الرئيسية</a>
+            </li>
+        </ul>
+    </nav>
+</header>
 
-    <main>
-        <section class="card">
-            <h2>بيانات المستخدم</h2>
-            <img src="https://static.vecteezy.com/system/resources/thumbnails/036/594/092/small/man-empty-avatar-photo-placeholder-for-social-networks-resumes-forums-and-dating-sites-male-and-female-no-photo-images-for-unfilled-user-profile-free-vector.jpg" width="300" alt="صورة المستخدم">
-            <p>الاسم: عبدالعزيز المسعود</p>
-            <p>البريد الإلكتروني: AzizMohammed9822@gmail.com</p>
-            <p>البلد: السعودية</p>
-        </section>
+<main class="container my-5 text-end dir-rtl">
+    <section class="card p-4 shadow-sm mb-4 border-0">
+        <h2 class="h4 fw-bold mb-4 border-bottom pb-2">بيانات المستخدم</h2>
+        <div class="d-flex flex-column align-items-start mb-3">
+            <img src="https://static.vecteezy.com/system/resources/thumbnails/036/594/092/small/man-empty-avatar-photo-placeholder-for-social-networks-resumes-forums-and-dating-sites-male-and-female-no-photo-images-for-unfilled-user-profile-free-vector.jpg" class="rounded-circle shadow-sm mb-3" width="150" height="150" style="object-fit: cover;" alt="صورة المستخدم">
+        </div>
+        <div class="bg-light p-3 rounded">
+            <p class="mb-2"><strong>الاسم:</strong> عبدالعزيز المسعود</p>
+            <p class="mb-2"><strong>البريد الإلكتروني:</strong> AzizMohammed9822@gmail.com</p>
+            <p class="mb-0"><strong>البلد:</strong> السعودية</p>
+        </div>
+    </section>
 
-        <section>
-            <h2>تحديث بياناتك</h2>
-            <form>
-                <label>الاسم:</label><br>
-                <input class = "form-control" type="text"><br><br>
-                <label>البريد الإلكتروني:</label><br>
-                <input class = "form-control" type="email"><br><br>
-                <label>كلمة المرور الجديدة:</label><br>
-                <input class = "form-control" type="password"><br><br>
-                <button class="btn btn-outline-success mb-3" >حفظ التغييرات</button>
-            </form>
-        </section>
-    </main>
+    <section class="card p-4 shadow-sm border-0">
+        <h2 class="h4 fw-bold mb-4 border-bottom pb-2">تحديث بياناتك</h2>
+        <form>
+            <label class="form-label fw-bold">الاسم:</label><br>
+            <input class="form-control" type="text"><br><br>
+            <label class="form-label fw-bold">البريد الإلكتروني:</label><br>
+            <input class="form-control" type="email"><br><br>
+            <label class="form-label fw-bold">كلمة المرور الجديدة:</label><br>
+            <input class="form-control" type="password"><br><br>
+            <button type="submit" class="btn btn-primary w-100 py-2 mb-3">حفظ التغييرات</button>
+        </form>
+    </section>
+</main>
 
-    <footer class="navbar navbar-expand-sm bg-light justify-content-center">
-        <p>© 2026 أكاديمية البرمجة</p>
-    </footer>
+<footer class="bg-dark text-white text-center py-3 mt-5">
+    <p class="mb-0">© 2026 أكاديمية البرمجة</p>
+</footer>
 </body>
 </html>

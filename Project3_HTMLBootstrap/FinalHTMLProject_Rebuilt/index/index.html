@@ -7,71 +7,65 @@
     <title>مشروع HTML النهائي المتكامل</title>
 </head>
 <body>
-<header style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; background-color: #f8f9fa;">
-  <h1>منصة البرمجة الاحترافية</h1>
-  
-  <nav>
-    <ul style="display: flex; list-style: none; gap: 1rem; margin: 0; padding: 0;">
-      <li><a href="../courses/courses.html">الدورات</a></li>
-      <li><a href="../dashboard/dashboard.html">لوحة التحكم</a></li>
-      <li><a href="../profile/profile.html">الملف الشخصي</a></li>
-      <li><a href="../settings/settings.html">الإعدادات</a></li>
-      <li><a href="../subscribe/subscribe.html">الاشتراك</a></li>
-      <li><a href="../search/search.html">بحث</a></li>
-      <li><a href="../contact/contact.html">تواصل معنا</a></li>
-    </ul>
-  </nav>
+<header class="navbar navbar-expand-lg bg-dark navbar-dark px-4 py-3 shadow-sm d-flex justify-content-between align-items-center">
+    <h1 class="h3 mb-0 text-white fw-bold">منصة البرمجة الاحترافية</h1>
+    <nav>
+        <ul class="nav gap-2">
+            <li class="nav-item"><a class="btn btn-primary" href="../courses/courses.html">الدورات</a></li>
+            <li class="nav-item"><a class="btn btn-primary" href="../dashboard/dashboard.html">لوحة التحكم</a></li>
+            <li class="nav-item"><a class="btn btn-primary" href="../profile/profile.html">الملف الشخصي</a></li>
+            <li class="nav-item"><a class="btn btn-primary" href="../settings/settings.html">الإعدادات</a></li>
+            <li class="nav-item"><a class="btn btn-primary" href="../subscribe/subscribe.html">الاشتراك</a></li>
+            <li class="nav-item"><a class="btn btn-primary" href="../search/search.html">بحث</a></li>
+            <li class="nav-item"><a class="btn btn-primary" href="../contact/contact.html">تواصل معنا</a></li>
+        </ul>
+    </nav>
 </header>
 
-    <main>
-        <section st class="p-5 myclass my-5 border bg-secondary">
-            <h2>مقدمة عن المنصة</h2>
-            <p>تهدف هذه المنصة إلى تعليم HTML بأسلوب عملي واحترافي عبر 20 يومًا متتاليًا.</p>
-        </section>
+<main class="container my-5 text-end dir-rtl">
+    <section class="p-4 my-4 border rounded bg-light text-dark shadow-sm">
+        <h2 class="h4 fw-bold mb-2">مقدمة عن المنصة</h2>
+        <p class="mb-0 text-muted">تهدف هذه المنصة إلى تعليم HTML بأسلوب عملي واحترافي عبر 20 يومًا متتاليًا.</p>
+    </section>
 
-        <section st class="p-5 myclass my-5 border bg-secondary">
-            <h2>مقالات مميزة</h2>
-            <article>
-                <h3>لماذا HTML هي الأساس؟</h3>
-                <p>HTML هي اللغة الأساسية لبناء صفحات الويب. بدونها، لا يمكنك عرض أي محتوى على المتصفح.</p>
-            </article>
-            <article>
-                <h3>نصائح لتعلم HTML بسرعة</h3>
-                <p>ابدأ بالمشاريع العملية، واحرص على كتابة الكود بنفسك بدلًا من النسخ واللصق.</p>
-            </article>
-        </section>
+    <section class="card p-4 shadow-sm mb-4 border-0">
+        <h2 class="h4 fw-bold mb-4 border-bottom pb-2">مقالات مميزة</h2>
+        <article class="alert alert-info border-start border-info border-4 shadow-sm mb-3">
+            <h3 class="alert-heading h5 fw-bold mb-2">لماذا HTML هي الأساس؟</h3>
+            <p class="mb-0 text-muted">HTML هي اللغة الأساسية لبناء صفحات الويب. بدونها، لا يمكنك عرض أي محتوى على المتصفح.</p>
+        </article>
+        <article class="alert alert-success border-start border-success border-4 shadow-sm mb-0">
+            <h3 class="alert-heading h5 fw-bold mb-2">نصائح لتعلم HTML بسرعة</h3>
+            <p class="mb-0 text-muted">ابدأ بالمشاريع العملية، واحرص على كتابة الكود بنفسك بدلًا من النسخ واللصق.</p>
+        </article>
+    </section>
 
-<section  class="p-5 myclass my-5 border bg-secondary">
-    <h2>معلومات إضافية</h2>
-    
-    <div class="d-flex flex-column gap-3" style="max-width: 500px; ">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHZLMY_VBzwm9Fm0KOd8p79ehxJv42dW910sKAvxFoKBquEH7PyZoCEnWs&s=10" class="w-100 rounded" style="height: 236px; object-fit: cover;" alt="صورة معلوماتية">
-        <video class="w-100 rounded" style="height: 236px; object-fit: cover;" controls>
-            <source src="../videos/whatshtml.mp4" type="video/mp4">
-        </video>
+    <section class="card p-4 shadow-sm mb-4 border-0">
+        <h2 class="h4 fw-bold mb-4 border-bottom pb-2">معلومات إضافية</h2>
+        <div class="d-flex flex-column gap-3" style="max-width: 500px;">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHZLMY_VBzwm9Fm0KOd8p79ehxJv42dW910sKAvxFoKBquEH7PyZoCEnWs&s=10" class="w-100 rounded shadow-sm" style="height: 236px; object-fit: cover;" alt="صورة معلوماتية">
+            <video class="w-100 rounded shadow-sm" style="height: 236px; object-fit: cover;" controls>
+                <source src="../videos/whatshtml.mp4" type="video/mp4">
+            </video>
+        </div>
+    </section>
 
-    </div>
-</section>
+    <section class="card p-4 shadow-sm border-0">
+        <h2 class="h4 fw-bold mb-4 border-bottom pb-2">نموذج تواصل سريع</h2>
+        <form>
+            <label class="form-label fw-bold">الاسم:</label><br>
+            <input class="form-control" type="text"><br><br>
+            <label class="form-label fw-bold">البريد:</label><br>
+            <input class="form-control" type="email"><br><br>
+            <label class="form-label fw-bold">رسالتك:</label><br>
+            <textarea class="form-control" rows="4"></textarea><br><br>
+            <button type="submit" class="btn btn-primary w-100 py-2">إرسال</button>
+        </form>
+    </section>
+</main>
 
-        <section>
-            <h2>نموذج تواصل سريع</h2>
-            <form>
-                <label>الاسم:</label><br>
-                <input class = "form-control" type="text"><br><br>
-                <label>البريد:</label><br>
-                <input class = "form-control" type="email"><br><br>
-                <label>رسالتك:</label><br>
-                <textarea class = "form-control"></textarea><br><br>
-                <button type="submit" class="btn btn-outline-success">إرسال</button>
-            </form>
-        </section>
-    </main>
-
-    
-
-
-    <footer class="navbar navbar-expand-sm bg-light justify-content-center">
-            <p>© 2025 جميع الحقوق محفوظة - أكاديمية البرمجة</p>
-        </footer>
+<footer class="bg-dark text-white text-center py-3 mt-5">
+    <p class="mb-0">© 2025 جميع الحقوق محفوظة - أكاديمية البرمجة</p>
+</footer>
 </body>
 </html>

@@ -7,33 +7,43 @@
     <title>اشترك الآن</title>
 </head>
 <body>
-    <header>
-        <h1>اشترك في المنصة</h1>
-        <nav><a href="../index/index.html">الصفحة الرئيسية</a></nav>
-    </header>
+<header class="navbar navbar-expand bg-dark navbar-dark px-4 py-3 shadow-sm d-flex justify-content-between align-items-center">
+    <h1 class="h3 mb-0 text-white fw-bold">اشترك في المنصة</h1>
+    <nav>
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="btn btn-primary mt-3 mb-3" href="../index/index.html">الصفحة الرئيسية</a>
+            </li>
+        </ul>
+    </nav>
+</header>
 
-    <main>
-        <section>
-            <form>
-                <label>الاسم الكامل:</label><br>
-                <input type="text" placeholder="مثال: أحمد علي"><br><br>
+<main class="container my-5 text-end dir-rtl">
+    <section class="card p-4 shadow-sm border-0">
+        <form>
+            <div class="form-floating mb-3 text-end" dir="rtl">
+                <input class="form-control text-end" type="text" id="name" name="name" placeholder="مثال: أحمد علي" dir="rtl">
+                <label for="name" class="text-end pe-0" style="right: 0; left: auto;">الاسم الكامل:</label>
+            </div>
 
-                <label>البريد الإلكتروني:</label><br>
-                <input type="email" placeholder="you@example.com"><br><br>
+            <div class="form-floating mb-3 text-end" dir="rtl">
+                <input class="form-control text-end" type="email" id="email" name="email" placeholder="you@example.com" dir="rtl">
+                <label for="email" class="text-end pe-0" style="right: 0; left: auto;">البريد الإلكتروني:</label>
+            </div>
 
-                <label>كلمة المرور:</label><br>
-                <input type="password"><br><br>
+            <label class="form-label fw-bold">كلمة المرور:</label><br>
+            <input class="form-control" type="password" dir="rtl"><br><br>
 
-                <label>تأكيد كلمة المرور:</label><br>
-                <input type="password"><br><br>
+            <label class="form-label fw-bold">تأكيد كلمة المرور:</label><br>
+            <input class="form-control" type="password" dir="rtl"><br><br>
 
-                <button>اشترك الآن</button>
-            </form>
-        </section>
-    </main>
+            <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">اشترك الآن</button>
+        </form>
+    </section>
+</main>
 
-    <footer>
-        <p>© 2025 الاشتراك في المنصة</p>
-    </footer>
+<footer class="bg-dark text-white text-center py-3 mt-5">
+    <p class="mb-0">© 2026 الاشتراك في المنصة</p>
+</footer>
 </body>
 </html>

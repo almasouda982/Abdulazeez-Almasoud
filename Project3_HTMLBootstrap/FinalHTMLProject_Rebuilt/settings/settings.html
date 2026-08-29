@@ -7,36 +7,36 @@
     <title>الإعدادات</title>
 </head>
 <body>
-    <header>
-        <h1>إعدادات الحساب</h1>
-        <nav><a href="../index/index.html">الصفحة الرئيسية</a></nav>
-    </header>
+<header class="navbar navbar-expand bg-dark navbar-dark px-4 py-3 shadow-sm d-flex justify-content-between align-items-center">
+    <h1 class="h3 mb-0 text-white fw-bold">إعدادات الحساب</h1>
+    <nav><a class="btn btn-primary" href="../index/index.html">الصفحة الرئيسية</a></nav>
+</header>
 
-    <main>
-        <section>
-            <h2>تفضيلات المستخدم</h2>
-            <form>
-                <label>اللغة المفضلة:</label><br>
-                <select>
-                    <option>العربية</option>
-                    <option>English</option>
-                </select><br><br>
+<main class="container my-5 text-end dir-rtl">
+    <section class="card p-4 shadow-sm border-0">
+        <h2 class="h4 fw-bold mb-4 border-bottom pb-2">تفضيلات المستخدم</h2>
+        <form>
+            <label class="form-label fw-bold">اللغة المفضلة:</label><br>
+            <select class="form-select">
+                <option>العربية</option>
+                <option>English</option>
+            </select><br><br>
 
-                <label>تفعيل الإشعارات:</label><br>
-                <input type="checkbox" checked> بريد إلكتروني<br>
-                <input type="checkbox"> رسائل نصية<br><br>
+            <label class="form-label fw-bold">تفعيل الإشعارات:</label><br>
+            <input class="form-check-input ms-1" type="checkbox" checked> بريد إلكتروني<br>
+            <input class="form-check-input ms-1" type="checkbox"> رسائل نصية<br><br>
 
-                <label>اختيار المظهر:</label><br>
-                <input type="radio" name="theme" checked> فاتح
-                <input type="radio" name="theme"> داكن<br><br>
+            <label class="form-label fw-bold">اختيار المظهر:</label><br>
+            <input class="form-check-input ms-1" type="radio" name="theme" checked> فاتح
+            <input class="form-check-input me-3 ms-1" type="radio" name="theme"> داكن<br><br>
 
-                <button>حفظ الإعدادات</button>
-            </form>
-        </section>
-    </main>
+            <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">حفظ الإعدادات</button>
+        </form>
+    </section>
+</main>
 
-    <footer>
-        <p>© 2025 إعدادات الحساب - جميع الحقوق محفوظة</p>
-    </footer>
+<footer class="bg-dark text-white text-center py-3 mt-5">
+    <p class="mb-0">© 2025 إعدادات الحساب - جميع الحقوق محفوظة</p>
+</footer>
 </body>
 </html>
