@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+          <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+
+
+  </style>
+</head>
+<body>
+<table id="Studentstable">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Grade</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+
+
+
+<script>
+
+    const students = [
+    { name: "Ali", grade: 90 },
+    { name: "Sara", grade: 85 },
+    { name: "Omar", grade: 78 }
+    ];
+
+    const Tablebody = document.querySelector("#Studentstable tbody")
+
+    for (let i = 0; i < students.length; i++){
+        const row = document.createElement("tr")
+
+        row.innerHTML = `
+        
+        <td>${students[i].name}</td>
+        <td>${students[i].grade}</td>        
+        `
+        Tablebody.appendChild(row)
+
+    }
+
+</script>
+
+</body>
+</html>
