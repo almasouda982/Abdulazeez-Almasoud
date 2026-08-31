@@ -23,11 +23,11 @@
   </style>
 </head>
 <body>
-<table id="Studentstable">
+<table id="Userstable">
     <thead>
         <tr>
             <th>Name</th>
-            <th>Grade</th>
+            <th>Email</th>
         </tr>
     </thead>
     <tbody>
@@ -39,24 +39,25 @@
 
 <script>
 
-    const students = [
-    { name: "Ali", grade: 90 },
-    { name: "Sara", grade: 85 },
-    { name: "Omar", grade: 78 }
+    const users = [
+        { name: "Ali Ahmed", email: "ali@example.com" },
+        { name: "Sara Mostafa", email: "sara@example.com" },
+        { name: "Omar Khalid", email: "omar@example.com" }
     ];
 
-    const Tablebody = document.querySelector("#Studentstable tbody")
+    const Tablebody = document.querySelector("#Userstable tbody")
 
-    students.forEach(student => {
+    for (let i = 0; i < users.length; i++){
+        const row = document.createElement("tr")
 
-      const row = document.createElement("tr")
         row.innerHTML = `
         
-        <td>${student.name}</td>
-        <td>${student.grade}</td>        
+        <td>${users[i].name}</td>
+        <td>${users[i].email}</td>        
         `
         Tablebody.appendChild(row)
-    });
+
+    }
 
 </script>
 
