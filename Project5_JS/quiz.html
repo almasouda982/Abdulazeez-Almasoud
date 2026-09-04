@@ -3,33 +3,94 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>compute_PCT</title>
+  <title>Quiz</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 </head>
 <body class="bg-light">
   <div class="container py-4" style="max-width: 480px;">
       <a href="main.html" class="btn btn-link px-0">&larr; Back</a>
-    <h2>Quiz</h2>
-    <p class="text-secondary">pct = (mark / fullMark) × 100</p>
-<!--
-    <div class="mb-3">
-      <label class="form-label">Student name</label>
-      <input id="name" class="form-control" value="Sara" />
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Mark</label>
-      <input id="mark" type="number" class="form-control" value="85" />
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Full mark</label>
-      <input id="full" type="number" class="form-control" value="100" />
-    </div>
-    <button id="btn" class="btn btn-primary">Compute Percent</button>
-    <div id="out" class="alert alert-info mt-3 d-none"></div> -->
-  </div>
+    <h2 class="text-center">Quiz</h2>
+    <p class="text-secondary text-center">pct = (mark / fullMark) × 100</p>
 
+
+  <div class="container mt-3">
+
+
+  <form class="card shadow-sm p-4 mx-auto" style="max-width: 480px;">
+    <div class="mb-3">
+      <label for="question1" class="form-label">1) 2 + 2 = ?</label>
+      <select class="form-select" id="question1">
+        <option value="chose1">-- choose --</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="question2" class="form-label">2) Python file ends with?</label>
+      <select class="form-select" id="question2">
+        <option value="chose2">-- choose --</option>
+        <option value=".py">.py</option>
+        <option value=".js">.js</option>
+        <option value=".html">.html</option>
+      </select>
+    </div>
+    <div class="mb-3">
+      <label for="question3" class="form-label">3) 10 / 2 = ?</label>
+      <select class="form-select" id="question3">
+        <option value="chose3">-- choose --</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="10">10</option>
+      </select>
+    </div>
+    <button type="button" class="btn btn-primary" onclick="calculate()">Calculate</button>
+    <div id="out" class="alert alert-info mt-3 d-none"></div>
+
+</form>
+ 
   <script>
+    function calculate()
+    {
+        const q1 = document.getElementById("question1").value;
+        const q2 = document.getElementById("question2").value;
+        const q3 = document.getElementById("question3").value;
+        
+        let score = 0;
+        if(q1 === '4') score++;
+        if(q2 === '.py') score++;
+        if(q3 === '5') score++;
 
+        if(q1 === 'chose1' || q2 === 'chose2' || q3 === 'chose3'){
+            alert("Please answer all questions before submitting.");
+            return;
+        }
+
+        const out = document.getElementById('out');
+
+        out.classList.remove('alert-success', 'alert-warning', 'alert-danger');
+
+        if(score >= 3){
+            out.classList.add('alert-success');
+            out.textContent = `Your score: ${score}/3 greate job!`;
+        }
+        else if(score >= 2){
+            out.classList.add('alert-success');
+            out.textContent = `Your score: ${score}/3 good job!`;
+        }
+        else if(score >= 1){
+            out.classList.add('alert-warning');
+            out.textContent = `Your score: ${score}/3 you can do better!`;
+        }
+        else{
+            out.classList.add('alert-danger');
+            out.textContent = `Your score: ${score}/3 you need to study more!`;
+        }
+
+        out.classList.remove('d-none');
+
+
+    }
   </script>
 </body>
 </html>

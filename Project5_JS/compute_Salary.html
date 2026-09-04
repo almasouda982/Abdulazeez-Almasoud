@@ -9,22 +9,25 @@
 <body class="bg-light">
   <div class="container py-4" style="max-width: 480px;">
  <a href="main.html" class="btn btn-link px-0">&larr; Back</a>
-    <h2>Compute Salary</h2>
-    <p class="text-secondary">annual = monthly × 12</p>
+    <h2 class="text-center">Compute Salary</h2>
+    <p class="text-secondary text-center">annual = monthly × 12</p>
 
-    <div class="mb-3">
-      <label class="form-label">Employee name</label>
-      <input id="name" class="form-control" value="Omar" />
+    <form class="card shadow-sm p-4 mx-auto" style="max-width: 480px;">
+      <div class="mb-3">
+        <label class="form-label">Employee name</label>
+        <input id="name" class="form-control" value="Omar" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Monthly salary</label>
+        <input id="sal" type="number" class="form-control" value="1000" />
+      </div>
+      <button id="btn"  class="btn btn-primary">Compute Annual</button>
+      <div id="out" class="alert alert-info mt-3 d-none"></div>
     </div>
-    <div class="mb-3">
-      <label class="form-label">Monthly salary</label>
-      <input id="sal" type="number" class="form-control" value="1000" />
-    </div>
-    <button id="btn"  class="btn btn-primary">Compute Annual</button>
-    <div id="out" class="alert alert-info mt-3 d-none"></div>
-  </div>
+  </form>
   <script>
-    document.getElementById("btn").onclick = function () {
+    document.getElementById("btn").onclick = function (e) {
+      e.preventDefault();
       var name = document.getElementById("name").value;
       var sal = Number(document.getElementById("sal").value);
       var annual = sal * 12;
@@ -36,7 +39,7 @@
 
       var out = document.getElementById("out");
       out.classList.remove("d-none");
-      out.textContent = name + ": monthly=" + sal + ", annual=" + annual + " — " + band;
+      out.innerHTML = `Your name is: ${name}<br/> Monthly salary: ${sal}<br/> Annual salary: ${annual}<br/> Salary band: ${band}`;
     };
   </script>
 </body>

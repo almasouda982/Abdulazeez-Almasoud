@@ -9,41 +9,44 @@
 <body class="bg-light">
   <div class="container py-4" style="max-width: 480px;">
      <a href="main.html" class="btn btn-link px-0">&larr; Back</a>
-    <h2>compute_PCT</h2>
-    <p class="text-secondary">pct = (mark / fullMark) × 100</p>
+    <h2 class="text-center">Compute PCT</h2>
+    <p class="text-secondary text-center">pct = (mark / fullMark) × 100</p>
 
-    <div class="mb-3">
-      <label class="form-label">Student name</label>
-      <input id="name" class="form-control" value="Sara" />
+    <form class="card shadow-sm p-4 mx-auto" style="max-width: 480px;">
+      <div class="mb-3">
+        <label class="form-label">Student name</label>
+        <input id="name" class="form-control" value="Sara" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Mark</label>
+        <input id="mark" type="number" class="form-control" value="85" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Full mark</label>
+        <input id="full" type="number" class="form-control" value="100" />
+      </div>
+      <button id="btn" class="btn btn-primary">Compute Percent</button>
+      <div id="out" class="alert alert-info mt-3 d-none"></div>
     </div>
-    <div class="mb-3">
-      <label class="form-label">Mark</label>
-      <input id="mark" type="number" class="form-control" value="85" />
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Full mark</label>
-      <input id="full" type="number" class="form-control" value="100" />
-    </div>
-    <button id="btn" class="btn btn-primary">Compute Percent</button>
-    <div id="out" class="alert alert-info mt-3 d-none"></div>
-  </div>
-
+  </form>
+    
   <script>
-    document.getElementById("btn").onclick = function () {
+    document.getElementById("btn").onclick = function (e) {
+      e.preventDefault();
       var name = document.getElementById("name").value;
       var mark = Number(document.getElementById("mark").value);
       var full = Number(document.getElementById("full").value);
       var pct = (mark / full) * 100;
       var grade;
       if (pct >= 85) grade = "excellent";
-      else if (pct >= 75) grade = "v.good";
+      else if (pct >= 75) grade = "very good";
       else if (pct >= 65) grade = "good";
       else if (pct >= 50) grade = "pass";
       else grade = "Fail";
 
       var out = document.getElementById("out");
       out.classList.remove("d-none");
-      out.textContent = name + ": " + pct.toFixed(1) + "% — " + grade;
+      out.innerHTML = `Student name: ${name}<br/> Mark: ${mark}<br/> Full mark: ${full}<br/> Percentage: ${pct}%<br/> Grade: ${grade}`;
     };
   </script>
 </body>
