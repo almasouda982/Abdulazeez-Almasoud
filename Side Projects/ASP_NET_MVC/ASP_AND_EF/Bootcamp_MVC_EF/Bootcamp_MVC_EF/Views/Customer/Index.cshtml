@@ -1,0 +1,29 @@
+﻿@model IList<Customer>
+
+
+	<div class="container">
+		<table class="table table-striped table-hover">
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Name</th>
+					<th>Email</th>
+					<th>Phone</th>
+				</tr>
+			</thead>
+			<tbody>
+
+				@foreach (var customer in Model)
+				{
+					<tr>
+						<td>@customer.Id</td>
+						<td>@customer.Name</td>
+						<td>@customer.Email</td>
+						<td>@customer.Phone</td>
+					</tr>
+			}
+
+
+			</tbody>
+		</table>
+	</div>
