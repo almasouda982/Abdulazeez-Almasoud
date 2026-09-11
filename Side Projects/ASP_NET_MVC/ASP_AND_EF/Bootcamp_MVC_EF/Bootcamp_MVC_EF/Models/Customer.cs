@@ -1,7 +1,10 @@
-﻿namespace Bootcamp_MVC_EF.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Bootcamp_MVC_EF.Models
 {
     public class Customer
     {
+        [Key]
         public int Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
