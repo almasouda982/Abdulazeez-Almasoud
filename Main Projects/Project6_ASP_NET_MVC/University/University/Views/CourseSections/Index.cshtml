@@ -1,0 +1,49 @@
+﻿@model IEnumerable<CourseSection>
+
+<div class="container">
+
+    <h1>Course Section</h1>
+
+    <div class="text-end">
+        <a asp-action="Create" class="btn btn-primary mb-3">New Course Section</a>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Course Id</th>
+                <th>Section Number</th>
+                <th>Max Capacity</th>
+                <th>Days Of Week</th>
+                <th>Time Slot</th>
+                <th>Actions</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var courseSection in Model)
+            {
+
+                <tr>
+                    <td>@courseSection.Id</td>
+                    <td>@courseSection.CourseId</td>
+                    <td>@courseSection.SectionNumber</td>
+                    <td>@courseSection.MaxCapacity</td>
+                    <td>@courseSection.DaysOfWeek</td>
+                    <td>@courseSection.TimeSlot</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@courseSection.Id" class="btn btn-sm btn-warning">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@courseSection.Id" class="btn btn-sm btn-danger">Delete</a>
+
+                    </td>
+
+                </tr>
+
+            }
+
+
+        </tbody>
+
+    </table>
+</div>
