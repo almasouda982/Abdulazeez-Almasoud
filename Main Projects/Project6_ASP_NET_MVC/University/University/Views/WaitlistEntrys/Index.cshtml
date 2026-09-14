@@ -1,0 +1,51 @@
+﻿@model IEnumerable<WaitlistEntry>
+
+<div class="container">
+
+    <h1>Waitlist Entry</h1>
+
+    <div class="text-end">
+        <a asp-action="Create" class="btn btn-primary mb-3">New Waitlist Entry</a>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Student Id</th>
+                <th>Course Section Id</th>
+                <th>Position</th>
+                <th>Offered At</th>
+                <th>ExpiresAt</th>
+                <th>Status</th>
+                <th>Actions</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var waitlistEntry in Model)
+            {
+
+                <tr>
+                    <td>@waitlistEntry.Id</td>
+                    <td>@waitlistEntry.StudentId</td>
+                    <td>@waitlistEntry.CourseSectionId</td>
+                    <td>@waitlistEntry.Position</td>
+                    <td>@waitlistEntry.OfferedAt</td>
+                    <td>@waitlistEntry.ExpiresAt</td>
+                    <td>@(waitlistEntry.Status ? "Seat Offered" : "Waiting")</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@waitlistEntry.Id" class="btn btn-sm btn-warning">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@waitlistEntry.Id" class="btn btn-sm btn-danger">Delete</a>
+
+                    </td>
+
+                </tr>
+
+            }
+
+
+        </tbody>
+
+    </table>
+</div>

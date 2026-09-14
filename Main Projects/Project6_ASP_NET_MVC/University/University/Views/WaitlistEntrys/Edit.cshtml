@@ -1,0 +1,65 @@
+﻿@model WaitlistEntry
+@{
+    ViewData["Title"] = "Edit Waitlist Entry";
+}
+
+<div class="container">
+    <h1>Edit Waitlist Entry</h1>
+    <form asp-action="Edit" method="post">
+
+        <div class="text-danger" asp-validation-summary="All"></div>
+
+        <div class="form-group">
+            <label class="control-label">Student Id</label>
+            <input asp-for="StudentId" class="form-control" />
+            <span asp-validation-for="StudentId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Course Section Id</label>
+            <input asp-for="CourseSectionId" class="form-control" />
+            <span asp-validation-for="CourseSectionId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Position</label>
+            <input asp-for="Position" class="form-control" />
+            <span asp-validation-for="Position" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Offered At</label>
+            <input asp-for="OfferedAt" class="form-control" />
+            <span asp-validation-for="OfferedAt" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Expires At</label>
+            <input asp-for="ExpiresAt" class="form-control" />
+            <span asp-validation-for="ExpiresAt" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label d-block mb-2">Status</label>
+            <div class="btn-group" role="group" aria-label="Enrollment Status Toggle">
+                <input type="radio" class="btn-check" asp-for="Status" value="true" id="enrollTrue" autocomplete="off" />
+                <label class="btn btn-outline-success" for="enrollTrue">Seat Offered</label>
+                <input type="radio" class="btn-check" asp-for="Status" value="false" id="enrollFalse" autocomplete="off" />
+                <label class="btn btn-outline-danger" for="enrollFalse">Waiting</label>
+            </div>
+            <span asp-validation-for="Status" class="text-danger d-block mt-1"></span>
+        </div>
+
+
+
+
+        <div class="form-group">
+            <input type="submit" value="Update" class="btn btn-warning" />
+        </div>
+    </form>
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

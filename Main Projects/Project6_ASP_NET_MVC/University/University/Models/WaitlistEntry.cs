@@ -10,7 +10,9 @@ namespace University.Models
         [Required]
         [DisplayName("Student Id")]
         [RegularExpression(@"^\d{10}$", ErrorMessage = "The number must be exactly 10 digits.")]
-        public string StudentId { get; set; }
+        public string StudentId { get; set; } = "";
+        [Required]
+        public int CourseSectionId { get; set; }
         [Required]
         public int Position { get; set; }
         public DateTime? OfferedAt { get; set; }
