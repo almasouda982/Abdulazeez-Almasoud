@@ -1,0 +1,46 @@
+﻿@model DegreeRequirement
+
+@{
+    ViewData["Title"] = "Edit Degree Requirements";
+}
+
+<div class="container">
+    <h1>Edit Degree Requirements</h1>
+    <form asp-action="Edit" method="post">
+
+        <div class="text-danger" asp-validation-summary="All">
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">Category Name</label>
+            <input asp-for="CategoryName" class="form-control" />
+            <span asp-validation-for="CategoryName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Required Credits</label>
+            <input asp-for="RequiredCredits" class="form-control" />
+            <span asp-validation-for="RequiredCredits" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Minimum Level</label>
+            <input asp-for="MinLevel" class="form-control" />
+            <span asp-validation-for="MinLevel" class="text-danger"></span>
+        </div>
+
+
+
+        <div class="form-group">
+            <input type="submit" value="Update" class="btn btn-warning" />
+        </div>
+    </form>
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

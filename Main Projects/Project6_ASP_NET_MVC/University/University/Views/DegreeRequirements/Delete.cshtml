@@ -1,0 +1,39 @@
+﻿@model DegreeRequirement
+
+@{
+    ViewData["Title"] = "Delete Degree Requirement";
+}
+
+<div class="container">
+    <h1>Delete Degree Requirement</h1>
+    <form asp-action="Delete" method="post">
+
+
+
+
+
+        <div class="form-group">
+            <label asp-for="CategoryName" class="control-label"></label>
+            <input asp-for="CategoryName" class="form-control" readonly />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="RequiredCredits" class="control-label"></label>
+            <input asp-for="RequiredCredits" class="form-control" readonly />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="MinLevel" class="control-label"></label>
+            <input asp-for="MinLevel" class="form-control" readonly />
+        </div>
+
+
+
+        <div class="form-group">
+            <input type="submit" value="Delete" class="btn btn-danger" />
+        </div>
+    </form>
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+</div>
