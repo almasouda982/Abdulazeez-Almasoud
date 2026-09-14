@@ -1,0 +1,45 @@
+﻿@model IEnumerable<CoursePrerequisite>
+
+<div class="container">
+
+    <h1>Course Prerequisites</h1>
+
+    <div class="text-end">
+        <a asp-action="Create" class="btn btn-primary mb-3">New Course</a>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>MinGradeRequired</th>
+                <th>CourseId</th>
+                <th>PrerequisiteCourseId</th>
+                <th>Actions</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var courseprereq in Model)
+            {
+
+                <tr>
+                    <td>@courseprereq.Id</td>
+                    <td>@courseprereq.MinGradeRequired</td>
+                    <td>@courseprereq.CourseId</td>
+                    <td>@courseprereq.PrerequisiteCourseId</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@courseprereq.Id" class="btn btn-sm btn-warning">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@courseprereq.Id" class="btn btn-sm btn-danger">Delete</a>
+
+                    </td>
+
+                </tr>
+
+            }
+
+
+        </tbody>
+
+    </table>
+</div>

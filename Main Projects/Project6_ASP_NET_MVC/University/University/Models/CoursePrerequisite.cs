@@ -7,10 +7,14 @@ namespace University.Models
     {
         [Key]
         public int Id { get; set; }
-        [Required]
         [DisplayName("Minimum Grade Required")]
-        public string MinGradeRequired { get; set; } = "";
-        public int? CourseId { get; set; }
+        [RegularExpression(@"^(A[+-]?|B[+-]?|C[+-]?|D[+-]?|F)$", ErrorMessage = "Must be a valid letter grade (e.g., A+, B, C-).")]
+        public string? MinGradeRequired { get; set; } = "";
+        [Required]
+        [DisplayName("Course ID")]
+        public int CourseId { get; set; }
+        [Required]
+        [DisplayName("Prerequisite Course ID")]
         public int PrerequisiteCourseId { get; set; }
     }
 }

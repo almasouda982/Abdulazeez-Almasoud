@@ -1,0 +1,41 @@
+﻿@model CoursePrerequisite
+@{
+    ViewData["Title"] = "Create Course Preprequisite";
+}
+
+
+<div class="container">
+    <h1>Create Prerequisite Course</h1>
+    <form asp-action="Create" method="post">
+        <div class="text-danger" asp-validation-summary="All"></div>
+
+
+        <div class="form-group">
+            <label class="control-label">MinGradeRequired</label>
+            <input asp-for="MinGradeRequired" class="form-control" />
+            <span asp-validation-for="MinGradeRequired" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Course Id</label>
+            <input asp-for="CourseId" class="form-control" />
+            <span asp-validation-for="CourseId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Prerequisite Course Id</label>
+            <input asp-for="PrerequisiteCourseId" class="form-control" />
+            <span asp-validation-for="PrerequisiteCourseId" class="text-danger"></span>
+        </div>
+
+
+        <div class="form-group">
+            <input type="submit" value="Create" class="btn btn-primary mt-3 mb-3" />
+        </div>
+    </form>
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

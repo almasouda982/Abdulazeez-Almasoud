@@ -11,6 +11,9 @@ namespace University.Models
         [DisplayName("Course Code")]
         [RegularExpression(@"^[A-Za-z]{3}\d{3}$", ErrorMessage = "Must be 3 letters followed by 3 numbers.")]
         public string Code { get; set; } = "";
+        //[Required]
+        //[DisplayName("Course ID")]
+        //public int CourseId { get; set; }
         [Required]
         [DisplayName("Course Title")]
         public string Title { get; set; } = "";
