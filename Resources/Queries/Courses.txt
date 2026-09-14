@@ -1,0 +1,22 @@
+INSERT INTO Courses (Code, Title, Credits, Description)
+VALUES 
+('CS101', 'Introduction to Computer Science', 3, 'Fundamental concepts of programming and algorithm design.'),
+('CS102', 'Data Structures and Algorithms', 4, 'Study of stacks, queues, trees, graphs, and sorting algorithms.'),
+('ENG101', 'English Composition I', 3, 'Focuses on critical reading, writing, and analytical skills.'),
+('MATH101', 'Calculus I', 4, 'Limits, derivatives, and introduction to integration.'),
+('MATH201', 'Linear Algebra', 3, 'Vector spaces, matrices, linear transformations, and eigenvalues.'),
+('PHY101', 'General Physics I', 4, 'Mechanics, heat, sound, and wave motion.'),
+('CHEM101', 'General Chemistry I', 4, 'Basic principles of atomic structure, bonding, and stoichiometry.'),
+('BIO101', 'Introductory Biology', 3, NULL),
+('HIST101', 'World History I', 3, 'Survey of global historical events from ancient times to 1500.'),
+('ART101', 'Art Appreciation', 2, NULL),
+('CS201', 'Object-Oriented Programming', 3, 'Principles of encapsulation, inheritance, and polymorphism in C#.'),
+('CS301', 'Database Systems', 3, 'Relational database design, SQL querying, and normalization.'),
+('CS401', 'Software Engineering', 4, 'Software development life cycle, Agile methodologies, and design patterns.'),
+('BUS101', 'Introduction to Business', 3, NULL),
+('ECON101', 'Principles of Microeconomics', 3, 'Analysis of individual economic units, supply, demand, and markets.'),
+('ECON201', 'Principles of Macroeconomics', 3, 'Study of national income, inflation, unemployment, and monetary policy.'),
+('PSYC101', 'General Psychology', 3, 'Overview of human behavior, cognition, emotion, and development.'),
+('SOC101', 'Introduction to Sociology', 3, NULL),
+('PE101', 'Physical Fitness and Wellness', 1, 'Practical guidance on exercise, physical fitness, and health.'),
+('CS402', 'Web Application Development', 4, 'Building web applications using ASP.NET Core MVC and EF Core.');
