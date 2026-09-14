@@ -1,0 +1,67 @@
+﻿@model Student
+@{
+    ViewData["Title"] = "Create Student";
+}
+
+
+<div class="container">
+    <h1>Create Student</h1>
+    <form asp-action="Create" method="post">
+        <div class="text-danger" asp-validation-summary="All"></div>
+
+
+        <div class="form-group">
+            <label class="control-label">First Name</label>
+            <input asp-for="FirstName" class="form-control" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Last Name</label>
+            <input asp-for="LastName" class="form-control" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Email</label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Phone Number</label>
+            <input asp-for="Phone" class="form-control" />
+            <span asp-validation-for="Phone" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Standing</label>
+            <input asp-for="Standing" class="form-control" placeholder="Standing Position" />
+            <span asp-validation-for="Standing" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">GPA</label>
+            <input asp-for="GPA" class="form-control" />
+            <span asp-validation-for="GPA" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label d-block mb-2">Enrollment Status</label>
+            <div class="btn-group" role="group" aria-label="Enrollment Status Toggle">
+                <input type="radio" class="btn-check" asp-for="EnrollmentStatus" value="true" id="enrollTrue" autocomplete="off" />
+                <label class="btn btn-outline-success" for="enrollTrue">Enrolled</label>
+                <input type="radio" class="btn-check" asp-for="EnrollmentStatus" value="false" id="enrollFalse" autocomplete="off" />
+                <label class="btn btn-outline-danger" for="enrollFalse">Not Enrolled</label>
+            </div>
+            <span asp-validation-for="EnrollmentStatus" class="text-danger d-block mt-1"></span>
+        </div>
+
+
+
+        <div class="form-group">
+            <input type="submit" value="Create" class="btn btn-primary mt-3 mb-3" />
+        </div>
+    </form>
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,59 @@
+﻿@model Student
+
+@{
+    ViewData["Title"] = "Delete Student";
+}
+
+<div class="container">
+    <h1>Delete Student</h1>
+    <form asp-action="Delete" method="post">
+
+
+
+
+
+        <div class="form-group">
+            <label class="control-label">First Name</label>
+            <input asp-for="FirstName" class="form-control" readonly/>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Last Name</label>
+            <input asp-for="LastName" class="form-control" readonly/>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Email</label>
+            <input asp-for="Email" class="form-control" readonly/>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Phone Number</label>
+            <input asp-for="Phone" class="form-control"readonly />
+        </div>
+        <div class="form-group">
+            <label class="control-label">Standing</label>
+            <input asp-for="Standing" class="form-control" placeholder="Standing Position" readonly/>
+        </div>
+        <div class="form-group">
+            <label class="control-label">GPA</label>
+            <input asp-for="GPA" class="form-control" readonly/>
+        </div>
+        <div class="form-group">
+            <label class="control-label d-block mb-2">Enrollment Status</label>
+            <div class="btn-group" role="group" aria-label="Enrollment Status Toggle">
+                <input type="radio" class="btn-check" asp-for="EnrollmentStatus" value="true" id="enrollTrue" autocomplete="off" readonly />
+                <label class="btn btn-outline-success" for="enrollTrue">Enrolled</label>
+                <input type="radio" class="btn-check" asp-for="EnrollmentStatus" value="false" id="enrollFalse" autocomplete="off" readonly />
+                <label class="btn btn-outline-danger" for="enrollFalse">Not Enrolled</label>
+            </div>
+        </div>
+
+
+
+
+        <div class="form-group">
+            <input type="submit" value="Delete" class="btn btn-danger" />
+        </div>
+    </form>
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+</div>

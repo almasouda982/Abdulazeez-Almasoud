@@ -8,7 +8,7 @@ namespace University.Models
         public int StudentId { get; set; }
         public string FinalGrade { get; set; } = "";
         public string Status { get; set; } = "";
-        public string LetterGradePoints { get; set; } = "";
+        public decimal LetterGradePoints { get; set; } = 0;
 
 
     }

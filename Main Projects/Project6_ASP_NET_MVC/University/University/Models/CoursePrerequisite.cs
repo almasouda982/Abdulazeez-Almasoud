@@ -3,14 +3,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace University.Models
 {
-    public class CoursePrerequesite
+    public class CoursePrerequisite
     {
         [Key]
         public int Id { get; set; }
         [Required]
         [DisplayName("Minimum Grade Required")]
-        public string Min_grade_required { get; set; } = "";
-        [Required]
-        public int CourseId { get; set; }
+        public string MinGradeRequired { get; set; } = "";
+        public int? CourseId { get; set; }
+        public int PrerequisiteCourseId { get; set; }
     }
 }

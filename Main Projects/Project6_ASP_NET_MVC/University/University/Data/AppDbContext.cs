@@ -12,7 +12,7 @@ namespace University.Data
 
         public DbSet<Student> Students { get; set; }
         public DbSet<Course> Courses { get; set; }
-        public DbSet<CoursePrerequesite> CoursePrerequesites { get; set; }
+        public DbSet<CoursePrerequisite> CoursePrerequesites { get; set; }
         public DbSet<DegreeProgram> DegreePrograms { get; set; }
         public DbSet<DegreeRequirement> DegreeRequirements { get; set; }
         public DbSet<CourseSection> CourseSections { get; set; }
