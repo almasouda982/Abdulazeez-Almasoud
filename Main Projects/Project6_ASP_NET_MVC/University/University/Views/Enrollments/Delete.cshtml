@@ -1,0 +1,43 @@
+﻿@model Enrollment
+
+@{
+    ViewData["Title"] = "Delete Enrollment";
+}
+
+<div class="container">
+    <h1>Delete Enrollment</h1>
+    <form asp-action="Delete" method="post">
+
+
+
+
+
+        <div class="form-group">
+            <label asp-for="StudentId" class="control-label"></label>
+            <input asp-for="StudentId" class="form-control" readonly />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="FinalGrade" class="control-label"></label>
+            <input asp-for="FinalGrade" class="form-control" readonly />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Status" class="control-label"></label>
+            <input asp-for="Status" class="form-control" readonly />
+        </div>
+        <div class="form-group">
+            <label asp-for="LetterGradePoints" class="control-label"></label>
+            <input asp-for="LetterGradePoints" class="form-control" readonly />
+        </div>
+
+
+
+        <div class="form-group">
+            <input type="submit" value="Delete" class="btn btn-danger" />
+        </div>
+    </form>
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+﻿@model Enrollment
+@{
+    ViewData["Title"] = "Enrollment";
+}
+
+
+<div class="container">
+    <h1>Create Enrollment</h1>
+    <form asp-action="Create" method="post">
+        <div class="text-danger" asp-validation-summary="All"></div>
+
+
+        <div class="form-group">
+            <label class="control-label">Student Id</label>
+            <input asp-for="StudentId" class="form-control" />
+            <span asp-validation-for="StudentId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Final Grade</label>
+            <input asp-for="FinalGrade" class="form-control" />
+            <span asp-validation-for="FinalGrade" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Status</label>
+            <input asp-for="Status" class="form-control" />
+            <span asp-validation-for="Status" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Letter Grade Points</label>
+            <input asp-for="LetterGradePoints" class="form-control" />
+            <span asp-validation-for="LetterGradePoints" class="text-danger"></span>
+        </div>
+
+
+
+
+        <div class="form-group">
+            <input type="submit" value="Create" class="btn btn-primary mt-3 mb-3" />
+        </div>
+    </form>
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
