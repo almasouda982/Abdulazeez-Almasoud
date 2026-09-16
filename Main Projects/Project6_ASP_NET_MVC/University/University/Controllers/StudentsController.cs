@@ -45,7 +45,7 @@ namespace University.Controllers
         // Edit
         //==============================
         [HttpGet]
-        public IActionResult Edit(int Id)
+        public IActionResult Edit(long Id)
         {
             var std = _db.Students.Find(Id);
             if (std == null)
@@ -72,7 +72,7 @@ namespace University.Controllers
         // Delete
         //===========
         [HttpGet]
-        public IActionResult Delete(int Id)
+        public IActionResult Delete(long Id)
         {
             var std = _db.Students.Find(Id);
             if (std == null)
