@@ -13,6 +13,11 @@
 
 
         <div class="form-group">
+            <label class="control-label">Degree Program Id</label>
+            <input asp-for="DegreeProgramID" class="form-control" readonly/>
+        </div>
+
+        <div class="form-group">
             <label class="control-label">First Name</label>
             <input asp-for="FirstName" class="form-control" readonly/>
         </div>
@@ -39,9 +44,9 @@
         <div class="form-group">
             <label class="control-label d-block mb-2">Enrollment Status</label>
             <div class="btn-group" role="group" aria-label="Enrollment Status Toggle">
-                <input type="radio" class="btn-check" asp-for="EnrollmentStatus" value="true" id="enrollTrue" autocomplete="off" readonly />
+                <input type="radio" class="btn-check" asp-for="EnrollmentStatus" value="true" id="enrollTrue" autocomplete="off" disabled />
                 <label class="btn btn-outline-success" for="enrollTrue">Enrolled</label>
-                <input type="radio" class="btn-check" asp-for="EnrollmentStatus" value="false" id="enrollFalse" autocomplete="off" readonly />
+                <input type="radio" class="btn-check" asp-for="EnrollmentStatus" value="false" id="enrollFalse" autocomplete="off" disabled />
                 <label class="btn btn-outline-danger" for="enrollFalse">Not Enrolled</label>
             </div>
         </div>

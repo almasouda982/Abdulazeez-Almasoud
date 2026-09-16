@@ -156,6 +156,9 @@ namespace University.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CourseSectionId")
+                        .HasColumnType("int");
+
                     b.Property<string>("FinalGrade")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -163,9 +166,8 @@ namespace University.Migrations
                     b.Property<decimal>("LetterGradePoints")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
 
                     b.Property<int>("StudentId")
                         .HasColumnType("int");

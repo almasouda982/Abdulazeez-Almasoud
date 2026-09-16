@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace University.Migrations
 {
     /// <inheritdoc />
-    public partial class rebuilt_the_Database : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,8 +17,8 @@ namespace University.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    MinGradeRequired = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CourseId = table.Column<int>(type: "int", nullable: true),
+                    MinGradeRequired = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CourseId = table.Column<int>(type: "int", nullable: false),
                     PrerequisiteCourseId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -96,8 +96,9 @@ namespace University.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     StudentId = table.Column<int>(type: "int", nullable: false),
+                    CourseSectionId = table.Column<int>(type: "int", nullable: false),
                     FinalGrade = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: false),
                     LetterGradePoints = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
@@ -131,6 +132,7 @@ namespace University.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     StudentId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CourseSectionId = table.Column<int>(type: "int", nullable: false),
                     Position = table.Column<int>(type: "int", nullable: false),
                     OfferedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ExpiresAt = table.Column<DateTime>(type: "datetime2", nullable: true),

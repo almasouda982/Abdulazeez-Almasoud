@@ -8,6 +8,9 @@ namespace University.Models
         [Key]
         public int Id { get; set; } = 0;
         [Required]
+        [DisplayName("Degree Program Id")]
+        public int DegreeProgramId { get; set; }
+        [Required]
         [DisplayName("Category Name")]
         public string CategoryName { get; set; } = "";
         [Required]

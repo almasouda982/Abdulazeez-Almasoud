@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace University.Models
 {
@@ -7,13 +8,18 @@ namespace University.Models
         [Key]
         public int Id { get; set; }
         [Required]
+        [DisplayName("Student Id")]
         public int StudentId { get; set; }
         [Required]
+        [DisplayName("Course Section Id")]
+        public int CourseSectionId { get; set; }
+        [Required]
+        [DisplayName("Final Grade")]
         public string FinalGrade { get; set; } = "";
         [Required]
-        //change to bool
-        public string Status { get; set; } = "";
+        public bool Status { get; set; }
         [Required]
+        [DisplayName("Letter Grade Points")]
         public decimal LetterGradePoints { get; set; } = 0;
 
 

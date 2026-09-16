@@ -15,19 +15,29 @@
             <span asp-validation-for="StudentId" class="text-danger"></span>
         </div>
         <div class="form-group">
+            <label class="control-label">Course Section Id</label>
+            <input asp-for="CourseSectionId" class="form-control" />
+            <span asp-validation-for="CourseSectionId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
             <label class="control-label">Final Grade</label>
             <input asp-for="FinalGrade" class="form-control" />
             <span asp-validation-for="FinalGrade" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label class="control-label">Status</label>
-            <input asp-for="Status" class="form-control" />
-            <span asp-validation-for="Status" class="text-danger"></span>
-        </div>
-        <div class="form-group">
             <label class="control-label">Letter Grade Points</label>
             <input asp-for="LetterGradePoints" class="form-control" />
             <span asp-validation-for="LetterGradePoints" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label d-block mb-2">Status</label>
+            <div class="btn-group" role="group" aria-label="Enrollment Status Toggle">
+                <input type="radio" class="btn-check" asp-for="Status" value="true" id="enrollTrue" autocomplete="off" />
+                <label class="btn btn-outline-success" for="enrollTrue">Enrolled</label>
+                <input type="radio" class="btn-check" asp-for="Status" value="false" id="enrollFalse" autocomplete="off" />
+                <label class="btn btn-outline-danger" for="enrollFalse">Not Enrolled</label>
+            </div>
+            <span asp-validation-for="Status" class="text-danger d-block mt-1"></span>
         </div>
 
 

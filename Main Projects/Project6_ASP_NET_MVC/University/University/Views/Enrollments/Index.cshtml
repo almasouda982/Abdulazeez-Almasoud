@@ -13,6 +13,7 @@
             <tr>
                 <th>Id</th>
                 <th>Student Id</th>
+                <th>Course Section Id</th>
                 <th>Final Grade</th>
                 <th>Status</th>
                 <th>Letter Grade Points</th>
@@ -27,9 +28,10 @@
                 <tr>
                     <td>@enrollment.Id</td>
                     <td>@enrollment.StudentId</td>
+                    <td>@enrollment.CourseSectionId</td>
                     <td>@enrollment.FinalGrade</td>
-                    <td>@enrollment.Status</td>
                     <td>@enrollment.LetterGradePoints</td>
+                    <td>@(enrollment.Status ? "Enrolled" : "Not Enrolled")</td>
                     <td>
                         <a asp-action="Edit" asp-route-id="@enrollment.Id" class="btn btn-sm btn-warning">Edit</a>
                         <a asp-action="Delete" asp-route-id="@enrollment.Id" class="btn btn-sm btn-danger">Delete</a>

@@ -9,8 +9,8 @@ namespace University.Models
         public int Id { get; set; }
         [Required]
         [DisplayName("Student Id")]
-        [RegularExpression(@"^\d{10}$", ErrorMessage = "The number must be exactly 10 digits.")]
-        public string StudentId { get; set; } = "";
+        [Range(1000000000, 9999999999, ErrorMessage = "Student ID must be a 10-digit number.")]
+        public int StudentId { get; set; }
         [Required]
         public int CourseSectionId { get; set; }
         [Required]

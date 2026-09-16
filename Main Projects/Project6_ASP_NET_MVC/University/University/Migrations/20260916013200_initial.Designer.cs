@@ -12,8 +12,8 @@ using University.Data;
 namespace University.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260914162720_CoursePrerequisite_model_Adjusted")]
-    partial class CoursePrerequisite_model_Adjusted
+    [Migration("20260916013200_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -159,6 +159,9 @@ namespace University.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CourseSectionId")
+                        .HasColumnType("int");
+
                     b.Property<string>("FinalGrade")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -166,9 +169,8 @@ namespace University.Migrations
                     b.Property<decimal>("LetterGradePoints")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<bool>("Status")
+                        .HasColumnType("bit");
 
                     b.Property<int>("StudentId")
                         .HasColumnType("int");
@@ -224,6 +226,9 @@ namespace University.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CourseSectionId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("ExpiresAt")
                         .HasColumnType("datetime2");

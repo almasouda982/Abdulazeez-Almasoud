@@ -10,7 +10,11 @@
 
         <div class="text-danger" asp-validation-summary="All">
         </div>
-
+        <div class="form-group">
+            <label class="control-label">Degree Program Id</label>
+            <input asp-for="DegreeProgramId" class="form-control" />
+            <span asp-validation-for="DegreeProgramId" class="text-danger"></span>
+        </div>
         <div class="form-group">
             <label class="control-label">Category Name</label>
             <input asp-for="CategoryName" class="form-control" />
