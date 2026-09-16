@@ -22,9 +22,28 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdownStudents" role="button" data-bs-toggle="dropdown" areal-expanded="false">
+                                Students
+                            </a>
+                            <ul class="dropdown-menu" arial-labelledby="navbarDropdownStudents">
+
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Students" asp-action="Index">Students</a>
                         </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Enrollments" asp-action="Index">Enrollment</a>
+                        </li>
+                            </ul>
+                        </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdownCourses" role="button" data-bs-toggle="dropdown" areal-expanded="false">
+                                Courses
+                            </a>
+                            <ul class="dropdown-menu" arial-labelledby="navbarDropdownCourses">
+
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Courses" asp-action="Index">Courses</a>
                         </li>
@@ -32,20 +51,28 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="CoursePrerequisits" asp-action="Index">Course Prerequisites</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="CourseSections" asp-action="Index">Course Section</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="WaitlistEntrys" asp-action="Index">Waitlist Entry</a>
+                        </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdownDegrees" role="button" data-bs-toggle="dropdown" areal-expanded="false">
+                                Degrees
+                            </a>
+                            <ul class="dropdown-menu" arial-labelledby="navbarDropdownDegrees">
+                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="DegreePrograms" asp-action="Index">Degree Programs</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="DegreeRequirements" asp-action="Index">Degree Requirement</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="CourseSections" asp-action="Index">Course Section</a>
+
+                            </ul>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Enrollments" asp-action="Index">Enrollment</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="WaitlistEntrys" asp-action="Index">Waitlist Entry</a>
-                        </li>
+
                     </ul>
                 </div>
             </div>
