@@ -33,9 +33,9 @@ namespace University.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Credits = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -49,6 +49,7 @@ namespace University.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SectionNumber = table.Column<int>(type: "int", nullable: false),
+                    Semester = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     MaxCapacity = table.Column<int>(type: "int", nullable: false),
                     DaysOfWeek = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TimeSlot = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -65,7 +66,7 @@ namespace University.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     CatalogYear = table.Column<int>(type: "int", nullable: false),
                     TotalCreditsRequired = table.Column<int>(type: "int", nullable: false)
                 },
@@ -80,7 +81,8 @@ namespace University.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CategoryName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DegreeProgramId = table.Column<int>(type: "int", nullable: false),
+                    CategoryName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     RequiredCredits = table.Column<int>(type: "int", nullable: false),
                     MinLevel = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -95,7 +97,7 @@ namespace University.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    StudentId = table.Column<int>(type: "int", nullable: false),
+                    StudentId = table.Column<long>(type: "bigint", nullable: false),
                     CourseSectionId = table.Column<int>(type: "int", nullable: false),
                     FinalGrade = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<bool>(type: "bit", nullable: false),
@@ -110,10 +112,11 @@ namespace University.Migrations
                 name: "Students",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DegreeProgramId = table.Column<int>(type: "int", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Standing = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -131,7 +134,7 @@ namespace University.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    StudentId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StudentId = table.Column<long>(type: "bigint", nullable: false),
                     CourseSectionId = table.Column<int>(type: "int", nullable: false),
                     Position = table.Column<int>(type: "int", nullable: false),
                     OfferedAt = table.Column<DateTime>(type: "datetime2", nullable: true),

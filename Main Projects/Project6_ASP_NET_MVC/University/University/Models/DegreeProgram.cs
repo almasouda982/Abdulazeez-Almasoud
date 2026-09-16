@@ -9,6 +9,7 @@ namespace University.Models
         public int Id { get; set; }
         [Required]
         [DisplayName("Program Name")]
+        [StringLength(100, MinimumLength = 3, ErrorMessage = "Program name must be between 3 and 100 characters.")]
         public string Name { get; set; } = "";
         [Required]
         [DisplayName("Catalog Year")]

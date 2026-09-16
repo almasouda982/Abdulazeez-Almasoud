@@ -13,12 +13,14 @@ namespace University.Models
         public string Code { get; set; } = "";
         [Required]
         [DisplayName("Course Title")]
+        [StringLength(200, MinimumLength =15, ErrorMessage ="Title is must be between 15 - 200 characters ")]
         public string Title { get; set; } = "";
         [Required]
         [DisplayName("Course Credits")]
-        [Range(0,4)]
+        [Range(0,6, ErrorMessage ="Credits must be between 0 and 6")]
         public int Credits { get; set; } = 0;
         [DisplayName("Course Description")]
+        [StringLength(500, ErrorMessage ="Description must be at most 500 characters long")]
         public string? Description { get; set; } = "";
 
     }
