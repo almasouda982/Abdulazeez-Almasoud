@@ -29,17 +29,34 @@
             <input asp-for="MaxCapacity" class="form-control" />
             <span asp-validation-for="MaxCapacity" class="text-danger"></span>
         </div>
-        <div class="form-group">
-            <label class="control-label">Days Of Week</label>
-            <input asp-for="DaysOfWeek" class="form-control" />
+        <div class="form-group mt-2">
+            <label class="control-label fw-bold">Days Of Week</label>
+            <div class="d-flex gap-3 my-1">
+                <div class="form-check"><input type="checkbox" class="day-checkbox form-check-input" value="M" /> M</div>
+                <div class="form-check"><input type="checkbox" class="day-checkbox form-check-input" value="T" /> T</div>
+                <div class="form-check"><input type="checkbox" class="day-checkbox form-check-input" value="W" /> W</div>
+                <div class="form-check"><input type="checkbox" class="day-checkbox form-check-input" value="TH" /> TH</div>
+                <div class="form-check"><input type="checkbox" class="day-checkbox form-check-input" value="F" /> F</div>
+            </div>
+            <input type="hidden" asp-for="DaysOfWeek" id="DaysOfWeekInput" />
             <span asp-validation-for="DaysOfWeek" class="text-danger"></span>
         </div>
-        <div class="form-group">
-            <label class="control-label">Time Slot</label>
-            <input asp-for="TimeSlot" class="form-control" />
+
+        <div class="form-group mt-2">
+            <label class="control-label fw-bold">Time Slot</label>
+            <div class="row">
+                <div class="col">
+                    <label class="small text-muted">Start Time</label>
+                    <input type="time" id="StartTime" class="form-control" />
+                </div>
+                <div class="col">
+                    <label class="small text-muted">End Time</label>
+                    <input type="time" id="EndTime" class="form-control" />
+                </div>
+            </div>
+            <input type="hidden" asp-for="TimeSlot" id="TimeSlotInput" />
             <span asp-validation-for="TimeSlot" class="text-danger"></span>
         </div>
-
 
 
         <div class="form-group">
@@ -56,4 +73,53 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        const currentDays = "@Model.DaysOfWeek";
+        document.querySelectorAll('.day-checkbox').forEach(chk => {
+            if (currentDays.includes(chk.value)) {
+                chk.checked = true;
+            }
+            chk.addEventListener('change', updateDaysInput);
+        });
+
+        function updateDaysInput() {
+            const selected = Array.from(document.querySelectorAll('.day-checkbox:checked'))
+                                  .map(cb => cb.value)
+                                  .join('');
+            document.getElementById('DaysOfWeekInput').value = selected;
+        }
+
+        const currentTimeSlot = "@Model.TimeSlot";
+        if (currentTimeSlot && currentTimeSlot.includes('-')) {
+            const parts = currentTimeSlot.split(' - ');
+            document.getElementById('StartTime').value = convertTo24Hour(parts[0].trim());
+            document.getElementById('EndTime').value = convertTo24Hour(parts[1].trim());
+        }
+
+        function convertTo24Hour(timeStr) {
+            let [time, modifier] = timeStr.split(' ');
+            let [hours, minutes] = time.split(':');
+            if (hours === '12') hours = '00';
+            if (modifier === 'PM') hours = parseInt(hours, 10) + 12;
+            return `${String(hours).padStart(2, '0')}:${minutes}`;
+        }
+
+        function updateTimeSlot() {
+            const start = document.getElementById('StartTime').value;
+            const end = document.getElementById('EndTime').value;
+            if (start && end) {
+                const formatTime = (t) => {
+                    let [h, m] = t.split(':');
+                    let period = h >= 12 ? 'PM' : 'AM';
+                    h = h % 12 || 12;
+                    return `${String(h).padStart(2, '0')}:${m} ${period}`;
+                };
+                document.getElementById('TimeSlotInput').value = `${formatTime(start)} - ${formatTime(end)}`;
+            }
+        }
+
+        document.getElementById('StartTime').addEventListener('change', updateTimeSlot);
+        document.getElementById('EndTime').addEventListener('change', updateTimeSlot);
+    </script>
 }
