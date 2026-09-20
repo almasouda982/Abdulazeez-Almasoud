@@ -1,8 +1,11 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.AspNetCore.Authorization;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace University.Models
 {
+    [Authorize]
+
     public class CourseSection
     {
         [Key]

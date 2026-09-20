@@ -1,12 +1,18 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.AspNetCore.Authorization;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace University.Models
 {
+    [Authorize]
+
     public class Student
     {
+
         [Key]
         public long Id { get; set; }
+        public string Uuid { get; set; } = Guid.NewGuid().ToString();
+
         [Required]
         [DisplayName("Degree Program Id")]
         public int DegreeProgramId { get; set; }

@@ -18,5 +18,6 @@ namespace University.Data
         public DbSet<CourseSection> CourseSections { get; set; }
         public DbSet<Enrollment> Enrollments { get; set; }
         public DbSet<WaitlistEntry> WaitlistEntries { get; set; }
+        public DbSet<User> Users { get; set; }
     }
 }

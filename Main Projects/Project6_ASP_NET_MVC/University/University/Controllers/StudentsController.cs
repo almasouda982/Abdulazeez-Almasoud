@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using University.Data;
 using University.Models;
 
 namespace University.Controllers
 {
+    [Authorize]
     public class StudentsController : Controller
     {
         private readonly AppDbContext _db;
@@ -45,9 +47,10 @@ namespace University.Controllers
         // Edit
         //==============================
         [HttpGet]
-        public IActionResult Edit(long Id)
+        public IActionResult Edit(string uuid)
         {
-            var std = _db.Students.Find(Id);
+            var std = _db.Students.FirstOrDefault(s => s.Uuid == uuid);
+
             if (std == null)
             {
                 return NotFound();
@@ -59,22 +62,38 @@ namespace University.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.Students.Update(student);
+                var oldstd = _db.Students.FirstOrDefault(s => s.Uuid == student.Uuid);
+                if(oldstd == null)
+                {
+                    return NotFound();
+                }
+
+                // replaces Update
+                oldstd.DegreeProgramId = student.DegreeProgramId;
+                oldstd.FirstName = student.FirstName;
+                oldstd.LastName = student.LastName;
+                oldstd.Email= student.Email;
+                oldstd.Phone = student.Phone;
+                oldstd.Standing = student.Standing;
+                oldstd.GPA= student.GPA;
+                oldstd.EnrollmentStatus = student.EnrollmentStatus;
+
                 _db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
-            ModelState.AddModelError("", "Please fill all the required fields.");
+            ModelState.AddModelError("", "Please fill all the required fields");
             return View(student);
+
+
         }
 
         //===========
         // Delete
         //===========
         [HttpGet]
-        public IActionResult Delete(long Id)
+        public IActionResult Delete(string uuid)
         {
-            var std = _db.Students.Find(Id);
+            var std = _db.Students.FirstOrDefault(s => s.Uuid == uuid);
             if (std == null)
             {
                 return NotFound();
@@ -82,9 +101,16 @@ namespace University.Controllers
             return View(std);
         }
         [HttpPost]
-        public IActionResult Delete(Student student)
+        [ActionName("Delete")]
+        public IActionResult DeleteConfirm(string uuid)
         {
-            _db.Students.Remove(student);
+            var std = _db.Students.FirstOrDefault(s => s.Uuid == uuid);
+            if (std == null)
+            {
+                return NotFound();
+            }
+
+            _db.Students.Remove(std);
             _db.SaveChanges();
             return RedirectToAction("Index");
         }

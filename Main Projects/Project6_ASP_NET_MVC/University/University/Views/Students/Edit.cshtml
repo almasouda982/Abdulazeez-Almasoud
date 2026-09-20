@@ -6,7 +6,7 @@
 
 <div class="container">
     <h1>Edit Students</h1>
-    <form asp-action="Edit" method="post">
+    <form asp-action="Edit" method="post" asp-route-Uuid="@Model.Uuid">
 
         <div class="text-danger" asp-validation-summary="All">
         </div>

@@ -39,8 +39,8 @@
                     <td>@student.GPA</td>
                     <td>@(student.EnrollmentStatus ? "Enrolled" : "Not Enrolled")</td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@student.Id" class="btn btn-sm btn-warning">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@student.Id" class="btn btn-sm btn-danger">Delete</a>
+                        <a asp-action="Edit" asp-route-Uuid="@student.Uuid" class="btn btn-sm btn-warning">Edit</a>
+                        <a asp-action="Delete" asp-route-Uuid="@student.Uuid" class="btn btn-sm btn-danger">Delete</a>
 
                     </td>
 
