@@ -10,6 +10,8 @@ namespace University.Models
     {
         [Key]
         public int Id { get; set; } = 0;
+        public string Uuid { get; set; } = Guid.NewGuid().ToString();
+
         [Required]
         [DisplayName("Degree Program Id")]
         public int DegreeProgramId { get; set; }

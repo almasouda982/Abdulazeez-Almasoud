@@ -9,6 +9,8 @@ namespace University.Models
     {
         [Key]
         public int Id { get; set; }
+        public string Uuid { get; set; } = Guid.NewGuid().ToString();
+
         [Required]
         [DisplayName("Program Name")]
         [StringLength(100, MinimumLength = 3, ErrorMessage = "Program name must be between 3 and 100 characters.")]

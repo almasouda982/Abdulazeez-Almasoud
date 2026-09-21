@@ -9,6 +9,8 @@ namespace University.Models
     {
         [Key]
         public int Id { get; set; }
+        public string Uuid { get; set; } = Guid.NewGuid().ToString();
+
         [DisplayName("Minimum Grade Required")]
         [RegularExpression(@"^(A[+-]?|B[+-]?|C[+-]?|D[+-]?|F)$", ErrorMessage = "Must be a valid letter grade (e.g., A+, B, C-).")]
         public string? MinGradeRequired { get; set; } = "";

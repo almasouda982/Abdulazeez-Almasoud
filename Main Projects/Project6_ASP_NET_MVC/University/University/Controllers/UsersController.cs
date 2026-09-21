@@ -74,9 +74,10 @@ namespace University.Controllers
         // =========================
         // Edit GET
         // =========================
-        public IActionResult Edit(int id)
+        public IActionResult Edit(string uuid)
         {
-            var user = _db.Users.Find(id);
+            var user = _db.Users.FirstOrDefault(u => u.Uuid == uuid);
+
 
             if (user == null)
                 return NotFound();
@@ -93,7 +94,7 @@ namespace University.Controllers
         {
             if (ModelState.IsValid)
             {
-                var oldUser = _db.Users.Find(user.Id);
+                var oldUser = _db.Users.FirstOrDefault(u => u.Uuid == u.Uuid);
 
                 if (oldUser == null)
                     return NotFound();
@@ -114,7 +115,7 @@ namespace University.Controllers
 
                 return RedirectToAction("Index");
             }
-
+            ModelState.AddModelError("", "Please fill all required fields");
             return View(user);
         }
 
@@ -122,9 +123,9 @@ namespace University.Controllers
         // =========================
         // Delete GET
         // =========================
-        public IActionResult Delete(int id)
+        public IActionResult Delete(string uuid)
         {
-            var user = _db.Users.Find(id);
+            var user = _db.Users.FirstOrDefault(u => u.Uuid == uuid);
 
             if (user == null)
                 return NotFound();
@@ -137,16 +138,15 @@ namespace University.Controllers
         // POST
         [HttpPost]
         [ActionName("Delete")]
-        public IActionResult DeleteConfirm(int id)
+        public IActionResult DeleteConfirm(string uuid)
         {
-            var user = _db.Users.Find(id);
+            var user = _db.Users.FirstOrDefault(u => u.Uuid == uuid);
 
             if (user == null)
                 return NotFound();
 
             _db.Users.Remove(user);
             _db.SaveChanges();
-
             return RedirectToAction("Index");
         }
     }

@@ -10,6 +10,8 @@ namespace University.Models
     {
         [Key]
         public int Id { get; set; }
+        public string Uuid { get; set; } = Guid.NewGuid().ToString();
+
         [Required]
         [DisplayName("Student Id")]
         [Range(1000000000, 9999999999, ErrorMessage = "Student ID must be a 10-digit number.")]

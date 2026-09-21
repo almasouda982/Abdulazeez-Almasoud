@@ -3,6 +3,8 @@
     public class User
     {
         public int Id { get; set; }
+        public string Uuid { get; set; } = Guid.NewGuid().ToString();
+
 
         public string Name { get; set; }
 

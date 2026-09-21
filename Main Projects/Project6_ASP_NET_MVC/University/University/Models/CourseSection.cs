@@ -10,6 +10,8 @@ namespace University.Models
     {
         [Key]
         public int Id { get; set; }
+        public string Uuid { get; set; } = Guid.NewGuid().ToString();
+
         [Required]
         [Range(1,99, ErrorMessage ="Sections must be between 1 and 99.")]
         public int SectionNumber { get; set; }

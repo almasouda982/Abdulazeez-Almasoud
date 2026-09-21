@@ -9,6 +9,8 @@ namespace University.Models
     {
         [Key]
         public int Id { get; set; }
+        public string Uuid { get; set; } = Guid.NewGuid().ToString();
+
         [Required]
         [DisplayName("Course Code")]
         [RegularExpression(@"^[A-Za-z]{3}\d{3}$", ErrorMessage = "Must be 3 letters followed by 3 numbers.")]
