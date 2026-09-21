@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using University.Data;
 using University.Models;
 
 namespace University.Controllers
 {
+    [Authorize]
+
     public class DegreeProgramsController : Controller
     {
         private readonly AppDbContext _db;
@@ -44,9 +47,9 @@ namespace University.Controllers
         // Edit
         //==============================
         [HttpGet]
-        public IActionResult Edit(int Id)
+        public IActionResult Edit(string uuid)
         {
-            var degp = _db.DegreePrograms.Find(Id);
+            var degp = _db.DegreePrograms.FirstOrDefault(d => d.Uuid == uuid);
             if (degp == null)
             {
                 return NotFound();
@@ -58,7 +61,16 @@ namespace University.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.DegreePrograms.Update(degreeProgram);
+                var olddegp = _db.DegreePrograms.FirstOrDefault(o => o.Uuid == degreeProgram.Uuid);
+                if(olddegp == null)
+                {
+                    return NotFound();
+                }
+
+                olddegp.Name = degreeProgram.Name;
+                olddegp.CatalogYear = degreeProgram.CatalogYear;
+                olddegp.TotalCreditsRequired = degreeProgram.TotalCreditsRequired;
+
                 _db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -71,9 +83,9 @@ namespace University.Controllers
         // Delete
         //===========
         [HttpGet]
-        public IActionResult Delete(int Id)
+        public IActionResult Delete(string uuid)
         {
-            var degp = _db.DegreePrograms.Find(Id);
+            var degp = _db.DegreePrograms.FirstOrDefault(d => d.Uuid ==uuid);
             if (degp == null)
             {
                 return NotFound();
@@ -81,9 +93,15 @@ namespace University.Controllers
             return View(degp);
         }
         [HttpPost]
-        public IActionResult Delete(DegreeProgram degreeProgram)
+        [ActionName("Delete")]
+        public IActionResult DeleteConfirm(string uuid)
         {
-            _db.DegreePrograms.Remove(degreeProgram);
+            var degp = _db.DegreePrograms.FirstOrDefault(d => d.Uuid==uuid);
+            if (degp == null)
+            {
+                return NotFound();
+            }
+            _db.DegreePrograms.Remove(degp);
             _db.SaveChanges();
             return RedirectToAction("Index");
         }

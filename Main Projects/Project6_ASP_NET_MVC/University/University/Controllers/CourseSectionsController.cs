@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using University.Data;
 using University.Models;
 
 namespace University.Controllers
 {
+    [Authorize]
+
     public class CourseSectionsController : Controller
     {
         private readonly AppDbContext _db;
@@ -44,9 +47,9 @@ namespace University.Controllers
         // Edit
         //==============================
         [HttpGet]
-        public IActionResult Edit(int Id)
+        public IActionResult Edit(string uuid)
         {
-            var crs = _db.CourseSections.Find(Id);
+            var crs = _db.CourseSections.FirstOrDefault(c => c.Uuid == uuid);
             if (crs == null)
             {
                 return NotFound();
@@ -58,7 +61,17 @@ namespace University.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.CourseSections.Update(courseSection);
+                var oldcrs = _db.CourseSections.FirstOrDefault(c => c.Uuid == courseSection.Uuid);
+                if (oldcrs == null)
+                {
+                    return NotFound();
+                }
+
+                oldcrs.CourseId = courseSection.CourseId;
+                oldcrs.Semester = courseSection.Semester;
+                oldcrs.SectionNumber = courseSection.SectionNumber;
+                oldcrs.MaxCapacity = courseSection.MaxCapacity;
+
                 _db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -71,9 +84,9 @@ namespace University.Controllers
         // Delete
         //===========
         [HttpGet]
-        public IActionResult Delete(int Id)
+        public IActionResult Delete(string uuid)
         {
-            var crs = _db.CourseSections.Find(Id);
+            var crs = _db.CourseSections.FirstOrDefault(c => c.Uuid == uuid);
             if (crs == null)
             {
                 return NotFound();
@@ -81,9 +94,15 @@ namespace University.Controllers
             return View(crs);
         }
         [HttpPost]
-        public IActionResult Delete(CourseSection courseSection)
+        [ActionName("Delete")]
+        public IActionResult DeleteConfirm(string uuid)
         {
-            _db.CourseSections.Remove(courseSection);
+            var crs = _db.CourseSections.FirstOrDefault(c => c.Uuid == uuid);
+            if (crs == null)
+            {
+                return NotFound();
+            }
+            _db.CourseSections.Remove(crs);
             _db.SaveChanges();
             return RedirectToAction("Index");
         }

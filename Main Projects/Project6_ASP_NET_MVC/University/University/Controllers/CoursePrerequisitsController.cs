@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using University.Data;
 using University.Models;
 
 namespace University.Controllers
 {
+    [Authorize]
+
     public class CoursePrerequisitsController : Controller
     {
         private readonly AppDbContext _db;
@@ -43,9 +46,9 @@ namespace University.Controllers
         //Edit
         //============
         [HttpGet]
-        public IActionResult Edit(int Id)
+        public IActionResult Edit(string uuid)
         {
-            var crsp = _db.CoursePrerequesites.Find(Id);
+            var crsp = _db.CoursePrerequesites.FirstOrDefault(c => c.Uuid == uuid);
             if (crsp == null)
             {
                 return NotFound();
@@ -57,7 +60,15 @@ namespace University.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.CoursePrerequesites.Update(coursePrerequisite);
+                var oldcrsp = _db.CoursePrerequesites.FirstOrDefault(o => o.Uuid == coursePrerequisite.Uuid);
+                if(oldcrsp == null)
+                {
+                    return NotFound();
+                }
+                oldcrsp.MinGradeRequired = coursePrerequisite.MinGradeRequired;
+                oldcrsp.CourseId = coursePrerequisite.CourseId;
+                oldcrsp.PrerequisiteCourseId = coursePrerequisite.PrerequisiteCourseId;
+
                 _db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -69,9 +80,9 @@ namespace University.Controllers
         // Delete
         //===========
         [HttpGet]
-        public IActionResult Delete(int Id)
+        public IActionResult Delete(string uuid)
         {
-            var crsp = _db.CoursePrerequesites.Find(Id);
+            var crsp = _db.CoursePrerequesites.FirstOrDefault(c => c.Uuid == uuid);
             if (crsp == null)
             {
                 return NotFound();
@@ -79,9 +90,16 @@ namespace University.Controllers
             return View(crsp);
         }
         [HttpPost]
-        public IActionResult Delete(CoursePrerequisite coursePrerequisite)
+        [ActionName("Delete")]
+        public IActionResult DeleteConfirm(string uuid)
         {
-            _db.CoursePrerequesites.Remove(coursePrerequisite);
+            var crsp = _db.CoursePrerequesites.FirstOrDefault(c => c.Uuid == uuid);
+            if (crsp == null)
+            {
+                return NotFound();
+            }
+
+            _db.CoursePrerequesites.Remove(crsp);
             _db.SaveChanges();
             return RedirectToAction("Index");
         }

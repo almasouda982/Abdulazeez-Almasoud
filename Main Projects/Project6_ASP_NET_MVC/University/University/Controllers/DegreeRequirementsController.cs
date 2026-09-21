@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using University.Data;
 using University.Models;
 
 namespace University.Controllers
 {
+    [Authorize]
+
     public class DegreeRequirementsController : Controller
     {
         private readonly AppDbContext _db;
@@ -44,9 +47,9 @@ namespace University.Controllers
         // Edit
         //==============================
         [HttpGet]
-        public IActionResult Edit(int Id)
+        public IActionResult Edit(string uuid)
         {
-            var degr = _db.DegreeRequirements.Find(Id);
+            var degr = _db.DegreeRequirements.FirstOrDefault(d => d.Uuid == uuid);
             if (degr == null)
             {
                 return NotFound();
@@ -58,7 +61,18 @@ namespace University.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.DegreeRequirements.Update(degreeRequirement);
+                var olddegr = _db.DegreeRequirements.FirstOrDefault(o => o.Uuid == degreeRequirement.Uuid);
+                if (olddegr == null)
+                {
+                    return NotFound();
+                }
+
+                olddegr.DegreeProgramId = degreeRequirement.DegreeProgramId;
+                olddegr.CategoryName = degreeRequirement.CategoryName;
+                olddegr.RequiredCredits = degreeRequirement.RequiredCredits;
+                olddegr.MinLevel= degreeRequirement.MinLevel;
+
+
                 _db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -71,9 +85,9 @@ namespace University.Controllers
         // Delete
         //===========
         [HttpGet]
-        public IActionResult Delete(int Id)
+        public IActionResult Delete(string uuid)
         {
-            var degr = _db.DegreeRequirements.Find(Id);
+            var degr = _db.DegreeRequirements.FirstOrDefault(d => d.Uuid == uuid);
             if (degr == null)
             {
                 return NotFound();
@@ -81,9 +95,16 @@ namespace University.Controllers
             return View(degr);
         }
         [HttpPost]
-        public IActionResult Delete(DegreeRequirement degreeRequirement)
+        [ActionName("Delete")]
+        public IActionResult DeleteConfirm(string uuid)
         {
-            _db.DegreeRequirements.Remove(degreeRequirement);
+            var degr = _db.DegreeRequirements.FirstOrDefault(d => d.Uuid ==uuid);
+            if (degr == null)
+            {
+                return NotFound();
+            }
+
+            _db.DegreeRequirements.Remove(degr);
             _db.SaveChanges();
             return RedirectToAction("Index");
         }

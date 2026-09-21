@@ -33,8 +33,8 @@
                     <td>@enrollment.LetterGradePoints</td>
                     <td>@(enrollment.Status ? "Enrolled" : "Not Enrolled")</td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@enrollment.Id" class="btn btn-sm btn-warning">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@enrollment.Id" class="btn btn-sm btn-danger">Delete</a>
+                        <a asp-action="Edit" asp-route-Uuid="@enrollment.Uuid" class="btn btn-sm btn-warning">Edit</a>
+                        <a asp-action="Delete" asp-route-Uuid="@enrollment.Uuid" class="btn btn-sm btn-danger">Delete</a>
 
                     </td>
 

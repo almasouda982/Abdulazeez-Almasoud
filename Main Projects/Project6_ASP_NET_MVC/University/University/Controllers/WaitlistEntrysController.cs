@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using University.Data;
 using University.Models;
 
 namespace University.Controllers
 {
+    [Authorize]
+
     public class WaitlistEntrysController : Controller
     {
         private readonly AppDbContext _db;
@@ -44,9 +47,9 @@ namespace University.Controllers
         // Edit
         //==============================
         [HttpGet]
-        public IActionResult Edit(int Id)
+        public IActionResult Edit(string uuid)
         {
-            var wti = _db.WaitlistEntries.Find(Id);
+            var wti = _db.WaitlistEntries.FirstOrDefault(w => w.Uuid == uuid);
             if (wti == null)
             {
                 return NotFound();
@@ -58,7 +61,19 @@ namespace University.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.WaitlistEntries.Update(waitlistEntry);
+                var oldwti = _db.WaitlistEntries.FirstOrDefault(o => o.Uuid == waitlistEntry.Uuid);
+                if (oldwti == null)
+                {
+                    return NotFound();
+                }
+
+                oldwti.StudentId = waitlistEntry.StudentId;
+                oldwti.CourseSectionId = waitlistEntry.CourseSectionId;
+                oldwti.Position = waitlistEntry.Position;
+                oldwti.OfferedAt = waitlistEntry.OfferedAt;
+                oldwti.ExpiresAt = waitlistEntry.ExpiresAt;
+                oldwti.Status = waitlistEntry.Status;
+
                 _db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -71,9 +86,9 @@ namespace University.Controllers
         // Delete
         //===========
         [HttpGet]
-        public IActionResult Delete(int Id)
+        public IActionResult Delete(string uuid)
         {
-            var wti = _db.WaitlistEntries.Find(Id);
+            var wti = _db.WaitlistEntries.FirstOrDefault(w => w.Uuid == uuid);
             if (wti == null)
             {
                 return NotFound();
@@ -81,9 +96,16 @@ namespace University.Controllers
             return View(wti);
         }
         [HttpPost]
-        public IActionResult Delete(WaitlistEntry waitlistEntry)
+        [ActionName("Delete")]
+        public IActionResult DeleteConfirm(string uuid)
         {
-            _db.WaitlistEntries.Remove(waitlistEntry);
+            var wti = _db.WaitlistEntries.FirstOrDefault(w => w.Uuid == uuid);
+            if (wti == null)
+            {
+                return NotFound();
+            }
+
+            _db.WaitlistEntries.Remove(wti);
             _db.SaveChanges();
             return RedirectToAction("Index");
         }

@@ -35,8 +35,8 @@
                     <td>@waitlistEntry.ExpiresAt</td>
                     <td>@(waitlistEntry.Status ? "Seat Offered" : "Waiting")</td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@waitlistEntry.Id" class="btn btn-sm btn-warning">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@waitlistEntry.Id" class="btn btn-sm btn-danger">Delete</a>
+                        <a asp-action="Edit" asp-route-Uuid="@waitlistEntry.Uuid" class="btn btn-sm btn-warning">Edit</a>
+                        <a asp-action="Delete" asp-route-Uuid="@waitlistEntry.Uuid" class="btn btn-sm btn-danger">Delete</a>
 
                     </td>
 
