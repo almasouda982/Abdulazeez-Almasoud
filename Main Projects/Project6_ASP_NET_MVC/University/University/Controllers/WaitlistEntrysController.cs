@@ -26,7 +26,9 @@ namespace University.Controllers
 
         public async Task<IActionResult> Index()
         {
-            IEnumerable<WaitlistEntry> waitlistEntries = await _db.WaitlistEntries.Include(w => w.Student).Include(w => w.CourseSection).ToListAsync();
+            IEnumerable<WaitlistEntry> waitlistEntries = await _db.WaitlistEntries
+                .Include(w => w.Student)
+                .Include(w => w.CourseSection).ToListAsync();
             return View(waitlistEntries);
         }
 
@@ -39,6 +41,9 @@ namespace University.Controllers
             var students = _db.Students.ToList();
             SelectList selectListItems1 = new SelectList(students, "Id", "LastName");
             ViewBag.Students = selectListItems1;
+            var courseSections = _db.CourseSections.ToList();
+            SelectList selectListItems2 = new SelectList(courseSections, "Id", "SectionNumber");
+            ViewBag.CourseSections = selectListItems2;
 
             return View();;
         }

@@ -12,8 +12,8 @@
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Student Id</th>
-                <th>Course Section Id</th>
+                <th>Student Last Name</th>
+                <th>Course Section Code</th>
                 <th>Position</th>
                 <th>Offered At</th>
                 <th>ExpiresAt</th>
@@ -28,8 +28,8 @@
 
                 <tr>
                     <td>@waitlistEntry.Id</td>
-                    <td>@waitlistEntry.StudentId</td>
-                    <td>@waitlistEntry.CourseSectionId</td>
+                    <td>@waitlistEntry.Student?.LastName</td>
+                    <td>@waitlistEntry.CourseSection?.SectionNumber</td>
                     <td>@waitlistEntry.Position</td>
                     <td>@waitlistEntry.OfferedAt</td>
                     <td>@waitlistEntry.ExpiresAt</td>
