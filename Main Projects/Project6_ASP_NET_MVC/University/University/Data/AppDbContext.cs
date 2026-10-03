@@ -30,9 +30,6 @@ namespace University.Data
         //        .HasForeignKey(cp => cp.PrerequisiteCourseId)
         //        .OnDelete(DeleteBehavior.Restrict);
 
-        //    modelBuilder.Entity<Enrollment>()
-        //        .Property(e => e.LetterGradePoints)
-        //        .HasPrecision(3, 2);
         //}
     }
 }
