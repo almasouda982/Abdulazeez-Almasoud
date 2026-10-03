@@ -71,6 +71,12 @@ namespace University.Controllers
             {
                 return NotFound();
             }
+            var students = _db.Students.ToList();
+            SelectList selectListItems1 = new SelectList(students, "Id", "LastName");
+            ViewBag.Students = selectListItems1;
+            var courseSections = _db.CourseSections.ToList();
+            SelectList selectListItems2 = new SelectList(courseSections, "Id", "SectionNumber");
+            ViewBag.CourseSections = selectListItems2;
             return View(wti);
         }
         [HttpPost]
