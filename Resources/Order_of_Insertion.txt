@@ -1,0 +1,66 @@
+To insert data into the database without violating Foreign Key (FK) constraints, you must follow a specific insertion hierarchy: **Parent tables (tables with no foreign keys) must be populated first**, followed by dependent child tables.
+
+Here is the exact insertion order for your model classes:
+
+---
+
+### Tier 1: Independent Tables (Add Data First)
+
+1. Course
+
+
+
+
+
+2. DegreeProgram
+
+
+
+
+
+3. User
+
+
+
+
+4. Student
+
+
+
+
+
+
+5. DegreeRequirement
+
+
+
+
+
+
+6. CourseSection
+
+
+
+
+
+7. CoursePrerequisite
+
+
+
+
+
+8. Enrollment
+
+
+
+
+
+9. WaitlistEntry
+
+
+
+
+
+
+
+```
