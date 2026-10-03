@@ -15,6 +15,7 @@ namespace University.Models
         [Required]
         [DisplayName("Degree Program Id")]
         public int DegreeProgramId { get; set; }
+        public DegreeProgram? DegreeProgram { get; set; }
         [Required]
         [DisplayName("Category Name")]
         [StringLength(50, ErrorMessage = "Category name cannot exceed 50 characters.")]

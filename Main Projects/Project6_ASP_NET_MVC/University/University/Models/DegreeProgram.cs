@@ -23,5 +23,8 @@ namespace University.Models
         [DisplayName("Total Credits Required")]
         [Range(100, 120, ErrorMessage = "Total credits required must be between 100 and 120")]
         public int TotalCreditsRequired { get; set; } = 0;
+
+        public ICollection<Student>? Students { get; set; }
+        public ICollection<DegreeRequirement>? DegreeRequirements { get; set; } 
     }
 }

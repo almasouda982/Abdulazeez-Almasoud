@@ -28,6 +28,9 @@ namespace University.Models
         public string TimeSlot { get; set; } = "";
         [Required]
         public  int CourseId { get; set; }
+        public Course? Course { get; set; }
 
+        public ICollection<Enrollment>? Enrollments { get; set; }
+        public ICollection<WaitlistEntry>? WaitlistEntries { get; set; }
     }
 }

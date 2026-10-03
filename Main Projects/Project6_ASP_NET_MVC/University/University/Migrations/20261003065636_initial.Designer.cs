@@ -12,8 +12,8 @@ using University.Data;
 namespace University.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260921042945_Uuid_Added_To_all_Models")]
-    partial class Uuid_Added_To_all_Models
+    [Migration("20261003065636_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -81,7 +81,11 @@ namespace University.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CoursePrerequesites");
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("PrerequisiteCourseId");
+
+                    b.ToTable("CoursePrerequisites");
                 });
 
             modelBuilder.Entity("University.Models.CourseSection", b =>
@@ -118,6 +122,8 @@ namespace University.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
 
                     b.ToTable("CourseSections");
                 });
@@ -179,6 +185,8 @@ namespace University.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DegreeProgramId");
+
                     b.ToTable("DegreeRequirements");
                 });
 
@@ -198,7 +206,8 @@ namespace University.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("LetterGradePoints")
-                        .HasColumnType("decimal(18,2)");
+                        .HasPrecision(3, 2)
+                        .HasColumnType("decimal(3,2)");
 
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
@@ -211,6 +220,10 @@ namespace University.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CourseSectionId");
+
+                    b.HasIndex("StudentId");
 
                     b.ToTable("Enrollments");
                 });
@@ -259,6 +272,8 @@ namespace University.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DegreeProgramId");
 
                     b.ToTable("Students");
                 });
@@ -331,7 +346,127 @@ namespace University.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CourseSectionId");
+
+                    b.HasIndex("StudentId");
+
                     b.ToTable("WaitlistEntries");
+                });
+
+            modelBuilder.Entity("University.Models.CoursePrerequisite", b =>
+                {
+                    b.HasOne("University.Models.Course", "Course")
+                        .WithMany()
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("University.Models.Course", "PrerequisiteCourse")
+                        .WithMany()
+                        .HasForeignKey("PrerequisiteCourseId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("PrerequisiteCourse");
+                });
+
+            modelBuilder.Entity("University.Models.CourseSection", b =>
+                {
+                    b.HasOne("University.Models.Course", "Course")
+                        .WithMany("CourseSections")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+                });
+
+            modelBuilder.Entity("University.Models.DegreeRequirement", b =>
+                {
+                    b.HasOne("University.Models.DegreeProgram", "DegreeProgram")
+                        .WithMany("DegreeRequirements")
+                        .HasForeignKey("DegreeProgramId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DegreeProgram");
+                });
+
+            modelBuilder.Entity("University.Models.Enrollment", b =>
+                {
+                    b.HasOne("University.Models.CourseSection", "CourseSection")
+                        .WithMany("Enrollments")
+                        .HasForeignKey("CourseSectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("University.Models.Student", "Student")
+                        .WithMany("Enrollments")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CourseSection");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("University.Models.Student", b =>
+                {
+                    b.HasOne("University.Models.DegreeProgram", "DegreeProgram")
+                        .WithMany("Students")
+                        .HasForeignKey("DegreeProgramId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DegreeProgram");
+                });
+
+            modelBuilder.Entity("University.Models.WaitlistEntry", b =>
+                {
+                    b.HasOne("University.Models.CourseSection", "CourseSection")
+                        .WithMany("WaitlistEntries")
+                        .HasForeignKey("CourseSectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("University.Models.Student", "Student")
+                        .WithMany("WaitlistEntries")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CourseSection");
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("University.Models.Course", b =>
+                {
+                    b.Navigation("CourseSections");
+                });
+
+            modelBuilder.Entity("University.Models.CourseSection", b =>
+                {
+                    b.Navigation("Enrollments");
+
+                    b.Navigation("WaitlistEntries");
+                });
+
+            modelBuilder.Entity("University.Models.DegreeProgram", b =>
+                {
+                    b.Navigation("DegreeRequirements");
+
+                    b.Navigation("Students");
+                });
+
+            modelBuilder.Entity("University.Models.Student", b =>
+                {
+                    b.Navigation("Enrollments");
+
+                    b.Navigation("WaitlistEntries");
                 });
 #pragma warning restore 612, 618
         }

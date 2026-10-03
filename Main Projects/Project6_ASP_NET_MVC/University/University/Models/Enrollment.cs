@@ -16,9 +16,11 @@ namespace University.Models
         [DisplayName("Student Id")]
         [Range(1000000000, 9999999999, ErrorMessage = "Student ID must be a 10-digit number.")]
         public long StudentId { get; set; }
+        public Student? Student { get; set; }
         [Required]
         [DisplayName("Course Section Id")]
         public int CourseSectionId { get; set; }
+        public CourseSection? CourseSection { get; set; }
         [Required]
         [DisplayName("Final Grade")]
         [RegularExpression(@"^(A[+-]?|B[+-]?|C[+-]?|D[+-]?|F)$", ErrorMessage = "Must be a valid letter grade (e.g., A+, B, C-).")]

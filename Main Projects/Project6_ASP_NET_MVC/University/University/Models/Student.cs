@@ -16,6 +16,7 @@ namespace University.Models
         [Required]
         [DisplayName("Degree Program Id")]
         public int DegreeProgramId { get; set; }
+        public DegreeProgram? DegreeProgram { get; set; }
         [Required]
         [DisplayName("First Name")]
         [StringLength(50)]
@@ -41,5 +42,8 @@ namespace University.Models
         public double GPA { get; set; } = 0.0;
         [Required]
         public bool EnrollmentStatus { get; set; } = false;
+
+        public ICollection<Enrollment>? Enrollments { get; set; }
+        public ICollection<WaitlistEntry>? WaitlistEntries { get; set; }
     }
 }

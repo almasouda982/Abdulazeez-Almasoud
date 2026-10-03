@@ -26,6 +26,7 @@ namespace University.Models
         [DisplayName("Course Description")]
         [StringLength(500, ErrorMessage ="Description must be at most 500 characters long")]
         public string? Description { get; set; } = "";
+        public ICollection<CourseSection>? CourseSections { get; set; }
 
     }
 }

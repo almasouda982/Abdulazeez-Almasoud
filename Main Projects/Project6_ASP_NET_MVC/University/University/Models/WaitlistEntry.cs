@@ -16,8 +16,10 @@ namespace University.Models
         [DisplayName("Student Id")]
         [Range(1000000000, 9999999999, ErrorMessage = "Student ID must be a 10-digit number.")]
         public long StudentId { get; set; }
+        public Student? Student { get; set; }
         [Required]
         public int CourseSectionId { get; set; }
+        public CourseSection? CourseSection { get; set; }
         [Required]
         [Range(1, 500, ErrorMessage = "Waitlist position must be between 1 and 500.")]
         public int Position { get; set; }
