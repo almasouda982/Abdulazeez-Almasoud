@@ -5,7 +5,7 @@ using University.Models;
 
 namespace University.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class UsersController : Controller
     {
         private readonly AppDbContext _db;

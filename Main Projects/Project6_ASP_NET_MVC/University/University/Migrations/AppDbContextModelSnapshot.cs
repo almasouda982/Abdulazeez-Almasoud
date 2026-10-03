@@ -80,8 +80,6 @@ namespace University.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.HasIndex("PrerequisiteCourseId");
-
                     b.ToTable("CoursePrerequisites");
                 });
 
@@ -203,8 +201,7 @@ namespace University.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("LetterGradePoints")
-                        .HasPrecision(3, 2)
-                        .HasColumnType("decimal(3,2)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
@@ -358,15 +355,7 @@ namespace University.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("University.Models.Course", "PrerequisiteCourse")
-                        .WithMany()
-                        .HasForeignKey("PrerequisiteCourseId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("Course");
-
-                    b.Navigation("PrerequisiteCourse");
                 });
 
             modelBuilder.Entity("University.Models.CourseSection", b =>

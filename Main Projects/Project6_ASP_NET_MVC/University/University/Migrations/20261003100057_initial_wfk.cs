@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace University.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class initial_wfk : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -82,12 +82,6 @@ namespace University.Migrations
                         principalTable: "Courses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CoursePrerequisites_Courses_PrerequisiteCourseId",
-                        column: x => x.PrerequisiteCourseId,
-                        principalTable: "Courses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -176,7 +170,7 @@ namespace University.Migrations
                     CourseSectionId = table.Column<int>(type: "int", nullable: false),
                     FinalGrade = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<bool>(type: "bit", nullable: false),
-                    LetterGradePoints = table.Column<decimal>(type: "decimal(3,2)", precision: 3, scale: 2, nullable: false)
+                    LetterGradePoints = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -230,11 +224,6 @@ namespace University.Migrations
                 name: "IX_CoursePrerequisites_CourseId",
                 table: "CoursePrerequisites",
                 column: "CourseId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CoursePrerequisites_PrerequisiteCourseId",
-                table: "CoursePrerequisites",
-                column: "PrerequisiteCourseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CourseSections_CourseId",

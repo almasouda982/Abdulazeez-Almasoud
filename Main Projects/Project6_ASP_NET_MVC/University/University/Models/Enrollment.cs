@@ -14,7 +14,7 @@ namespace University.Models
 
         [Required]
         [DisplayName("Student Id")]
-        [Range(1000000000, 9999999999, ErrorMessage = "Student ID must be a 10-digit number.")]
+        //[Range(1000000000, 9999999999, ErrorMessage = "Student ID must be a 10-digit number.")]
         public long StudentId { get; set; }
         public Student? Student { get; set; }
         [Required]

@@ -21,6 +21,6 @@ namespace University.Models
         [Required]
         [DisplayName("Prerequisite Course ID")]
         public int PrerequisiteCourseId { get; set; }
-        public Course? PrerequisiteCourse { get; set; }
+        //public Course? PrerequisiteCourse { get; set; }
     }
 }

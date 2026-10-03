@@ -20,19 +20,19 @@ namespace University.Data
         public DbSet<WaitlistEntry> WaitlistEntries { get; set; }
         public DbSet<User> Users { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<CoursePrerequisite>()
-                .HasOne(cp => cp.PrerequisiteCourse)
-                .WithMany()
-                .HasForeignKey(cp => cp.PrerequisiteCourseId)
-                .OnDelete(DeleteBehavior.Restrict);
+        //    modelBuilder.Entity<CoursePrerequisite>()
+        //        .HasOne(cp => cp.PrerequisiteCourse)
+        //        .WithMany()
+        //        .HasForeignKey(cp => cp.PrerequisiteCourseId)
+        //        .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Enrollment>()
-                .Property(e => e.LetterGradePoints)
-                .HasPrecision(3, 2);
-        }
+        //    modelBuilder.Entity<Enrollment>()
+        //        .Property(e => e.LetterGradePoints)
+        //        .HasPrecision(3, 2);
+        //}
     }
 }
