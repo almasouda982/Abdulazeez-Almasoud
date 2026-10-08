@@ -1,4 +1,5 @@
-﻿@model IEnumerable<CourseSection>
+﻿@using University.Dtos
+@model IEnumerable<CourseSectionDto>
 
 <div class="container">
 
@@ -29,7 +30,7 @@
 
                 <tr>
                     <td>@courseSection.Id</td>
-                    <td>@courseSection.Course?.Code</td>
+                    <td>@courseSection.Code</td>
                     <td>@courseSection.Semester</td>
                     <td>@courseSection.SectionNumber</td>
                     <td>@courseSection.MaxCapacity</td>

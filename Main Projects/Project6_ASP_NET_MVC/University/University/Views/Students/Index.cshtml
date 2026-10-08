@@ -1,4 +1,5 @@
-﻿@model IEnumerable<Student>
+﻿@using University.Dtos
+@model IEnumerable<StudentDto>
 
 <div class="container">
 
@@ -30,7 +31,7 @@
 
                 <tr>
                     <td>@student.Id</td>
-                    <td>@student.DegreeProgram?.Name</td>
+                    <td>@student.Name</td>
                     <td>@student.FirstName</td>
                     <td>@student.LastName</td>
                     <td>@student.Email</td>

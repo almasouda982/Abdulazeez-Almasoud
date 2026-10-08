@@ -37,7 +37,7 @@ namespace University.Controllers
         
         public IActionResult Index()
         {
-            IEnumerable<WaitlistEntryDto> waitlistEntries =  _db.WaitlistEntries.Select(w=> new WaitlistEntryDto
+            IEnumerable<WaitlistEntryDto> waitlistEntriesDto =  _db.WaitlistEntries.Select(w=> new WaitlistEntryDto
             {
                 // Mapping properties from WaitlistEntry to WaitlistEntryDto
                 Id = w.Id,
@@ -51,7 +51,7 @@ namespace University.Controllers
 
             }
             ).ToList();
-            return View(waitlistEntries);
+            return View(waitlistEntriesDto);
         }
 
         //==============================
@@ -64,19 +64,19 @@ namespace University.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(WaitlistEntryCreateDto waitlistEntryDto)
+        public IActionResult Create(WaitlistEntryCreateDto waitlistEntryCreateDto)
         {
             if (ModelState.IsValid)
             {
                 //Mapping the DTO to the WaitlistEntry model
                 var waitlistEntry = new WaitlistEntry
                 {
-                    StudentId = waitlistEntryDto.StudentId,
-                    CourseSectionId = waitlistEntryDto.CourseSectionId,
-                    Position = waitlistEntryDto.Position,
-                    OfferedAt = waitlistEntryDto.OfferedAt,
-                    ExpiresAt = waitlistEntryDto.ExpiresAt,
-                    Status = waitlistEntryDto.Status
+                    StudentId = waitlistEntryCreateDto.StudentId,
+                    CourseSectionId = waitlistEntryCreateDto.CourseSectionId,
+                    Position = waitlistEntryCreateDto.Position,
+                    OfferedAt = waitlistEntryCreateDto.OfferedAt,
+                    ExpiresAt = waitlistEntryCreateDto.ExpiresAt,
+                    Status = waitlistEntryCreateDto.Status
                 };
                 _db.WaitlistEntries.Add(waitlistEntry);
                 _db.SaveChanges();
@@ -85,7 +85,7 @@ namespace University.Controllers
             }
             ModelState.AddModelError("", "Please fill all the required fields.");
             LoadWatilistEntry();
-            return View(waitlistEntryDto);
+            return View(waitlistEntryCreateDto);
 
 
         }
@@ -116,22 +116,22 @@ namespace University.Controllers
             return View(dto);
         }
         [HttpPost]
-        public IActionResult Edit(WaitlistEntryUpdateDto waitlistEntryDto)
+        public IActionResult Edit(WaitlistEntryUpdateDto waitlistEntryUpdateDto)
         {
             if (ModelState.IsValid)
             {
-                var oldwti = _db.WaitlistEntries.FirstOrDefault(o => o.Uuid == waitlistEntryDto.Uuid);
+                var oldwti = _db.WaitlistEntries.FirstOrDefault(o => o.Uuid == waitlistEntryUpdateDto.Uuid);
                 if (oldwti == null)
                 {
                     return NotFound();
                 }
 
-                oldwti.StudentId = waitlistEntryDto.StudentId;
-                oldwti.CourseSectionId = waitlistEntryDto.CourseSectionId;
-                oldwti.Position = waitlistEntryDto.Position;
-                oldwti.OfferedAt = waitlistEntryDto.OfferedAt;
-                oldwti.ExpiresAt = waitlistEntryDto.ExpiresAt;
-                oldwti.Status = waitlistEntryDto.Status;
+                oldwti.StudentId = waitlistEntryUpdateDto.StudentId;
+                oldwti.CourseSectionId = waitlistEntryUpdateDto.CourseSectionId;
+                oldwti.Position = waitlistEntryUpdateDto.Position;
+                oldwti.OfferedAt = waitlistEntryUpdateDto.OfferedAt;
+                oldwti.ExpiresAt = waitlistEntryUpdateDto.ExpiresAt;
+                oldwti.Status = waitlistEntryUpdateDto.Status;
 
                 _db.SaveChanges();
                 return RedirectToAction("Index");
@@ -139,7 +139,7 @@ namespace University.Controllers
 
             ModelState.AddModelError("", "Please fill all the required fields.");
             LoadWatilistEntry();
-            return View(waitlistEntryDto);
+            return View(waitlistEntryUpdateDto);
         }
 
         //===========

@@ -1,4 +1,5 @@
-﻿@model IEnumerable<CoursePrerequisite>
+﻿@using University.Dtos
+@model IEnumerable<CoursePrerequisiteDto>
 
 <div class="container">
 
@@ -27,7 +28,7 @@
                 <tr>
                     <td>@courseprereq.Id</td>
                     <td>@courseprereq.MinGradeRequired</td>
-                    <td>@courseprereq.Course?.Code</td>
+                    <td>@courseprereq.Code</td>
                     <td>@courseprereq.PrerequisiteCourseId</td>
                     <td>
                         <a asp-action="Edit" asp-route-Uuid="@courseprereq.Uuid" class="btn btn-sm btn-warning">Edit</a>
