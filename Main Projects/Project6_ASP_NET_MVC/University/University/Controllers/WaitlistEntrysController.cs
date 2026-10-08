@@ -45,7 +45,7 @@ namespace University.Controllers
             SelectList selectListItems2 = new SelectList(courseSections, "Id", "SectionNumber");
             ViewBag.CourseSections = selectListItems2;
 
-            return View();;
+            return View();
         }
         [HttpPost]
         public IActionResult Create(WaitlistEntry waitlistEntry)

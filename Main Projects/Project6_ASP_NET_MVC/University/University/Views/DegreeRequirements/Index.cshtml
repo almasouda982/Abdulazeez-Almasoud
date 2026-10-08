@@ -12,7 +12,8 @@
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Degree Program Id</th>
+                @* <th>Degree Program Id</th> *@
+                <th>Degree Program Name</th>
                 <th>Category Name</th>
                 <th>Required Credits</th>
                 <th>Minimum Level</th>
@@ -26,7 +27,7 @@
 
                 <tr>
                     <td>@degreeReq.Id</td>
-                    <td>@degreeReq.DegreeProgramId</td>
+                    <td>@degreeReq.DegreeProgram?.Name</td>
                     <td>@degreeReq.CategoryName</td>
                     <td>@degreeReq.RequiredCredits</td>
                     <td>@degreeReq.MinLevel</td>

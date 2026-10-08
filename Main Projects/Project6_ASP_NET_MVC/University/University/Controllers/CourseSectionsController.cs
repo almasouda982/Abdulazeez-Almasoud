@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using University.Data;
 using University.Models;
@@ -28,7 +29,9 @@ namespace University.Controllers
             IEnumerable<CourseSection> courseSections = await _db.CourseSections
 
                 .Include(w => w.WaitlistEntries)
-                .Include(e => e.Enrollments).ToListAsync();
+                .Include(e => e.Enrollments)
+                .Include(c => c.Course)
+                .ToListAsync();
 
             return View(courseSections);
         }
@@ -39,7 +42,9 @@ namespace University.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-
+            var courses = _db.Courses.ToList();
+            SelectList selectListItems = new SelectList(courses, "Id", "Code");
+            ViewBag.Courses = selectListItems;
             return View();
         }
         [HttpPost]
@@ -66,6 +71,9 @@ namespace University.Controllers
             {
                 return NotFound();
             }
+            var courses = _db.Courses.ToList();
+            SelectList selectListItems = new SelectList(courses, "Id", "Code");
+            ViewBag.Courses = selectListItems;
             return View(crs);
         }
         [HttpPost]

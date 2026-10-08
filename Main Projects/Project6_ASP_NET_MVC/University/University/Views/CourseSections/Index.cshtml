@@ -12,7 +12,8 @@
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Course Id</th>
+                @* <th>Course Id</th> *@
+                <th>Course Code</th>
                 <th>Semester</th>
                 <th>Section Number</th>
                 <th>Max Capacity</th>
@@ -28,7 +29,7 @@
 
                 <tr>
                     <td>@courseSection.Id</td>
-                    <td>@courseSection.CourseId</td>
+                    <td>@courseSection.Course?.Code</td>
                     <td>@courseSection.Semester</td>
                     <td>@courseSection.SectionNumber</td>
                     <td>@courseSection.MaxCapacity</td>

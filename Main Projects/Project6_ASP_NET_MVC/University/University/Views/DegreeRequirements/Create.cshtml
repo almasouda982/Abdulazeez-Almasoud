@@ -10,9 +10,16 @@
         <div class="text-danger" asp-validation-summary="All"></div>
 
 
-        <div class="form-group">
+        @* <div class="form-group">
             <label class="control-label">Degree Program Id</label>
             <input asp-for="DegreeProgramId" class="form-control" />
+            <span asp-validation-for="DegreeProgramId" class="text-danger"></span>
+        </div> *@
+        <div class="form-group">
+            <label asp-for="DegreeProgramId" class="control-label">Degree Program Name</label>
+            <select asp-for="DegreeProgramId" class="form-control" asp-items="ViewBag.DegreePrograms">
+                <option value="">-- Select Degree Program --</option>
+            </select>
             <span asp-validation-for="DegreeProgramId" class="text-danger"></span>
         </div>
         <div class="form-group">
