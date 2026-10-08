@@ -12,8 +12,8 @@ using University.Data;
 namespace University.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20261003100057_initial_wfk")]
-    partial class initial_wfk
+    [Migration("20261008092348_intial")]
+    partial class intial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
