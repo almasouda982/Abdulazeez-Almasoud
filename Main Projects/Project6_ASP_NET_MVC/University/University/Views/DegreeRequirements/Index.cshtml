@@ -1,4 +1,5 @@
-﻿@model IEnumerable<DegreeRequirement>
+﻿@using University.Dtos
+@model IEnumerable<DegreeRequirementDto>
 
 <div class="container">
 
@@ -27,7 +28,7 @@
 
                 <tr>
                     <td>@degreeReq.Id</td>
-                    <td>@degreeReq.DegreeProgram?.Name</td>
+                    <td>@degreeReq.Name</td>
                     <td>@degreeReq.CategoryName</td>
                     <td>@degreeReq.RequiredCredits</td>
                     <td>@degreeReq.MinLevel</td>

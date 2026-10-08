@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using University.Data;
+using University.Dtos;
 using University.Models;
 
 namespace University.Controllers
@@ -23,11 +24,26 @@ namespace University.Controllers
         //    IEnumerable<DegreeRequirement> degreeRequirements = _db.DegreeRequirements.ToList();
         //    return View(degreeRequirements);
         //}
-        public async Task<IActionResult> Index()
+        //public async Task<IActionResult> Index()
+        //{
+        //    IEnumerable<DegreeRequirement> degreeRequirements = await _db.DegreeRequirements
+        //        .Include(d => d.DegreeProgram).ToListAsync();
+        //    return View(degreeRequirements);
+        //}
+
+        public IActionResult Index()
         {
-            IEnumerable<DegreeRequirement> degreeRequirements = await _db.DegreeRequirements
-                .Include(d => d.DegreeProgram).ToListAsync();
-            return View(degreeRequirements);
+            IEnumerable<DegreeRequirementDto> degreeRequirementDtos = _db.DegreeRequirements.Select(d => new DegreeRequirementDto
+            {
+                Id = d.Id,
+                Uuid = d.Uuid,
+                Name = d.DegreeProgram != null ? d.DegreeProgram.Name : "",
+                CategoryName = d.CategoryName,
+                RequiredCredits = d.RequiredCredits,
+                MinLevel = d.MinLevel
+
+            }).ToList();
+            return View(degreeRequirementDtos);
         }
 
         //==============================
@@ -36,22 +52,29 @@ namespace University.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            var degreePrograms = _db.DegreePrograms.ToList();
-            SelectList selectListItems = new SelectList(degreePrograms, "Id", "Name");
-            ViewBag.DegreePrograms = selectListItems;
+
+            LoadDegreeRequirements();
             return View();
         }
         [HttpPost]
-        public IActionResult Create(DegreeRequirement degreeRequirement)
+        public IActionResult Create(DegreeRequirementCreateDto degreeRequirementCreateDto)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                ModelState.AddModelError("", "Please fill in all required fields.");
-                return View(degreeRequirement);
+                var degreeRequirement = new DegreeRequirement
+                {
+                    DegreeProgramId = degreeRequirementCreateDto.DegreeProgramId,
+                    CategoryName = degreeRequirementCreateDto.CategoryName,
+                    RequiredCredits = degreeRequirementCreateDto.RequiredCredits,
+                    MinLevel = degreeRequirementCreateDto.MinLevel
+                };
+                _db.DegreeRequirements.Add(degreeRequirement);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+
             }
-            _db.DegreeRequirements.Add(degreeRequirement);
-            _db.SaveChanges();
-            return RedirectToAction("Index");
+                ModelState.AddModelError("", "Please fill in all required fields.");
+                return View(degreeRequirementCreateDto);
         }
 
         //==============================
@@ -65,34 +88,41 @@ namespace University.Controllers
             {
                 return NotFound();
             }
-            var degreePrograms = _db.DegreePrograms.ToList();
-            SelectList selectListItems = new SelectList(degreePrograms, "Id", "Name");
-            ViewBag.DegreePrograms = selectListItems;
-            return View(degr);
+            var dto = new DegreeRequirementUpdateDto
+            {
+                Uuid = degr.Uuid,
+                DegreeProgramId = degr.DegreeProgramId,
+                CategoryName = degr.CategoryName,
+                RequiredCredits = degr.RequiredCredits,
+                MinLevel = degr.MinLevel
+            };
+
+            LoadDegreeRequirements();
+            return View(dto);
         }
         [HttpPost]
-        public IActionResult Edit(DegreeRequirement degreeRequirement)
+        public IActionResult Edit(DegreeRequirementUpdateDto  degreeRequirementUpdateDto)
         {
             if (ModelState.IsValid)
             {
-                var olddegr = _db.DegreeRequirements.FirstOrDefault(o => o.Uuid == degreeRequirement.Uuid);
+                var olddegr = _db.DegreeRequirements.FirstOrDefault(o => o.Uuid == degreeRequirementUpdateDto.Uuid);
                 if (olddegr == null)
                 {
                     return NotFound();
                 }
 
-                olddegr.DegreeProgramId = degreeRequirement.DegreeProgramId;
-                olddegr.CategoryName = degreeRequirement.CategoryName;
-                olddegr.RequiredCredits = degreeRequirement.RequiredCredits;
-                olddegr.MinLevel= degreeRequirement.MinLevel;
-
+                olddegr.DegreeProgramId = degreeRequirementUpdateDto.DegreeProgramId;
+                olddegr.CategoryName = degreeRequirementUpdateDto.CategoryName;
+                olddegr.RequiredCredits = degreeRequirementUpdateDto.RequiredCredits;
+                olddegr.MinLevel= degreeRequirementUpdateDto.MinLevel;
 
                 _db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
             ModelState.AddModelError("", "Please fill all the required fields.");
-            return View(degreeRequirement);
+            LoadDegreeRequirements();
+            return View(degreeRequirementUpdateDto);
         }
 
         //===========
@@ -106,7 +136,15 @@ namespace University.Controllers
             {
                 return NotFound();
             }
-            return View(degr);
+            var dto = new DegreeRequirementUpdateDto
+            {
+                Uuid = degr.Uuid,
+                DegreeProgramId = degr.DegreeProgramId,
+                CategoryName = degr.CategoryName,
+                RequiredCredits = degr.RequiredCredits,
+                MinLevel = degr.MinLevel
+            };
+            return View(dto);
         }
         [HttpPost]
         [ActionName("Delete")]
@@ -121,6 +159,12 @@ namespace University.Controllers
             _db.DegreeRequirements.Remove(degr);
             _db.SaveChanges();
             return RedirectToAction("Index");
+        }
+        public void LoadDegreeRequirements()
+        {
+            var degreePrograms = _db.DegreePrograms.ToList();
+            SelectList selectListItems = new SelectList(degreePrograms, "Id", "Name");
+            ViewBag.DegreePrograms = selectListItems;
         }
     }
 }
