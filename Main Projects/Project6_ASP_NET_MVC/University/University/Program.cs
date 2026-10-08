@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using University.Data;
+using University.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LoginPath = "/Accounts/Login";
         //options.AccessDeniedPath = "/Account/AccessDenied";
     });
+
+// Repositories
+builder.Services.AddScoped<IWaitlistEntryRepository, WaitlistEntryRepository>();
+
 
 var app = builder.Build();
 

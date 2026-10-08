@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using University.Data;
 using University.Dtos;
 using University.Models;
+using University.Repositories;
 
 namespace University.Controllers
 {
@@ -12,11 +13,11 @@ namespace University.Controllers
 
     public class WaitlistEntrysController : Controller
     {
-        private readonly AppDbContext _db;
+        private readonly IWaitlistEntryRepository _waitlistEntryRepository;
 
-        public WaitlistEntrysController(AppDbContext db)
+        public WaitlistEntrysController(IWaitlistEntryRepository waitlistEntryRepository)
         {
-            _db = db;
+            _waitlistEntryRepository = waitlistEntryRepository;
         }
 
         //public IActionResult Index()
@@ -37,7 +38,8 @@ namespace University.Controllers
         
         public IActionResult Index()
         {
-            IEnumerable<WaitlistEntryDto> waitlistEntriesDto =  _db.WaitlistEntries.Select(w=> new WaitlistEntryDto
+            var waitlistEntries = _waitlistEntryRepository.GetAll();
+            IEnumerable<WaitlistEntryDto> waitlistEntriesDto =  waitlistEntries.Select(w=> new WaitlistEntryDto
             {
                 // Mapping properties from WaitlistEntry to WaitlistEntryDto
                 Id = w.Id,
@@ -78,8 +80,7 @@ namespace University.Controllers
                     ExpiresAt = waitlistEntryCreateDto.ExpiresAt,
                     Status = waitlistEntryCreateDto.Status
                 };
-                _db.WaitlistEntries.Add(waitlistEntry);
-                _db.SaveChanges();
+                _waitlistEntryRepository.AddWaitlistEntry(waitlistEntry);
                 return RedirectToAction("Index");
 
             }
@@ -96,7 +97,7 @@ namespace University.Controllers
         [HttpGet]
         public IActionResult Edit(string uuid)
         {
-            var wti = _db.WaitlistEntries.FirstOrDefault(w => w.Uuid == uuid);
+            var wti = _waitlistEntryRepository.GetWaitlistEntryByUuid(uuid);
             if (wti == null)
             {
                 return NotFound();
@@ -120,7 +121,7 @@ namespace University.Controllers
         {
             if (ModelState.IsValid)
             {
-                var oldwti = _db.WaitlistEntries.FirstOrDefault(o => o.Uuid == waitlistEntryUpdateDto.Uuid);
+                var oldwti = _waitlistEntryRepository.GetWaitlistEntryByUuid(waitlistEntryUpdateDto.Uuid);
                 if (oldwti == null)
                 {
                     return NotFound();
@@ -133,7 +134,7 @@ namespace University.Controllers
                 oldwti.ExpiresAt = waitlistEntryUpdateDto.ExpiresAt;
                 oldwti.Status = waitlistEntryUpdateDto.Status;
 
-                _db.SaveChanges();
+                _waitlistEntryRepository.UpdateWaitlistEntry(oldwti);
                 return RedirectToAction("Index");
             }
 
@@ -148,7 +149,7 @@ namespace University.Controllers
         [HttpGet]
         public IActionResult Delete(string uuid)
         {
-            var wti = _db.WaitlistEntries.FirstOrDefault(w => w.Uuid == uuid);
+            var wti = _waitlistEntryRepository.GetWaitlistEntryByUuid(uuid);
             if (wti == null)
             {
                 return NotFound();
@@ -170,7 +171,7 @@ namespace University.Controllers
         [ActionName("Delete")]
         public IActionResult DeleteConfirm(string uuid)
         {
-            var wti = _db.WaitlistEntries.FirstOrDefault(w => w.Uuid == uuid);
+            var wti = _waitlistEntryRepository.GetWaitlistEntryByUuid(uuid);
             if (wti == null)
             {
                 return NotFound();
@@ -178,17 +179,16 @@ namespace University.Controllers
 
 
 
-            _db.WaitlistEntries.Remove(wti);
-            _db.SaveChanges();
+            _waitlistEntryRepository.DeleteWaitlistEntry(uuid);
             return RedirectToAction("Index");
         }
 
         public void LoadWatilistEntry()
         {
-            var students = _db.Students.ToList();
+            var students = _waitlistEntryRepository.GetStudents();
             SelectList selectListItems1 = new SelectList(students, "Id", "LastName");
             ViewBag.Students = selectListItems1;
-            var courseSections = _db.CourseSections.ToList();
+            var courseSections = _waitlistEntryRepository.GetCourseSections();
             SelectList selectListItems2 = new SelectList(courseSections, "Id", "SectionNumber");
             ViewBag.CourseSections = selectListItems2;
         }
