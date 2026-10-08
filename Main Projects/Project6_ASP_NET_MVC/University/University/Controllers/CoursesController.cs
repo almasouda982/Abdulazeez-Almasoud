@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using University.Data;
 using University.Models;
 
@@ -15,11 +16,24 @@ namespace University.Controllers
             _db = db;
         }
 
-        public IActionResult Index()
+        //public IActionResult Index()
+        //{
+        //    IEnumerable<Course> courses = _db.Courses.ToList();
+        //    return View(courses);
+        //}
+
+
+        public async Task<IActionResult> Index()
         {
-            IEnumerable<Course> courses = _db.Courses.ToList();
+            IEnumerable<Course> courses = await _db.Courses
+
+                .Include(cp => cp.CoursePrerequisites)
+                .Include(d => d.CourseSections).ToListAsync();
+
             return View(courses);
         }
+
+
 
         //==============================
         // Create

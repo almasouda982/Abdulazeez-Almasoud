@@ -12,8 +12,10 @@
         <thead>
             <tr>
                 <th>Id</th>
-                <th>Student Id</th>
-                <th>Course Section Id</th>
+                @* <th>Student Id</th>
+                <th>Course Section Id</th> *@
+                <th>Student Last Name</th>
+                <th>Course Section Code</th>
                 <th>Final Grade</th>
                 <th>Letter Grade Points</th>
                 <th>Status</th>
@@ -27,8 +29,8 @@
 
                 <tr>
                     <td>@enrollment.Id</td>
-                    <td>@enrollment.StudentId</td>
-                    <td>@enrollment.CourseSectionId</td>
+                    <td>@enrollment.Student?.LastName</td>
+                    <td>@enrollment.CourseSection?.SectionNumber</td>
                     <td>@enrollment.FinalGrade</td>
                     <td>@enrollment.LetterGradePoints</td>
                     <td>@(enrollment.Status ? "Enrolled" : "Not Enrolled")</td>

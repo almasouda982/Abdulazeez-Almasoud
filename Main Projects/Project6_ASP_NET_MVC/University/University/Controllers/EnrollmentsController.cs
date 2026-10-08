@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -19,18 +21,41 @@ namespace University.Controllers
             _db = db;
         }
 
-        public IActionResult Index()
+        //public IActionResult Index()
+        //{
+        //    IEnumerable<Enrollment> enrollments = _db.Enrollments.ToList();
+        //    return View(enrollments);
+        //}
+
+        public async Task<IActionResult> Index()
         {
-            IEnumerable<Enrollment> enrollments = _db.Enrollments.ToList();
+            IEnumerable<Enrollment> enrollments = await _db.Enrollments
+                .Include(e => e.Student)
+                .Include(e => e.CourseSection).ToListAsync();
+
             return View(enrollments);
         }
 
         //==============================
         // Create
         //==============================
+       
+        //[HttpGet]
+        //public IActionResult Create()
+        //{
+        //    return View();
+        //}
+
         [HttpGet]
         public IActionResult Create()
         {
+            var students = _db.Students.ToList();
+            SelectList selectListItems1 = new SelectList(students, "Id", "LastName");
+            ViewBag.Students = selectListItems1;
+            var courseSections = _db.CourseSections.ToList();
+            SelectList selectListItems2 = new SelectList(courseSections, "Id", "SectionNumber");
+            ViewBag.CourseSections = selectListItems2;
+
             return View();
         }
         [HttpPost]
@@ -57,6 +82,13 @@ namespace University.Controllers
             {
                 return NotFound();
             }
+            var students = _db.Students.ToList();
+            SelectList selectListItems1 = new SelectList(students, "Id", "LastName");
+            ViewBag.Students = selectListItems1;
+            var courseSections = _db.CourseSections.ToList();
+            SelectList selectListItems2 = new SelectList(courseSections, "Id", "SectionNumber");
+            ViewBag.CourseSections = selectListItems2;
+
             return View(enr);
         }
         [HttpPost]

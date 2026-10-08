@@ -13,7 +13,8 @@
             <tr>
                 <th>Id</th>
                 <th>MinGradeRequired</th>
-                <th>CourseId</th>
+                @* <th>CourseId</th> *@
+                <th>Course Code</th>
                 <th>PrerequisiteCourseId</th>
                 <th>Actions</th>
 
@@ -26,7 +27,7 @@
                 <tr>
                     <td>@courseprereq.Id</td>
                     <td>@courseprereq.MinGradeRequired</td>
-                    <td>@courseprereq.CourseId</td>
+                    <td>@courseprereq.Course?.Code</td>
                     <td>@courseprereq.PrerequisiteCourseId</td>
                     <td>
                         <a asp-action="Edit" asp-route-Uuid="@courseprereq.Uuid" class="btn btn-sm btn-warning">Edit</a>

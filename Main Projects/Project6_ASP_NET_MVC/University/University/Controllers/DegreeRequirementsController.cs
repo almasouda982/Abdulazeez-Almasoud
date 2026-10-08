@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using University.Data;
 using University.Models;
 
@@ -16,9 +18,15 @@ namespace University.Controllers
             _db = db;
         }
 
-        public IActionResult Index()
+        //public IActionResult Index()
+        //{
+        //    IEnumerable<DegreeRequirement> degreeRequirements = _db.DegreeRequirements.ToList();
+        //    return View(degreeRequirements);
+        //}
+        public async Task<IActionResult> Index()
         {
-            IEnumerable<DegreeRequirement> degreeRequirements = _db.DegreeRequirements.ToList();
+            IEnumerable<DegreeRequirement> degreeRequirements = await _db.DegreeRequirements
+                .Include(d => d.DegreeProgram).ToListAsync();
             return View(degreeRequirements);
         }
 
@@ -28,6 +36,9 @@ namespace University.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+            var degreePrograms = _db.DegreePrograms.ToList();
+            SelectList selectListItems = new SelectList(degreePrograms, "Id", "Name");
+            ViewBag.DegreePrograms = selectListItems;
             return View();
         }
         [HttpPost]
@@ -54,6 +65,9 @@ namespace University.Controllers
             {
                 return NotFound();
             }
+            var degreePrograms = _db.DegreePrograms.ToList();
+            SelectList selectListItems = new SelectList(degreePrograms, "Id", "Name");
+            ViewBag.DegreePrograms = selectListItems;
             return View(degr);
         }
         [HttpPost]
