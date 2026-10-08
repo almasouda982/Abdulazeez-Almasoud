@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using University.Data;
+using University.Dtos;
 using University.Models;
 
 namespace University.Controllers
@@ -23,16 +24,31 @@ namespace University.Controllers
         //}
 
 
-        public async Task<IActionResult> Index()
+        //public async Task<IActionResult> Index()
+        //{
+        //    IEnumerable<Course> courses = await _db.Courses
+
+        //        .Include(cp => cp.CoursePrerequisites)
+        //        .Include(d => d.CourseSections).ToListAsync();
+
+        //    return View(courses);
+        //}
+
+
+        public IActionResult Index()
         {
-            IEnumerable<Course> courses = await _db.Courses
-
-                .Include(cp => cp.CoursePrerequisites)
-                .Include(d => d.CourseSections).ToListAsync();
-
-            return View(courses);
+            IEnumerable<CourseDto> courseDtos = _db.Courses.Select(c => new CourseDto
+                {
+                    Id = c.Id,
+                    Uuid = c.Uuid,
+                    Code = c.Code,
+                    Title = c.Title,
+                    Credits = c.Credits,
+                    Description = c.Description
+                })
+                .ToList();
+                return View(courseDtos);
         }
-
 
 
         //==============================
@@ -44,16 +60,24 @@ namespace University.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(Course course)
+        public IActionResult Create(CourseCreateDto courseCreateDto)
         {
-            if(!ModelState.IsValid)
+            if(ModelState.IsValid)
             {
-                ModelState.AddModelError("", "Please fill in all required fields.");
-                return View(course);
+                var course = new Course
+                {
+                    Code = courseCreateDto.Code,
+                    Title = courseCreateDto.Title,
+                    Credits = courseCreateDto.Credits,
+                    Description = courseCreateDto.Description
+                };
+                _db.Courses.Add(course);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
             }
-            _db.Courses.Add(course);
-            _db.SaveChanges();
-            return RedirectToAction("Index");
+            ModelState.AddModelError("", "Please fill in all required fields.");
+            return View(courseCreateDto);
+        
         }
 
         //==============================
@@ -67,30 +91,38 @@ namespace University.Controllers
             {
                 return NotFound();
             }
-            return View(crs);
+            var dto = new CourseUpdateDto
+            {
+                Uuid = crs.Uuid,
+                Code = crs.Code,
+                Title = crs.Title,
+                Credits = crs.Credits,
+                Description = crs.Description
+            };
+            return View(dto);
         }
         [HttpPost]
-        public IActionResult Edit(Course course)
+        public IActionResult Edit(CourseUpdateDto courseUpdateDto)
         {
             if (ModelState.IsValid)
             {
-                var oldcrs = _db.Courses.FirstOrDefault(o => o.Uuid == course.Uuid);
+                var oldcrs = _db.Courses.FirstOrDefault(o => o.Uuid == courseUpdateDto.Uuid);
                 if (oldcrs == null)
                 {
                     return NotFound();
                 }
 
-                oldcrs.Code = course.Code;
-                oldcrs.Title = course.Title;
-                oldcrs.Credits = course.Credits;
-                oldcrs.Description= course.Description;
+                oldcrs.Code = courseUpdateDto.Code;
+                oldcrs.Title = courseUpdateDto.Title;
+                oldcrs.Credits = courseUpdateDto.Credits;
+                oldcrs.Description= courseUpdateDto.Description;
 
                 _db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
             ModelState.AddModelError("", "Please fill all the required fields."); 
-            return View(course);
+            return View(courseUpdateDto);
         }
 
         //===========
@@ -104,7 +136,15 @@ namespace University.Controllers
             {
                 return NotFound();
             }
-            return View(crs);
+            var dto = new CourseUpdateDto
+            {
+                Uuid = crs.Uuid,
+                Code = crs.Code,
+                Title = crs.Title,
+                Credits = crs.Credits,
+                Description = crs.Description
+            };
+            return View(dto);
         }
         [HttpPost]
         [ActionName("Delete")]
@@ -119,6 +159,12 @@ namespace University.Controllers
             _db.Courses.Remove(crs);
             _db.SaveChanges();
             return RedirectToAction("Index");
+        }
+        // no viewbags so far
+        public void LoadCourses()
+        {
+            var courses = _db.Courses.ToList();
+            ViewBag.Courses = courses;
         }
 
     }

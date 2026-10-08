@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using University.Data;
+using University.Dtos;
 using University.Models;
 
 namespace University.Controllers
@@ -24,11 +25,25 @@ namespace University.Controllers
         //    return View(coursePrerequisites);
         //}
 
-        public async Task<IActionResult> Index()
+        //public async Task<IActionResult> Index()
+        //{
+        //    IEnumerable<CoursePrerequisite> coursePrerequisites = await _db.CoursePrerequisites
+        //        .Include(c => c.Course).ToListAsync();
+        //    return View(coursePrerequisites);
+        //}
+
+        public IActionResult Index()
         {
-            IEnumerable<CoursePrerequisite> coursePrerequisites = await _db.CoursePrerequisites
-                .Include(c => c.Course).ToListAsync();
-            return View(coursePrerequisites);
+            IEnumerable<CoursePrerequisiteDto> coursePrerequisiteDtos = _db.CoursePrerequisites.Select(c => new CoursePrerequisiteDto
+            {
+                Id = c.Id,
+                Uuid = c.Uuid,
+                MinGradeRequired = c.MinGradeRequired,
+                Code = c.Course != null ? c.Course.Code : null,
+                PrerequisiteCourseId = c.PrerequisiteCourseId
+
+            }).ToList();
+            return View(coursePrerequisiteDtos);
         }
         //============
         //Create
@@ -36,22 +51,29 @@ namespace University.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            var courses = _db.Courses.ToList();
-            SelectList selectListItems = new SelectList(courses, "Id", "Code");
-            ViewBag.Courses = selectListItems;
+            LoadCourses();
             return View();
         }
         [HttpPost]
-        public IActionResult Create(CoursePrerequisite coursePrerequisite)
+        public IActionResult Create(CoursePrerequisiteCreateDto coursePrerequisiteCreateDto)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                ModelState.AddModelError("", "Please fill in all required fields.");
-                return View(coursePrerequisite);
+                var coursePrerequisite = new CoursePrerequisite
+                {
+                    MinGradeRequired = coursePrerequisiteCreateDto.MinGradeRequired,
+                    CourseId = coursePrerequisiteCreateDto.CourseId,
+                    PrerequisiteCourseId = coursePrerequisiteCreateDto.PrerequisiteCourseId
+                };
+
+                _db.CoursePrerequisites.Add(coursePrerequisite);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
             }
-            _db.CoursePrerequisites.Add(coursePrerequisite);
-            _db.SaveChanges();
-            return RedirectToAction("Index");
+            ModelState.AddModelError("", "Please fill in all required fields.");
+            LoadCourses();
+            return View(coursePrerequisiteCreateDto);
+
         }
 
         //============
@@ -65,31 +87,36 @@ namespace University.Controllers
             {
                 return NotFound();
             }
-            var courses = _db.Courses.ToList();
-            SelectList selectListItems = new SelectList(courses, "Id", "Code");
-            ViewBag.Courses = selectListItems;
-            return View(crsp);
+            var dto = new CoursePrerequisiteUpdateDto
+            {
+                Uuid = crsp.Uuid,
+                MinGradeRequired = crsp.MinGradeRequired,
+                CourseId = crsp.CourseId,
+                PrerequisiteCourseId = crsp.PrerequisiteCourseId
+            };
+            LoadCourses();
+            return View(dto);
         }
         [HttpPost]
-        public IActionResult Edit(CoursePrerequisite coursePrerequisite)
+        public IActionResult Edit(CoursePrerequisiteUpdateDto coursePrerequisiteUpdateDto)
         {
             if (ModelState.IsValid)
             {
-                var oldcrsp = _db.CoursePrerequisites.FirstOrDefault(o => o.Uuid == coursePrerequisite.Uuid);
+                var oldcrsp = _db.CoursePrerequisites.FirstOrDefault(o => o.Uuid == coursePrerequisiteUpdateDto.Uuid);
                 if(oldcrsp == null)
                 {
                     return NotFound();
                 }
-                oldcrsp.MinGradeRequired = coursePrerequisite.MinGradeRequired;
-                oldcrsp.CourseId = coursePrerequisite.CourseId;
-                oldcrsp.PrerequisiteCourseId = coursePrerequisite.PrerequisiteCourseId;
+                oldcrsp.MinGradeRequired = coursePrerequisiteUpdateDto.MinGradeRequired;
+                oldcrsp.CourseId = coursePrerequisiteUpdateDto.CourseId;
+                oldcrsp.PrerequisiteCourseId = coursePrerequisiteUpdateDto.PrerequisiteCourseId;
 
                 _db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
             ModelState.AddModelError("", "Please fill all the required fields.");
-            return View(coursePrerequisite);
+            return View(coursePrerequisiteUpdateDto);
         }
         //===========
         // Delete
@@ -102,7 +129,14 @@ namespace University.Controllers
             {
                 return NotFound();
             }
-            return View(crsp);
+            var dto = new CoursePrerequisiteUpdateDto
+            {
+                Uuid = crsp.Uuid,
+                MinGradeRequired = crsp.MinGradeRequired,
+                CourseId = crsp.CourseId,
+                PrerequisiteCourseId = crsp.PrerequisiteCourseId
+            };
+            return View(dto);
         }
         [HttpPost]
         [ActionName("Delete")]
@@ -117,6 +151,12 @@ namespace University.Controllers
             _db.CoursePrerequisites.Remove(crsp);
             _db.SaveChanges();
             return RedirectToAction("Index");
+        }
+        public void LoadCourses()
+        {
+            var courses = _db.Courses.ToList();
+            SelectList selectListItems = new SelectList(courses, "Id", "Code");
+            ViewBag.Courses = selectListItems;
         }
     }
 }

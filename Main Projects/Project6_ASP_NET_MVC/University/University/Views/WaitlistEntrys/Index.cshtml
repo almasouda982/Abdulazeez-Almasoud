@@ -1,4 +1,5 @@
-﻿@model IEnumerable<WaitlistEntry>
+﻿@using University.Dtos
+@model IEnumerable<WaitlistEntryDto>
 
 <div class="container">
 
@@ -28,8 +29,8 @@
 
                 <tr>
                     <td>@waitlistEntry.Id</td>
-                    <td>@waitlistEntry.Student?.LastName</td>
-                    <td>@waitlistEntry.CourseSection?.SectionNumber</td>
+                    <td>@waitlistEntry.LastName</td>
+                    <td>@waitlistEntry.SectionNumber</td>
                     <td>@waitlistEntry.Position</td>
                     <td>@waitlistEntry.OfferedAt</td>
                     <td>@waitlistEntry.ExpiresAt</td>
