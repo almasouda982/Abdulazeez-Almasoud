@@ -26,7 +26,10 @@ namespace University.Controllers
         public async Task<IActionResult> Index()
         {
             IEnumerable<CourseSection> courseSections = await _db.CourseSections
-                .Include(w => w.WaitlistEntries).ToListAsync();
+
+                .Include(w => w.WaitlistEntries)
+                .Include(e => e.Enrollments).ToListAsync();
+
             return View(courseSections);
         }
 

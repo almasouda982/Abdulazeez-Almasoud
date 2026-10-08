@@ -21,11 +21,12 @@ namespace University.Controllers
         //    return View(students);
         //}
 
-        public async Task<ActionResult> Index()
+        public async Task<IActionResult> Index()
         {
             IEnumerable<Student> students = await _db.Students
             //more will be added    
-                .Include(w=> w.WaitlistEntries).ToListAsync();
+                .Include(w=> w.WaitlistEntries)
+                .Include(e => e.Enrollments).ToListAsync();
 
             return View(students);
         }
