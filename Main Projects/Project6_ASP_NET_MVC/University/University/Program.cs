@@ -27,6 +27,13 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 // Repositories
 builder.Services.AddScoped<IWaitlistEntryRepository, WaitlistEntryRepository>();
+builder.Services.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+builder.Services.AddScoped<ICoursePrerequisiteRepository, CoursePrerequisiteRepository>();
+builder.Services.AddScoped<ICourseSectionRepository, CourseSectionRepository>();
+builder.Services.AddScoped<IDegreeRequirementRepository, DegreeRequirementRepository>();
+builder.Services.AddScoped<ICourseRepository, CourseRepository>();
+builder.Services.AddScoped<IDegreeProgramRepository, DegreeProgramRepository>();
 
 
 var app = builder.Build();

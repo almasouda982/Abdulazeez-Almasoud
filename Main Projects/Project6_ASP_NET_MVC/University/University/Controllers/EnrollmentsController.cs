@@ -9,17 +9,18 @@ using System.Diagnostics.Metrics;
 using University.Data;
 using University.Dtos;
 using University.Models;
+using University.Repositories;
 
 namespace University.Controllers
 {
     [Authorize]
     public class EnrollmentsController : Controller
     {
-        private readonly AppDbContext _db;
+        private readonly IEnrollmentRepository _enrollmentRepository;
 
-        public EnrollmentsController(AppDbContext db)
+        public EnrollmentsController(IEnrollmentRepository enrollmentRepository)
         {
-            _db = db;
+            _enrollmentRepository = enrollmentRepository;
         }
 
         //public IActionResult Index()
@@ -39,7 +40,8 @@ namespace University.Controllers
 
         public IActionResult Index()
         {
-            IEnumerable<EnrollmentDto> enrollments = _db.Enrollments.Select(e => new EnrollmentDto
+            var enrollments = _enrollmentRepository.GetAll();
+            IEnumerable<EnrollmentDto> enrollmentsDto = enrollments.Select(e => new EnrollmentDto
             {
                 Id = e.Id,
                 Uuid = e.Uuid,
@@ -49,7 +51,7 @@ namespace University.Controllers
                 LetterGradePoints = e.LetterGradePoints,
                 Status = e.Status
             }).ToList();
-            return View(enrollments);
+            return View(enrollmentsDto);
         }
 
 
@@ -82,8 +84,7 @@ namespace University.Controllers
                     LetterGradePoints = enrollmentCreateDto.LetterGradePoints,
                     Status = enrollmentCreateDto.Status
                 };
-                _db.Enrollments.Add(enrollment);
-                _db.SaveChanges();
+                _enrollmentRepository.AddEnrollment(enrollment);
                 return RedirectToAction("Index");
             }
             ModelState.AddModelError("", "Please fill in all required fields.");
@@ -97,7 +98,7 @@ namespace University.Controllers
         [HttpGet]
         public IActionResult Edit(string uuid)
         {
-            var enr = _db.Enrollments.FirstOrDefault(e => e.Uuid == uuid);
+            var enr = _enrollmentRepository.GetEnrollmentByUuid(uuid);
             if (enr == null)
             {
                 return NotFound();
@@ -120,7 +121,7 @@ namespace University.Controllers
         {
             if (ModelState.IsValid)
             {
-                var oldenr = _db.Enrollments.FirstOrDefault(e => e.Uuid == enrollmentUpdateDto.Uuid);
+                var oldenr = _enrollmentRepository.GetEnrollmentByUuid(enrollmentUpdateDto.Uuid);
                 if(oldenr == null)
                 {
                     return NotFound();
@@ -133,7 +134,7 @@ namespace University.Controllers
                 oldenr.LetterGradePoints = enrollmentUpdateDto.LetterGradePoints;
                 oldenr.Status = enrollmentUpdateDto.Status;
 
-                _db.SaveChanges();
+                _enrollmentRepository.UpdateEnrollment(oldenr);
                 return RedirectToAction("Index");
     }
 
@@ -148,7 +149,7 @@ namespace University.Controllers
         [HttpGet]
         public IActionResult Delete(string uuid)
         {
-            var enr = _db.Enrollments.FirstOrDefault(e => e.Uuid == uuid);
+            var enr = _enrollmentRepository.GetEnrollmentByUuid(uuid);
             if (enr == null)
             {
                 return NotFound();
@@ -168,23 +169,22 @@ namespace University.Controllers
         [ActionName("Delete")]
         public IActionResult DeleteConfirm(string uuid)
         {
-            var enr = _db.Enrollments.FirstOrDefault(e => e.Uuid == uuid);
+            var enr = _enrollmentRepository.GetEnrollmentByUuid(uuid);
             if (enr == null)
             {
                 return NotFound();
             }
 
-            _db.Enrollments.Remove(enr);
-            _db.SaveChanges();
+            _enrollmentRepository.DeleteEnrollment(uuid);
             return RedirectToAction("Index");
         }
 
         public void LoadEnrollment()
         {
-            var students = _db.Students.ToList();
+            var students = _enrollmentRepository.GetStudents();
             SelectList selectListItems1 = new SelectList(students, "Id", "LastName");
             ViewBag.Students = selectListItems1;
-            var courseSections = _db.CourseSections.ToList();
+            var courseSections = _enrollmentRepository.GetCourseSections();
             SelectList selectListItems2 = new SelectList(courseSections, "Id", "SectionNumber");
             ViewBag.CourseSections = selectListItems2;
         }

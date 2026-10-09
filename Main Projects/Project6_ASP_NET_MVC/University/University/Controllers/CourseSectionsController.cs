@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using University.Data;
 using University.Dtos;
 using University.Models;
+using University.Repositories;
 
 namespace University.Controllers
 {
@@ -12,13 +13,12 @@ namespace University.Controllers
 
     public class CourseSectionsController : Controller
     {
-        private readonly AppDbContext _db;
+        private readonly ICourseSectionRepository _courseSectionRepository;
 
-        public CourseSectionsController(AppDbContext db)
+        public CourseSectionsController(ICourseSectionRepository courseSectionRepository)
         {
-            _db = db;
+            _courseSectionRepository = courseSectionRepository;
         }
-
         //public IActionResult Index()
         //{
         //    IEnumerable<CourseSection> courseSections = _db.CourseSections.ToList();
@@ -39,7 +39,8 @@ namespace University.Controllers
 
         public IActionResult Index()
         {
-            IEnumerable<CourseSectionDto> courseSectionDtos = _db.CourseSections.Select(cs => new CourseSectionDto
+            var courseSections = _courseSectionRepository.GetAll();
+            IEnumerable<CourseSectionDto> courseSectionDtos = courseSections.Select(cs => new CourseSectionDto
             {
                 Id = cs.Id,
                 Uuid = cs.Uuid,
@@ -77,8 +78,7 @@ namespace University.Controllers
                     DaysOfWeek = courseSectionDto.DaysOfWeek,
                     TimeSlot = courseSectionDto.TimeSlot
                 };
-                _db.CourseSections.Add(courseSection);
-                _db.SaveChanges();
+                _courseSectionRepository.AddCourseSection(courseSection);
                 return RedirectToAction("Index");
             }
             ModelState.AddModelError("", "Please fill in all required fields.");
@@ -92,7 +92,7 @@ namespace University.Controllers
         [HttpGet]
         public IActionResult Edit(string uuid)
         {
-            var crs = _db.CourseSections.FirstOrDefault(c => c.Uuid == uuid);
+            var crs = _courseSectionRepository.GetCourseSectionByUuid(uuid);
             if (crs == null)
             {
                 return NotFound();
@@ -115,7 +115,7 @@ namespace University.Controllers
         {
             if (ModelState.IsValid)
             {
-                var oldcrs = _db.CourseSections.FirstOrDefault(c => c.Uuid == courseSectionUpdateDto.Uuid);
+                var oldcrs = _courseSectionRepository.GetCourseSectionByUuid(courseSectionUpdateDto.Uuid);
                 if (oldcrs == null)
                 {
                     return NotFound();
@@ -128,7 +128,7 @@ namespace University.Controllers
                 oldcrs.DaysOfWeek = courseSectionUpdateDto.DaysOfWeek;
                 oldcrs.TimeSlot = courseSectionUpdateDto.TimeSlot;
 
-                _db.SaveChanges();
+                _courseSectionRepository.UpdateCourseSection(oldcrs);
                 return RedirectToAction("Index");
             }
 
@@ -143,7 +143,7 @@ namespace University.Controllers
         [HttpGet]
         public IActionResult Delete(string uuid)
         {
-            var crs = _db.CourseSections.FirstOrDefault(c => c.Uuid == uuid);
+            var crs = _courseSectionRepository.GetCourseSectionByUuid(uuid);
             if (crs == null)
             {
                 return NotFound();
@@ -164,18 +164,17 @@ namespace University.Controllers
         [ActionName("Delete")]
         public IActionResult DeleteConfirm(string uuid)
         {
-            var crs = _db.CourseSections.FirstOrDefault(c => c.Uuid == uuid);
+            var crs = _courseSectionRepository.GetCourseSectionByUuid(uuid);
             if (crs == null)
             {
                 return NotFound();
             }
-            _db.CourseSections.Remove(crs);
-            _db.SaveChanges();
+            _courseSectionRepository.DeleteCourseSection(uuid);
             return RedirectToAction("Index");
         }
         public void LoadCourseSections()
         {
-            var courses = _db.Courses.ToList();
+            var courses = _courseSectionRepository.GetCourses();
             SelectList selectListItems = new SelectList(courses, "Id", "Code");
             ViewBag.Courses = selectListItems;
         }
