@@ -5,17 +5,18 @@ using Microsoft.EntityFrameworkCore;
 using University.Data;
 using University.Dtos;
 using University.Models;
+using University.Repositories;
 
 namespace University.Controllers
 {
     [Authorize]
     public class StudentsController : Controller
     {
-        private readonly AppDbContext _db;
+        private readonly IStudentRepository _studentRepository;
 
-        public StudentsController(AppDbContext db)
+        public StudentsController(IStudentRepository studentRepository)
         {
-            _db = db;
+            _studentRepository = studentRepository;
         }
         //public IActionResult Index()
         //{
@@ -36,7 +37,8 @@ namespace University.Controllers
 
         public IActionResult Index()
         {
-            IEnumerable<StudentDto> studentDtos = _db.Students.Select(s => new StudentDto
+            var students = _studentRepository.GetAll();
+            IEnumerable<StudentDto> studentDtos = students.Select(s => new StudentDto
             {
                 Id = s.Id,
                 Uuid = s.Uuid,
@@ -81,8 +83,7 @@ namespace University.Controllers
                     GPA = studentCreateDto.GPA,
                     EnrollmentStatus = studentCreateDto.EnrollmentStatus
                 };
-                _db.Students.Add(newStudent);
-                _db.SaveChanges();
+                _studentRepository.AddStudent(newStudent);
                 return RedirectToAction("Index");
             }
             ModelState.AddModelError("", "Please fill in all required fields.");
@@ -96,7 +97,7 @@ namespace University.Controllers
         [HttpGet]
         public IActionResult Edit(string uuid)
         {
-            var std = _db.Students.FirstOrDefault(s => s.Uuid == uuid);
+            var std = _studentRepository.GetStudentByUuid(uuid);
 
             if (std == null)
             {
@@ -122,7 +123,7 @@ namespace University.Controllers
         {
             if (ModelState.IsValid)
             {
-                var oldstd = _db.Students.FirstOrDefault(s => s.Uuid == studentUpdateDto.Uuid);
+                var oldstd = _studentRepository.GetStudentByUuid(studentUpdateDto.Uuid);
                 if(oldstd == null)
                 {
                     return NotFound();
@@ -138,7 +139,7 @@ namespace University.Controllers
                 oldstd.GPA= studentUpdateDto.GPA;
                 oldstd.EnrollmentStatus = studentUpdateDto.EnrollmentStatus;
 
-                _db.SaveChanges();
+                _studentRepository.UpdateStudent(oldstd);
                 return RedirectToAction("Index");
             }
             ModelState.AddModelError("", "Please fill all the required fields");
@@ -153,7 +154,7 @@ namespace University.Controllers
         [HttpGet]
         public IActionResult Delete(string uuid)
         {
-            var std = _db.Students.FirstOrDefault(s => s.Uuid == uuid);
+            var std = _studentRepository.GetStudentByUuid(uuid);
             if (std == null)
             {
                 return NotFound();
@@ -176,19 +177,18 @@ namespace University.Controllers
         [ActionName("Delete")]
         public IActionResult DeleteConfirm(string uuid)
         {
-            var std = _db.Students.FirstOrDefault(s => s.Uuid == uuid);
+            var std = _studentRepository.GetStudentByUuid(uuid);
             if (std == null)
             {
                 return NotFound();
             }
 
-            _db.Students.Remove(std);
-            _db.SaveChanges();
+            _studentRepository.DeleteStudent(uuid);
             return RedirectToAction("Index");
         }
         public void LoadStudents()
         {
-            var degreePrograms = _db.DegreePrograms.ToList();
+            var degreePrograms = _studentRepository.GetDegreePrograms();
             SelectList selectListItems = new SelectList(degreePrograms, "Id", "Name");
             ViewBag.DegreePrograms = selectListItems;
         }

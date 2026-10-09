@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using University.Data;
 using University.Dtos;
 using University.Models;
+using University.Repositories;
 
 namespace University.Controllers
 {
@@ -11,11 +12,11 @@ namespace University.Controllers
 
     public class DegreeProgramsController : Controller
     {
-        private readonly AppDbContext _db;
+        private readonly IDegreeProgramRepository _degreeProgramRepository;
 
-        public DegreeProgramsController(AppDbContext db)
+        public DegreeProgramsController(IDegreeProgramRepository degreeProgramRepository)
         {
-            _db = db;
+            _degreeProgramRepository = degreeProgramRepository;
         }
 
         //public IActionResult Index()
@@ -37,7 +38,8 @@ namespace University.Controllers
 
         public IActionResult Index()
         {
-            IEnumerable<DegreeProgramDto> degreeProgramDtos = _db.DegreePrograms.Select(dp => new DegreeProgramDto
+            var degreePrograms = _degreeProgramRepository.GetAll();
+            IEnumerable<DegreeProgramDto> degreeProgramDtos = degreePrograms.Select(dp => new DegreeProgramDto
             {
                 Id = dp.Id,
                 Uuid = dp.Uuid,
@@ -67,8 +69,7 @@ namespace University.Controllers
                     CatalogYear = degreeProgramCreateDto.CatalogYear,
                     TotalCreditsRequired = degreeProgramCreateDto.TotalCreditsRequired
                 };
-                _db.DegreePrograms.Add(degreeProgram);
-                _db.SaveChanges();
+                _degreeProgramRepository.AddDegreeProgram(degreeProgram);
                 return RedirectToAction("Index");
             }
                 ModelState.AddModelError("", "Please fill in all required fields.");
@@ -82,7 +83,7 @@ namespace University.Controllers
         [HttpGet]
         public IActionResult Edit(string uuid)
         {
-            var degp = _db.DegreePrograms.FirstOrDefault(d => d.Uuid == uuid);
+            var degp = _degreeProgramRepository.GetDegreeProgramByUuid(uuid);
             if (degp == null)
             {
                 return NotFound();
@@ -101,7 +102,7 @@ namespace University.Controllers
         {
             if (ModelState.IsValid)
             {
-                var olddegp = _db.DegreePrograms.FirstOrDefault(o => o.Uuid == degreeProgramUpdateDto.Uuid);
+                var olddegp = _degreeProgramRepository.GetDegreeProgramByUuid(degreeProgramUpdateDto.Uuid);
                 if(olddegp == null)
                 {
                     return NotFound();
@@ -111,7 +112,7 @@ namespace University.Controllers
                 olddegp.CatalogYear = degreeProgramUpdateDto.CatalogYear;
                 olddegp.TotalCreditsRequired = degreeProgramUpdateDto.TotalCreditsRequired;
 
-                _db.SaveChanges();
+                _degreeProgramRepository.UpdateDegreeProgram(olddegp);
                 return RedirectToAction("Index");
             }
 
@@ -125,7 +126,7 @@ namespace University.Controllers
         [HttpGet]
         public IActionResult Delete(string uuid)
         {
-            var degp = _db.DegreePrograms.FirstOrDefault(d => d.Uuid ==uuid);
+            var degp = _degreeProgramRepository.GetDegreeProgramByUuid(uuid);
             if (degp == null)
             {
                 return NotFound();
@@ -143,13 +144,12 @@ namespace University.Controllers
         [ActionName("Delete")]
         public IActionResult DeleteConfirm(string uuid)
         {
-            var degp = _db.DegreePrograms.FirstOrDefault(d => d.Uuid==uuid);
+            var degp = _degreeProgramRepository.GetDegreeProgramByUuid(uuid);
             if (degp == null)
             {
                 return NotFound();
             }
-            _db.DegreePrograms.Remove(degp);
-            _db.SaveChanges();
+            _degreeProgramRepository.DeleteDegreeProgram(uuid);
             return RedirectToAction("Index");
         }
         // null for now

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using University.Data;
 using University.Dtos;
 using University.Models;
+using University.Repositories;
 
 namespace University.Controllers
 {
@@ -12,11 +13,11 @@ namespace University.Controllers
 
     public class DegreeRequirementsController : Controller
     {
-        private readonly AppDbContext _db;
+        private readonly IDegreeRequirementRepository _degreeRequirementRepository;
 
-        public DegreeRequirementsController(AppDbContext db)
+        public DegreeRequirementsController(IDegreeRequirementRepository degreeRequirementRepository)
         {
-            _db = db;
+            _degreeRequirementRepository = degreeRequirementRepository;
         }
 
         //public IActionResult Index()
@@ -33,7 +34,8 @@ namespace University.Controllers
 
         public IActionResult Index()
         {
-            IEnumerable<DegreeRequirementDto> degreeRequirementDtos = _db.DegreeRequirements.Select(d => new DegreeRequirementDto
+            var degreeRequirements = _degreeRequirementRepository.GetAll();
+            IEnumerable<DegreeRequirementDto> degreeRequirementsDtos = degreeRequirements.Select(d => new DegreeRequirementDto
             {
                 Id = d.Id,
                 Uuid = d.Uuid,
@@ -43,7 +45,7 @@ namespace University.Controllers
                 MinLevel = d.MinLevel
 
             }).ToList();
-            return View(degreeRequirementDtos);
+            return View(degreeRequirementsDtos);
         }
 
         //==============================
@@ -68,8 +70,7 @@ namespace University.Controllers
                     RequiredCredits = degreeRequirementCreateDto.RequiredCredits,
                     MinLevel = degreeRequirementCreateDto.MinLevel
                 };
-                _db.DegreeRequirements.Add(degreeRequirement);
-                _db.SaveChanges();
+                _degreeRequirementRepository.AddDegreeRequirement(degreeRequirement);
                 return RedirectToAction("Index");
 
             }
@@ -83,7 +84,7 @@ namespace University.Controllers
         [HttpGet]
         public IActionResult Edit(string uuid)
         {
-            var degr = _db.DegreeRequirements.FirstOrDefault(d => d.Uuid == uuid);
+            var degr = _degreeRequirementRepository.GetDegreeRequirementByUuid(uuid);
             if (degr == null)
             {
                 return NotFound();
@@ -105,7 +106,7 @@ namespace University.Controllers
         {
             if (ModelState.IsValid)
             {
-                var olddegr = _db.DegreeRequirements.FirstOrDefault(o => o.Uuid == degreeRequirementUpdateDto.Uuid);
+                var olddegr = _degreeRequirementRepository.GetDegreeRequirementByUuid(degreeRequirementUpdateDto.Uuid);
                 if (olddegr == null)
                 {
                     return NotFound();
@@ -116,7 +117,7 @@ namespace University.Controllers
                 olddegr.RequiredCredits = degreeRequirementUpdateDto.RequiredCredits;
                 olddegr.MinLevel= degreeRequirementUpdateDto.MinLevel;
 
-                _db.SaveChanges();
+                _degreeRequirementRepository.UpdateDegreeRequirement(olddegr);
                 return RedirectToAction("Index");
             }
 
@@ -131,7 +132,7 @@ namespace University.Controllers
         [HttpGet]
         public IActionResult Delete(string uuid)
         {
-            var degr = _db.DegreeRequirements.FirstOrDefault(d => d.Uuid == uuid);
+            var degr = _degreeRequirementRepository.GetDegreeRequirementByUuid(uuid);
             if (degr == null)
             {
                 return NotFound();
@@ -150,19 +151,18 @@ namespace University.Controllers
         [ActionName("Delete")]
         public IActionResult DeleteConfirm(string uuid)
         {
-            var degr = _db.DegreeRequirements.FirstOrDefault(d => d.Uuid ==uuid);
+            var degr = _degreeRequirementRepository.GetDegreeRequirementByUuid(uuid);
             if (degr == null)
             {
                 return NotFound();
             }
 
-            _db.DegreeRequirements.Remove(degr);
-            _db.SaveChanges();
+            _degreeRequirementRepository.DeleteDegreeRequirement(uuid);
             return RedirectToAction("Index");
         }
         public void LoadDegreeRequirements()
         {
-            var degreePrograms = _db.DegreePrograms.ToList();
+            var degreePrograms = _degreeRequirementRepository.GetDegreePrograms();
             SelectList selectListItems = new SelectList(degreePrograms, "Id", "Name");
             ViewBag.DegreePrograms = selectListItems;
         }
