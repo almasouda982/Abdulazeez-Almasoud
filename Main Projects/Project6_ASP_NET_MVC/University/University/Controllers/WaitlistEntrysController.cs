@@ -6,6 +6,7 @@ using University.Data;
 using University.Dtos;
 using University.Models;
 using University.Repositories;
+using University.Services.Base;
 
 namespace University.Controllers
 {
@@ -13,11 +14,12 @@ namespace University.Controllers
 
     public class WaitlistEntrysController : Controller
     {
-        private readonly IWaitlistEntryRepository _waitlistEntryRepository;
+        //private readonly IWaitlistEntryRepository _waitlistEntryRepository;
+        private readonly IWaitlistEntryService _waitlistEntryService;
 
-        public WaitlistEntrysController(IWaitlistEntryRepository waitlistEntryRepository)
+        public WaitlistEntrysController(IWaitlistEntryService waitlistEntryService)
         {
-            _waitlistEntryRepository = waitlistEntryRepository;
+            _waitlistEntryService = waitlistEntryService;
         }
 
         //public IActionResult Index()
@@ -38,21 +40,7 @@ namespace University.Controllers
         
         public IActionResult Index()
         {
-            var waitlistEntries = _waitlistEntryRepository.GetAll();
-            IEnumerable<WaitlistEntryDto> waitlistEntriesDto =  waitlistEntries.Select(w=> new WaitlistEntryDto
-            {
-                // Mapping properties from WaitlistEntry to WaitlistEntryDto
-                Id = w.Id,
-                Uuid = w.Uuid,
-                LastName = w.Student != null ? w.Student.LastName : null,
-                SectionNumber = w.CourseSection != null ? w.CourseSection.SectionNumber : (int?)null,
-                Position = w.Position,
-                OfferedAt = w.OfferedAt,
-                ExpiresAt = w.ExpiresAt,
-                Status = w.Status
-
-            }
-            ).ToList();
+            var waitlistEntriesDto = _waitlistEntryService.GetAllWaitlistEntries();
             return View(waitlistEntriesDto);
         }
 
@@ -70,26 +58,17 @@ namespace University.Controllers
         {
             if (ModelState.IsValid)
             {
-                //Mapping the DTO to the WaitlistEntry model
-                var waitlistEntry = new WaitlistEntry
-                {
-                    StudentId = waitlistEntryCreateDto.StudentId,
-                    CourseSectionId = waitlistEntryCreateDto.CourseSectionId,
-                    Position = waitlistEntryCreateDto.Position,
-                    OfferedAt = waitlistEntryCreateDto.OfferedAt,
-                    ExpiresAt = waitlistEntryCreateDto.ExpiresAt,
-                    Status = waitlistEntryCreateDto.Status
-                };
-                _waitlistEntryRepository.AddWaitlistEntry(waitlistEntry);
+                _waitlistEntryService.AddWaitlistEntry(waitlistEntryCreateDto);
                 return RedirectToAction("Index");
 
             }
+
             ModelState.AddModelError("", "Please fill all the required fields.");
             LoadWatilistEntry();
             return View(waitlistEntryCreateDto);
 
+            }
 
-        }
 
         //==============================
         // Edit
@@ -97,45 +76,30 @@ namespace University.Controllers
         [HttpGet]
         public IActionResult Edit(string uuid)
         {
-            var wti = _waitlistEntryRepository.GetWaitlistEntryByUuid(uuid);
+            var wti = _waitlistEntryService.GetWaitlistEntryByUuid(uuid);
             if (wti == null)
             {
                 return NotFound();
             }
-                var dto = new WaitlistEntryUpdateDto
-            {
-                Uuid = wti.Uuid,
-                StudentId = wti.StudentId,
-                CourseSectionId = wti.CourseSectionId,
-                Position = wti.Position,
-                OfferedAt = wti.OfferedAt,
-                ExpiresAt = wti.ExpiresAt,
-                Status = wti.Status
-            };
 
             LoadWatilistEntry();
-            return View(dto);
+            return View(wti);
         }
+
         [HttpPost]
         public IActionResult Edit(WaitlistEntryUpdateDto waitlistEntryUpdateDto)
         {
             if (ModelState.IsValid)
             {
-                var oldwti = _waitlistEntryRepository.GetWaitlistEntryByUuid(waitlistEntryUpdateDto.Uuid);
-                if (oldwti == null)
+                try
+                {
+                    _waitlistEntryService.UpdateWaitlistEntry(waitlistEntryUpdateDto);
+                    return RedirectToAction("Index");
+                }
+                catch (KeyNotFoundException)
                 {
                     return NotFound();
                 }
-
-                oldwti.StudentId = waitlistEntryUpdateDto.StudentId;
-                oldwti.CourseSectionId = waitlistEntryUpdateDto.CourseSectionId;
-                oldwti.Position = waitlistEntryUpdateDto.Position;
-                oldwti.OfferedAt = waitlistEntryUpdateDto.OfferedAt;
-                oldwti.ExpiresAt = waitlistEntryUpdateDto.ExpiresAt;
-                oldwti.Status = waitlistEntryUpdateDto.Status;
-
-                _waitlistEntryRepository.UpdateWaitlistEntry(oldwti);
-                return RedirectToAction("Index");
             }
 
             ModelState.AddModelError("", "Please fill all the required fields.");
@@ -149,29 +113,19 @@ namespace University.Controllers
         [HttpGet]
         public IActionResult Delete(string uuid)
         {
-            var wti = _waitlistEntryRepository.GetWaitlistEntryByUuid(uuid);
+            var wti = _waitlistEntryService.GetWaitlistEntryByUuid(uuid);
             if (wti == null)
             {
                 return NotFound();
             }
-            var dto = new WaitlistEntryUpdateDto
-            {
-                Uuid = wti.Uuid,
-                StudentId = wti.StudentId,
-                CourseSectionId = wti.CourseSectionId,
-                Position = wti.Position,
-                OfferedAt = wti.OfferedAt,
-                ExpiresAt = wti.ExpiresAt,
-                Status = wti.Status
-            };
 
-            return View(dto);
+            return View(wti);
         }
         [HttpPost]
         [ActionName("Delete")]
         public IActionResult DeleteConfirm(string uuid)
         {
-            var wti = _waitlistEntryRepository.GetWaitlistEntryByUuid(uuid);
+            var wti = _waitlistEntryService.GetWaitlistEntryByUuid(uuid);
             if (wti == null)
             {
                 return NotFound();
@@ -179,16 +133,16 @@ namespace University.Controllers
 
 
 
-            _waitlistEntryRepository.DeleteWaitlistEntry(uuid);
+            _waitlistEntryService.DeleteWaitlistEntry(uuid);
             return RedirectToAction("Index");
         }
 
         public void LoadWatilistEntry()
         {
-            var students = _waitlistEntryRepository.GetStudents();
+            var students = _waitlistEntryService.GetStudents();
             SelectList selectListItems1 = new SelectList(students, "Id", "LastName");
             ViewBag.Students = selectListItems1;
-            var courseSections = _waitlistEntryRepository.GetCourseSections();
+            var courseSections = _waitlistEntryService.GetCourseSections();
             SelectList selectListItems2 = new SelectList(courseSections, "Id", "SectionNumber");
             ViewBag.CourseSections = selectListItems2;
         }
