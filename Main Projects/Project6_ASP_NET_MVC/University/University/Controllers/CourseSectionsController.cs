@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using University.Data;
 using University.Dtos;
-using University.Models;
-using University.Repositories;
+using University.Services.Base;
 
 namespace University.Controllers
 {
@@ -13,11 +10,11 @@ namespace University.Controllers
 
     public class CourseSectionsController : Controller
     {
-        private readonly ICourseSectionRepository _courseSectionRepository;
+        private readonly ICourseSectionService _courseSectionService;
 
-        public CourseSectionsController(ICourseSectionRepository courseSectionRepository)
+        public CourseSectionsController(ICourseSectionService courseSectionService)
         {
-            _courseSectionRepository = courseSectionRepository;
+            _courseSectionService = courseSectionService;
         }
         //public IActionResult Index()
         //{
@@ -39,19 +36,9 @@ namespace University.Controllers
 
         public IActionResult Index()
         {
-            var courseSections = _courseSectionRepository.GetAll();
-            IEnumerable<CourseSectionDto> courseSectionDtos = courseSections.Select(cs => new CourseSectionDto
-            {
-                Id = cs.Id,
-                Uuid = cs.Uuid,
-                Code = cs.Course != null ? cs.Course.Code : null,
-                Semester = cs.Semester,
-                SectionNumber = cs.SectionNumber,
-                MaxCapacity = cs.MaxCapacity,
-                DaysOfWeek = cs.DaysOfWeek,
-                TimeSlot = cs.TimeSlot
-            }).ToList();
-            return View(courseSectionDtos);
+            var courseSectionsDtos = _courseSectionService.GetAllCourseSections();
+
+            return View(courseSectionsDtos);
         }
 
 
@@ -69,16 +56,8 @@ namespace University.Controllers
         {
             if (ModelState.IsValid)
             {
-                var courseSection = new CourseSection
-                {
-                    CourseId = courseSectionDto.CourseId,
-                    Semester = courseSectionDto.Semester,
-                    SectionNumber = courseSectionDto.SectionNumber,
-                    MaxCapacity = courseSectionDto.MaxCapacity,
-                    DaysOfWeek = courseSectionDto.DaysOfWeek,
-                    TimeSlot = courseSectionDto.TimeSlot
-                };
-                _courseSectionRepository.AddCourseSection(courseSection);
+
+                _courseSectionService.AddCourseSection(courseSectionDto);
                 return RedirectToAction("Index");
             }
             ModelState.AddModelError("", "Please fill in all required fields.");
@@ -92,44 +71,29 @@ namespace University.Controllers
         [HttpGet]
         public IActionResult Edit(string uuid)
         {
-            var crs = _courseSectionRepository.GetCourseSectionByUuid(uuid);
+            var crs = _courseSectionService.GetCourseSectionByUuid(uuid);
             if (crs == null)
             {
                 return NotFound();
             }
-            var dto = new CourseSectionUpdateDto
-            {
-                Uuid = crs.Uuid,
-                CourseId = crs.CourseId,
-                Semester = crs.Semester,
-                SectionNumber = crs.SectionNumber,
-                MaxCapacity = crs.MaxCapacity,
-                DaysOfWeek = crs.DaysOfWeek,
-                TimeSlot = crs.TimeSlot
-            };
+
             LoadCourseSections();
-            return View(dto);
+            return View(crs);
         }
         [HttpPost]
         public IActionResult Edit(CourseSectionUpdateDto courseSectionUpdateDto)
         {
             if (ModelState.IsValid)
             {
-                var oldcrs = _courseSectionRepository.GetCourseSectionByUuid(courseSectionUpdateDto.Uuid);
-                if (oldcrs == null)
+                try
+                {
+                    _courseSectionService.UpdateCourseSection(courseSectionUpdateDto);
+                    return RedirectToAction("Index");
+                }
+                catch (KeyNotFoundException)
                 {
                     return NotFound();
                 }
-
-                oldcrs.CourseId = courseSectionUpdateDto.CourseId;
-                oldcrs.Semester = courseSectionUpdateDto.Semester;
-                oldcrs.SectionNumber = courseSectionUpdateDto.SectionNumber;
-                oldcrs.MaxCapacity = courseSectionUpdateDto.MaxCapacity;
-                oldcrs.DaysOfWeek = courseSectionUpdateDto.DaysOfWeek;
-                oldcrs.TimeSlot = courseSectionUpdateDto.TimeSlot;
-
-                _courseSectionRepository.UpdateCourseSection(oldcrs);
-                return RedirectToAction("Index");
             }
 
             ModelState.AddModelError("", "Please fill all the required fields.");
@@ -143,38 +107,29 @@ namespace University.Controllers
         [HttpGet]
         public IActionResult Delete(string uuid)
         {
-            var crs = _courseSectionRepository.GetCourseSectionByUuid(uuid);
+            var crs = _courseSectionService.GetCourseSectionByUuid(uuid);
             if (crs == null)
             {
                 return NotFound();
             }
-            var dto = new CourseSectionUpdateDto
-            {
-                Uuid = crs.Uuid,
-                CourseId = crs.CourseId,
-                Semester = crs.Semester,
-                SectionNumber = crs.SectionNumber,
-                MaxCapacity = crs.MaxCapacity,
-                DaysOfWeek = crs.DaysOfWeek,
-                TimeSlot = crs.TimeSlot
-            };
-            return View(dto);
+
+            return View(crs);
         }
         [HttpPost]
         [ActionName("Delete")]
         public IActionResult DeleteConfirm(string uuid)
         {
-            var crs = _courseSectionRepository.GetCourseSectionByUuid(uuid);
+            var crs = _courseSectionService.GetCourseSectionByUuid(uuid);
             if (crs == null)
             {
                 return NotFound();
             }
-            _courseSectionRepository.DeleteCourseSection(uuid);
+            _courseSectionService.DeleteCourseSection(uuid);
             return RedirectToAction("Index");
         }
         public void LoadCourseSections()
         {
-            var courses = _courseSectionRepository.GetCourses();
+            var courses = _courseSectionService.GetCourses();
             SelectList selectListItems = new SelectList(courses, "Id", "Code");
             ViewBag.Courses = selectListItems;
         }

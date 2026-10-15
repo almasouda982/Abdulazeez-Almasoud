@@ -2,6 +2,9 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using University.Data;
 using University.Repositories;
+using University.Repositories.Base;
+using University.Services;
+using University.Services.Base;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +38,19 @@ builder.Services.AddScoped<IDegreeRequirementRepository, DegreeRequirementReposi
 builder.Services.AddScoped<ICourseRepository, CourseRepository>();
 builder.Services.AddScoped<IDegreeProgramRepository, DegreeProgramRepository>();
 
+
+//base repos
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+//Services
+builder.Services.AddScoped<IWaitlistEntryService, WaitlistEntryService>();
+builder.Services.AddScoped<IEnrollmentsService, EnrollmentsService>();
+builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<ICoursePrerequisiteService, CoursePrerequisiteService>();
+builder.Services.AddScoped<ICourseSectionService, CourseSectionService>();
+builder.Services.AddScoped<IDegreeRequirementService, DegreeRequirementService>();
+builder.Services.AddScoped<ICourseService, CourseService>();
+builder.Services.AddScoped<IDegreeProgramService, DegreeProgramService>();
 
 var app = builder.Build();
 

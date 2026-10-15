@@ -6,6 +6,7 @@ using University.Data;
 using University.Dtos;
 using University.Models;
 using University.Repositories;
+using University.Services.Base;
 
 namespace University.Controllers
 {
@@ -13,11 +14,11 @@ namespace University.Controllers
 
     public class DegreeRequirementsController : Controller
     {
-        private readonly IDegreeRequirementRepository _degreeRequirementRepository;
+        private readonly IDegreeRequirementService _degreeRequirementService;
 
-        public DegreeRequirementsController(IDegreeRequirementRepository degreeRequirementRepository)
+        public DegreeRequirementsController(IDegreeRequirementService degreeRequirementService)
         {
-            _degreeRequirementRepository = degreeRequirementRepository;
+            _degreeRequirementService = degreeRequirementService;
         }
 
         //public IActionResult Index()
@@ -34,17 +35,8 @@ namespace University.Controllers
 
         public IActionResult Index()
         {
-            var degreeRequirements = _degreeRequirementRepository.GetAll();
-            IEnumerable<DegreeRequirementDto> degreeRequirementsDtos = degreeRequirements.Select(d => new DegreeRequirementDto
-            {
-                Id = d.Id,
-                Uuid = d.Uuid,
-                Name = d.DegreeProgram != null ? d.DegreeProgram.Name : "",
-                CategoryName = d.CategoryName,
-                RequiredCredits = d.RequiredCredits,
-                MinLevel = d.MinLevel
+            var degreeRequirementsDtos = _degreeRequirementService.GetAllDegreeRequirements();
 
-            }).ToList();
             return View(degreeRequirementsDtos);
         }
 
@@ -63,14 +55,8 @@ namespace University.Controllers
         {
             if (ModelState.IsValid)
             {
-                var degreeRequirement = new DegreeRequirement
-                {
-                    DegreeProgramId = degreeRequirementCreateDto.DegreeProgramId,
-                    CategoryName = degreeRequirementCreateDto.CategoryName,
-                    RequiredCredits = degreeRequirementCreateDto.RequiredCredits,
-                    MinLevel = degreeRequirementCreateDto.MinLevel
-                };
-                _degreeRequirementRepository.AddDegreeRequirement(degreeRequirement);
+
+                _degreeRequirementService.AddDegreeRequirement(degreeRequirementCreateDto);
                 return RedirectToAction("Index");
 
             }
@@ -84,41 +70,29 @@ namespace University.Controllers
         [HttpGet]
         public IActionResult Edit(string uuid)
         {
-            var degr = _degreeRequirementRepository.GetDegreeRequirementByUuid(uuid);
+            var degr = _degreeRequirementService.GetDegreeRequirementByUuid(uuid);
             if (degr == null)
             {
                 return NotFound();
             }
-            var dto = new DegreeRequirementUpdateDto
-            {
-                Uuid = degr.Uuid,
-                DegreeProgramId = degr.DegreeProgramId,
-                CategoryName = degr.CategoryName,
-                RequiredCredits = degr.RequiredCredits,
-                MinLevel = degr.MinLevel
-            };
 
             LoadDegreeRequirements();
-            return View(dto);
+            return View(degr);
         }
         [HttpPost]
         public IActionResult Edit(DegreeRequirementUpdateDto  degreeRequirementUpdateDto)
         {
             if (ModelState.IsValid)
             {
-                var olddegr = _degreeRequirementRepository.GetDegreeRequirementByUuid(degreeRequirementUpdateDto.Uuid);
-                if (olddegr == null)
+                try
+                {
+                    _degreeRequirementService.UpdateDegreeRequirement(degreeRequirementUpdateDto);
+                    return RedirectToAction("Index");
+                }
+                catch (KeyNotFoundException)
                 {
                     return NotFound();
                 }
-
-                olddegr.DegreeProgramId = degreeRequirementUpdateDto.DegreeProgramId;
-                olddegr.CategoryName = degreeRequirementUpdateDto.CategoryName;
-                olddegr.RequiredCredits = degreeRequirementUpdateDto.RequiredCredits;
-                olddegr.MinLevel= degreeRequirementUpdateDto.MinLevel;
-
-                _degreeRequirementRepository.UpdateDegreeRequirement(olddegr);
-                return RedirectToAction("Index");
             }
 
             ModelState.AddModelError("", "Please fill all the required fields.");
@@ -132,37 +106,30 @@ namespace University.Controllers
         [HttpGet]
         public IActionResult Delete(string uuid)
         {
-            var degr = _degreeRequirementRepository.GetDegreeRequirementByUuid(uuid);
-            if (degr == null)
-            {
-                return NotFound();
-            }
-            var dto = new DegreeRequirementUpdateDto
-            {
-                Uuid = degr.Uuid,
-                DegreeProgramId = degr.DegreeProgramId,
-                CategoryName = degr.CategoryName,
-                RequiredCredits = degr.RequiredCredits,
-                MinLevel = degr.MinLevel
-            };
-            return View(dto);
-        }
-        [HttpPost]
-        [ActionName("Delete")]
-        public IActionResult DeleteConfirm(string uuid)
-        {
-            var degr = _degreeRequirementRepository.GetDegreeRequirementByUuid(uuid);
+            var degr = _degreeRequirementService.GetDegreeRequirementByUuid(uuid);
             if (degr == null)
             {
                 return NotFound();
             }
 
-            _degreeRequirementRepository.DeleteDegreeRequirement(uuid);
+            return View(degr);
+        }
+        [HttpPost]
+        [ActionName("Delete")]
+        public IActionResult DeleteConfirm(string uuid)
+        {
+            var degr = _degreeRequirementService.GetDegreeRequirementByUuid(uuid);
+            if (degr == null)
+            {
+                return NotFound();
+            }
+
+            _degreeRequirementService.DeleteDegreeRequirement(uuid);
             return RedirectToAction("Index");
         }
         public void LoadDegreeRequirements()
         {
-            var degreePrograms = _degreeRequirementRepository.GetDegreePrograms();
+            var degreePrograms = _degreeRequirementService.GetDegreePrograms();
             SelectList selectListItems = new SelectList(degreePrograms, "Id", "Name");
             ViewBag.DegreePrograms = selectListItems;
         }

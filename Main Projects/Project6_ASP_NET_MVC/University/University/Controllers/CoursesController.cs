@@ -1,22 +1,18 @@
-﻿using AspNetCoreGeneratedDocument;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using University.Data;
 using University.Dtos;
-using University.Models;
-using University.Repositories;
+using University.Services.Base;
 
 namespace University.Controllers
 {
     [Authorize]
     public class CoursesController : Controller
     {
-        private readonly ICourseRepository _courseRepository;
+        private readonly ICourseService _courseService;
 
-        public CoursesController(ICourseRepository courseRepository)
+        public CoursesController(ICourseService courseService)
         {
-            _courseRepository = courseRepository;
+            _courseService = courseService;
         }
         //public IActionResult Index()
         //{
@@ -38,18 +34,8 @@ namespace University.Controllers
 
         public IActionResult Index()
         {
-            var courses = _courseRepository.GetAll();
-            IEnumerable<CourseDto> courseDtos = courses.Select(c => new CourseDto
-                {
-                    Id = c.Id,
-                    Uuid = c.Uuid,
-                    Code = c.Code,
-                    Title = c.Title,
-                    Credits = c.Credits,
-                    Description = c.Description
-                })
-                .ToList();
-                return View(courseDtos);
+            var coursesDtos = _courseService.GetAllCourses();
+            return View(coursesDtos);
         }
 
 
@@ -66,15 +52,8 @@ namespace University.Controllers
         {
             if(ModelState.IsValid)
             {
-                var course = new Course
-                {
-                    Code = courseCreateDto.Code,
-                    Title = courseCreateDto.Title,
-                    Credits = courseCreateDto.Credits,
-                    Description = courseCreateDto.Description
-                };
 
-                _courseRepository.AddCourse(course);
+                _courseService.AddCourse(courseCreateDto);
                 return RedirectToAction("Index");
             }
             ModelState.AddModelError("", "Please fill in all required fields.");
@@ -88,42 +67,31 @@ namespace University.Controllers
         [HttpGet]
         public IActionResult Edit(string uuid)
         {
-            var crs = _courseRepository.GetCourseByUuid(uuid);
+            var crs = _courseService.GetCourseByUuid(uuid);
             if (crs == null)
             {
                 return NotFound();
             }
-            var dto = new CourseUpdateDto
-            {
-                Uuid = crs.Uuid,
-                Code = crs.Code,
-                Title = crs.Title,
-                Credits = crs.Credits,
-                Description = crs.Description
-            };
-            return View(dto);
+
+            return View(crs);
         }
         [HttpPost]
         public IActionResult Edit(CourseUpdateDto courseUpdateDto)
         {
             if (ModelState.IsValid)
             {
-                var oldcrs = _courseRepository.GetCourseByUuid(courseUpdateDto.Uuid);
-                if (oldcrs == null)
+                try
+                {
+                    _courseService.UpdateCourse(courseUpdateDto);
+                    return RedirectToAction("Index");
+                }
+                catch (KeyNotFoundException)
                 {
                     return NotFound();
                 }
-
-                oldcrs.Code = courseUpdateDto.Code;
-                oldcrs.Title = courseUpdateDto.Title;
-                oldcrs.Credits = courseUpdateDto.Credits;
-                oldcrs.Description= courseUpdateDto.Description;
-
-                _courseRepository.UpdateCourse(oldcrs);
-                return RedirectToAction("Index");
             }
 
-            ModelState.AddModelError("", "Please fill all the required fields."); 
+            ModelState.AddModelError("", "Please fill all the required fields.");
             return View(courseUpdateDto);
         }
 
@@ -133,32 +101,25 @@ namespace University.Controllers
         [HttpGet]
         public IActionResult Delete(string uuid)
         {
-            var crs = _courseRepository.GetCourseByUuid(uuid);
-            if (crs == null)
-            {
-                return NotFound();
-            }
-            var dto = new CourseUpdateDto
-            {
-                Uuid = crs.Uuid,
-                Code = crs.Code,
-                Title = crs.Title,
-                Credits = crs.Credits,
-                Description = crs.Description
-            };
-            return View(dto);
-        }
-        [HttpPost]
-        [ActionName("Delete")]
-        public IActionResult DeleteConfirm(string uuid)
-        {
-            var crs = _courseRepository.GetCourseByUuid(uuid);
+            var crs = _courseService.GetCourseByUuid(uuid);
             if (crs == null)
             {
                 return NotFound();
             }
 
-            _courseRepository.DeleteCourse(uuid);
+            return View(crs);
+        }
+        [HttpPost]
+        [ActionName("Delete")]
+        public IActionResult DeleteConfirm(string uuid)
+        {
+            var crs = _courseService.GetCourseByUuid(uuid);
+            if (crs == null)
+            {
+                return NotFound();
+            }
+
+            _courseService.DeleteCourse(uuid);
             return RedirectToAction("Index");
         }
         // no viewbags so far
