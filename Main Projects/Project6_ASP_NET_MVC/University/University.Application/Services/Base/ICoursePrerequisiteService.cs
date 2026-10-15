@@ -1,7 +1,7 @@
-﻿using University.Dtos;
-using University.Models;
+﻿using University.Application.Dtos;
+using University.Domain.Models;
 
-namespace University.Services.Base
+namespace University.Application.Services.Base
 {
     public interface ICoursePrerequisiteService
     {

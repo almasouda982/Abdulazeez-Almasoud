@@ -1,6 +1,6 @@
-﻿using University.Dtos;
+﻿using University.Application.Dtos;
 
-namespace University.Services.Base
+namespace University.Application.Services.Base
 {
     public interface IDegreeProgramService
     {

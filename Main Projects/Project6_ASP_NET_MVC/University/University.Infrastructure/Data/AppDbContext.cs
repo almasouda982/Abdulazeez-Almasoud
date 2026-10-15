@@ -1,7 +1,7 @@
 ﻿using University.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace University.Data
+namespace University.Infrastructure.Data
 {
     public class AppDbContext :DbContext
     {

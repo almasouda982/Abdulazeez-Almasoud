@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-using University.Data;
-using University.Repositories;
-using University.Repositories.Base;
-using University.Services;
-using University.Services.Base;
+using University.Infrastructure.Data;
+using University.Infrastructure.Repositories;
+using University.Infrastructure.Repositories.Base;
+using University.Application.Services;
+using University.Application.Services.Base;
 
 var builder = WebApplication.CreateBuilder(args);
 

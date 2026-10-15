@@ -1,9 +1,9 @@
-﻿using University.Dtos;
-using University.Models;
-using University.Repositories.Base;
-using University.Services.Base;
+﻿using University.Application.Dtos;
+using University.Domain.Models;
+using University.Infrastructure.Repositories.Base;
+using University.Application.Services.Base;
 
-namespace University.Services
+namespace University.Application.Services
 {
     public class DegreeRequirementService : IDegreeRequirementService
     {

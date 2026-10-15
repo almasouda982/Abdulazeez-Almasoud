@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace University.Domain.Models
 {
-    [Authorize]
 
     public class WaitlistEntry
     {

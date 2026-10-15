@@ -1,6 +1,6 @@
-﻿using Microsoft.Identity.Client;
+﻿//using Microsoft.Identity.Client;
 
-namespace University.Dtos
+namespace University.Application.Dtos
 {
     public class StudentDto
     {

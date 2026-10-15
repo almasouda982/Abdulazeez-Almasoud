@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using University.Data;
+using University.Infrastructure.Data;
 
 #nullable disable
 
-namespace University.Migrations
+namespace University.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20261008092348_intial")]

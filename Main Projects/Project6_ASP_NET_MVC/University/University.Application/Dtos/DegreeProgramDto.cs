@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.Contracts;
 
-namespace University.Dtos
+namespace University.Application.Dtos
 {
     public class DegreeProgramDto
     {
