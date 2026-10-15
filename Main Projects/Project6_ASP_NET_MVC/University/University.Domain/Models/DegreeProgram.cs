@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace University.Models
+namespace University.Domain.Models
 {
     [Authorize]
     public class DegreeProgram

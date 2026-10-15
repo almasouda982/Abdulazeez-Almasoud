@@ -1,4 +1,4 @@
-﻿namespace University.Models
+﻿namespace University.Domain.Models
 {
     public class User
     {
