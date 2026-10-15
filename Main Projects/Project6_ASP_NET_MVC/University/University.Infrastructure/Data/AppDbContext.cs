@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using University.Models;
+﻿using University.Domain.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace University.Data
 {

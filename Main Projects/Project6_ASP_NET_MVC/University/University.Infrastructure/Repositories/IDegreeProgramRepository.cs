@@ -1,6 +1,6 @@
-﻿using University.Models;
+﻿using University.Domain.Models;
 
-namespace University.Repositories
+namespace University.Infrastructure.Repositories
 {
     public interface IDegreeProgramRepository
     {

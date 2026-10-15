@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using University.Data;
-using University.Models;
+using University.Infrastructure.Data;
+using University.Domain.Models;
 
-namespace University.Repositories
+namespace University.Infrastructure.Repositories
 {
     public class StudentRepository : IStudentRepository
     {

@@ -8,7 +8,7 @@ using University.Data;
 
 #nullable disable
 
-namespace University.Migrations
+namespace University.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot

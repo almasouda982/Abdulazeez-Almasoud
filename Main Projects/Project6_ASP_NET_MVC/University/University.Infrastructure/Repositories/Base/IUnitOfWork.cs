@@ -1,4 +1,4 @@
-﻿namespace University.Repositories.Base
+﻿namespace University.Infrastructure.Repositories.Base
 {
     public interface IUnitOfWork
     {

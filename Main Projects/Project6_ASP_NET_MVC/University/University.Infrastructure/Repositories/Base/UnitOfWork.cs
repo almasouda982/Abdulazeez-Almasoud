@@ -1,6 +1,6 @@
 ﻿using University.Data;
 
-namespace University.Repositories.Base
+namespace University.Infrastructure.Repositories.Base
 {
     public class UnitOfWork : IUnitOfWork
     {
