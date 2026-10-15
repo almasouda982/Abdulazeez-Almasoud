@@ -1,4 +1,4 @@
-﻿using University.Data;
+﻿using University.Infrastructure.Data;
 
 namespace University.Infrastructure.Repositories.Base
 {
