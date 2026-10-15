@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using University.Models;
+using University.Domain.Models;
 
 namespace University.Controllers
 {

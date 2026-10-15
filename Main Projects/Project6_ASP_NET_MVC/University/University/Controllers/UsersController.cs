@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using University.Data;
-using University.Models;
+using University.Infrastructure.Data;
+using University.Domain.Models;
 
 namespace University.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class UsersController : Controller
     {
         private readonly AppDbContext _db;

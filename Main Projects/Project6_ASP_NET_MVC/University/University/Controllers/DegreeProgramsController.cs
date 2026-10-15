@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using University.Data;
-using University.Dtos;
-using University.Models;
-using University.Repositories;
-using University.Services.Base;
+using University.Application.Dtos;
+using University.Application.Services.Base;
 
 namespace University.Controllers
 {
