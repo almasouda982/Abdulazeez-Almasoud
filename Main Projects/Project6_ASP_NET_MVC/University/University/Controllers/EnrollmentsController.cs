@@ -1,26 +1,20 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.Metrics;
-using University.Data;
 using University.Dtos;
-using University.Models;
-using University.Repositories;
+using University.Services.Base;
+
 
 namespace University.Controllers
 {
     [Authorize]
     public class EnrollmentsController : Controller
     {
-        private readonly IEnrollmentRepository _enrollmentRepository;
-
-        public EnrollmentsController(IEnrollmentRepository enrollmentRepository)
+        //private readonly IEnrollmentRepository _enrollmentRepository;
+        private readonly IEnrollmentsService _enrollmentsService;
+        public EnrollmentsController(IEnrollmentsService enrollmentsService)
         {
-            _enrollmentRepository = enrollmentRepository;
+            _enrollmentsService = enrollmentsService;
         }
 
         //public IActionResult Index()
@@ -40,17 +34,7 @@ namespace University.Controllers
 
         public IActionResult Index()
         {
-            var enrollments = _enrollmentRepository.GetAll();
-            IEnumerable<EnrollmentDto> enrollmentsDto = enrollments.Select(e => new EnrollmentDto
-            {
-                Id = e.Id,
-                Uuid = e.Uuid,
-                LastName = e.Student != null ? e.Student.LastName : null,
-                SectionNumber = e.CourseSection != null ? e.CourseSection.SectionNumber : (int?)null,
-                FinalGrade = e.FinalGrade,
-                LetterGradePoints = e.LetterGradePoints,
-                Status = e.Status
-            }).ToList();
+            var enrollmentsDto = _enrollmentsService.GetAllEnrollments();
             return View(enrollmentsDto);
         }
 
@@ -76,15 +60,7 @@ namespace University.Controllers
         {
             if (ModelState.IsValid)
             {
-                var enrollment = new Enrollment
-                {
-                    StudentId = enrollmentCreateDto.StudentId,
-                    CourseSectionId = enrollmentCreateDto.CourseSectionId,
-                    FinalGrade = enrollmentCreateDto.FinalGrade,
-                    LetterGradePoints = enrollmentCreateDto.LetterGradePoints,
-                    Status = enrollmentCreateDto.Status
-                };
-                _enrollmentRepository.AddEnrollment(enrollment);
+                _enrollmentsService.AddEnrollment(enrollmentCreateDto);
                 return RedirectToAction("Index");
             }
             ModelState.AddModelError("", "Please fill in all required fields.");
@@ -98,45 +74,29 @@ namespace University.Controllers
         [HttpGet]
         public IActionResult Edit(string uuid)
         {
-            var enr = _enrollmentRepository.GetEnrollmentByUuid(uuid);
+            var enr = _enrollmentsService.GetEnrollmentByUuid(uuid);
             if (enr == null)
             {
                 return NotFound();
             }
-            var dto = new EnrollmentUpdateDto
-            {
-                Uuid = enr.Uuid,
-                StudentId = enr.StudentId,
-                CourseSectionId = enr.CourseSectionId,
-                FinalGrade = enr.FinalGrade,
-                LetterGradePoints = enr.LetterGradePoints,
-                Status = enr.Status
-            };
             LoadEnrollment();
-
-            return View(dto);
+            return View(enr);
         }
         [HttpPost]
         public IActionResult Edit(EnrollmentUpdateDto enrollmentUpdateDto)
         {
             if (ModelState.IsValid)
             {
-                var oldenr = _enrollmentRepository.GetEnrollmentByUuid(enrollmentUpdateDto.Uuid);
-                if(oldenr == null)
+                try
+                {
+                    _enrollmentsService.UpdateEnrollment(enrollmentUpdateDto);
+                    return RedirectToAction("Index");
+                }
+                catch (KeyNotFoundException)
                 {
                     return NotFound();
                 }
-
-                //replaces update
-                oldenr.StudentId = enrollmentUpdateDto.StudentId;
-                oldenr.CourseSectionId = enrollmentUpdateDto.CourseSectionId;
-                oldenr.FinalGrade = enrollmentUpdateDto.FinalGrade;
-                oldenr.LetterGradePoints = enrollmentUpdateDto.LetterGradePoints;
-                oldenr.Status = enrollmentUpdateDto.Status;
-
-                _enrollmentRepository.UpdateEnrollment(oldenr);
-                return RedirectToAction("Index");
-    }
+            }
 
             ModelState.AddModelError("", "Please fill all the required fields.");
             LoadEnrollment();
@@ -149,42 +109,33 @@ namespace University.Controllers
         [HttpGet]
         public IActionResult Delete(string uuid)
         {
-            var enr = _enrollmentRepository.GetEnrollmentByUuid(uuid);
+            var enr = _enrollmentsService.GetEnrollmentByUuid(uuid);
             if (enr == null)
             {
                 return NotFound();
             }
-            var dto = new EnrollmentUpdateDto
-            {
-                Uuid = enr.Uuid,
-                StudentId = enr.StudentId,
-                CourseSectionId = enr.CourseSectionId,
-                FinalGrade = enr.FinalGrade,
-                LetterGradePoints = enr.LetterGradePoints,
-                Status = enr.Status
-            };
-            return View(dto);
+            return View(enr);
         }
         [HttpPost]
         [ActionName("Delete")]
         public IActionResult DeleteConfirm(string uuid)
         {
-            var enr = _enrollmentRepository.GetEnrollmentByUuid(uuid);
+            var enr = _enrollmentsService.GetEnrollmentByUuid(uuid);
             if (enr == null)
             {
                 return NotFound();
             }
 
-            _enrollmentRepository.DeleteEnrollment(uuid);
+            _enrollmentsService.DeleteEnrollment(uuid);
             return RedirectToAction("Index");
         }
 
         public void LoadEnrollment()
         {
-            var students = _enrollmentRepository.GetStudents();
+            var students = _enrollmentsService.GetStudents();
             SelectList selectListItems1 = new SelectList(students, "Id", "LastName");
             ViewBag.Students = selectListItems1;
-            var courseSections = _enrollmentRepository.GetCourseSections();
+            var courseSections = _enrollmentsService.GetCourseSections();
             SelectList selectListItems2 = new SelectList(courseSections, "Id", "SectionNumber");
             ViewBag.CourseSections = selectListItems2;
         }

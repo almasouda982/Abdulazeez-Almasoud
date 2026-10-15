@@ -5,6 +5,7 @@ using University.Data;
 using University.Dtos;
 using University.Models;
 using University.Repositories;
+using University.Services.Base;
 
 namespace University.Controllers
 {
@@ -12,11 +13,11 @@ namespace University.Controllers
 
     public class DegreeProgramsController : Controller
     {
-        private readonly IDegreeProgramRepository _degreeProgramRepository;
+        private readonly IDegreeProgramService _degreeProgramService;
 
-        public DegreeProgramsController(IDegreeProgramRepository degreeProgramRepository)
+        public DegreeProgramsController(IDegreeProgramService degreeProgramService)
         {
-            _degreeProgramRepository = degreeProgramRepository;
+            _degreeProgramService = degreeProgramService;
         }
 
         //public IActionResult Index()
@@ -38,21 +39,12 @@ namespace University.Controllers
 
         public IActionResult Index()
         {
-            var degreePrograms = _degreeProgramRepository.GetAll();
-            IEnumerable<DegreeProgramDto> degreeProgramDtos = degreePrograms.Select(dp => new DegreeProgramDto
-            {
-                Id = dp.Id,
-                Uuid = dp.Uuid,
-                Name = dp.Name,
-                CatalogYear = dp.CatalogYear,
-                TotalCreditsRequired = dp.TotalCreditsRequired
-            })
-                .ToList();
-                return View(degreeProgramDtos);
+            var degreeProgramsDtos = _degreeProgramService.GetAllDegreePrograms();
+            return View(degreeProgramsDtos);
         }
-            //==============================
-            // Create
-            //==============================
+        //==============================
+        // Create
+        //==============================
         [HttpGet]
         public IActionResult Create()
         {
@@ -63,13 +55,8 @@ namespace University.Controllers
         {
             if (ModelState.IsValid)
             {
-                var degreeProgram = new DegreeProgram
-                {
-                    Name = degreeProgramCreateDto.Name,
-                    CatalogYear = degreeProgramCreateDto.CatalogYear,
-                    TotalCreditsRequired = degreeProgramCreateDto.TotalCreditsRequired
-                };
-                _degreeProgramRepository.AddDegreeProgram(degreeProgram);
+
+                _degreeProgramService.AddDegreeProgram(degreeProgramCreateDto);
                 return RedirectToAction("Index");
             }
                 ModelState.AddModelError("", "Please fill in all required fields.");
@@ -83,37 +70,28 @@ namespace University.Controllers
         [HttpGet]
         public IActionResult Edit(string uuid)
         {
-            var degp = _degreeProgramRepository.GetDegreeProgramByUuid(uuid);
+            var degp = _degreeProgramService.GetDegreeProgramByUuid(uuid);
             if (degp == null)
             {
                 return NotFound();
             }
-            var dto = new DegreeProgramUpdateDto
-            {
-                Uuid = degp.Uuid,
-                Name = degp.Name,
-                CatalogYear = degp.CatalogYear,
-                TotalCreditsRequired = degp.TotalCreditsRequired
-            };
-            return View(dto);
+
+            return View(degp);
         }
         [HttpPost]
         public IActionResult Edit(DegreeProgramUpdateDto degreeProgramUpdateDto)
         {
             if (ModelState.IsValid)
             {
-                var olddegp = _degreeProgramRepository.GetDegreeProgramByUuid(degreeProgramUpdateDto.Uuid);
-                if(olddegp == null)
+                try
+                {
+                    _degreeProgramService.UpdateDegreeProgram(degreeProgramUpdateDto);
+                    return RedirectToAction("Index");
+                }
+                catch (KeyNotFoundException)
                 {
                     return NotFound();
                 }
-
-                olddegp.Name = degreeProgramUpdateDto.Name;
-                olddegp.CatalogYear = degreeProgramUpdateDto.CatalogYear;
-                olddegp.TotalCreditsRequired = degreeProgramUpdateDto.TotalCreditsRequired;
-
-                _degreeProgramRepository.UpdateDegreeProgram(olddegp);
-                return RedirectToAction("Index");
             }
 
             ModelState.AddModelError("", "Please fill all the required fields.");
@@ -126,35 +104,29 @@ namespace University.Controllers
         [HttpGet]
         public IActionResult Delete(string uuid)
         {
-            var degp = _degreeProgramRepository.GetDegreeProgramByUuid(uuid);
+            var degp = _degreeProgramService.GetDegreeProgramByUuid(uuid);
             if (degp == null)
             {
                 return NotFound();
             }
-            var dto = new DegreeProgramUpdateDto
-            {
-                Uuid = degp.Uuid,
-                Name = degp.Name,
-                CatalogYear = degp.CatalogYear,
-                TotalCreditsRequired = degp.TotalCreditsRequired
-            };
-            return View(dto);
+
+            return View(degp);
         }
         [HttpPost]
         [ActionName("Delete")]
         public IActionResult DeleteConfirm(string uuid)
         {
-            var degp = _degreeProgramRepository.GetDegreeProgramByUuid(uuid);
+            var degp = _degreeProgramService.GetDegreeProgramByUuid(uuid);
             if (degp == null)
             {
                 return NotFound();
             }
-            _degreeProgramRepository.DeleteDegreeProgram(uuid);
+            _degreeProgramService.DeleteDegreeProgram(uuid);
             return RedirectToAction("Index");
         }
-        // null for now
-        public void LoadDegreePrograms()
-        {
-        }
+        //// null for now
+        //public void LoadDegreePrograms()
+        //{
+        //}
     }
 }

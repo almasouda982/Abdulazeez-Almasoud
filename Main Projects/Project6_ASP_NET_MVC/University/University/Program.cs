@@ -44,6 +44,13 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 //Services
 builder.Services.AddScoped<IWaitlistEntryService, WaitlistEntryService>();
+builder.Services.AddScoped<IEnrollmentsService, EnrollmentsService>();
+builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<ICoursePrerequisiteService, CoursePrerequisiteService>();
+builder.Services.AddScoped<ICourseSectionService, CourseSectionService>();
+builder.Services.AddScoped<IDegreeRequirementService, DegreeRequirementService>();
+builder.Services.AddScoped<ICourseService, CourseService>();
+builder.Services.AddScoped<IDegreeProgramService, DegreeProgramService>();
 
 var app = builder.Build();
 

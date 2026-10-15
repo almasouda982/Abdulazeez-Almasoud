@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using University.Data;
 using University.Dtos;
-using University.Models;
-using University.Repositories;
+using University.Services.Base;
 
 namespace University.Controllers
 {
@@ -13,11 +10,12 @@ namespace University.Controllers
 
     public class CoursePrerequisitsController : Controller
     {
-        private readonly ICoursePrerequisiteRepository _coursePrerequisiteRepository;
+        //private readonly ICoursePrerequisiteRepository _coursePrerequisiteRepository;
 
-        public CoursePrerequisitsController(ICoursePrerequisiteRepository coursePrerequisiteRepository)
+        private readonly ICoursePrerequisiteService _coursePrerequisiteService;
+        public CoursePrerequisitsController(ICoursePrerequisiteService coursePrerequisiteService)
         {
-            _coursePrerequisiteRepository = coursePrerequisiteRepository;
+            _coursePrerequisiteService = coursePrerequisiteService;
         }
         //public IActionResult Index()
         //{
@@ -34,16 +32,7 @@ namespace University.Controllers
 
         public IActionResult Index()
         {
-            var coursePrerequisites = _coursePrerequisiteRepository.GetAll();
-            IEnumerable<CoursePrerequisiteDto> coursePrerequisiteDtos = coursePrerequisites.Select(c => new CoursePrerequisiteDto
-            {
-                Id = c.Id,
-                Uuid = c.Uuid,
-                MinGradeRequired = c.MinGradeRequired,
-                Code = c.Course != null ? c.Course.Code : null,
-                PrerequisiteCourseId = c.PrerequisiteCourseId
-
-            }).ToList();
+            var coursePrerequisiteDtos = _coursePrerequisiteService.GetAllCoursePrerequisites();
             return View(coursePrerequisiteDtos);
         }
         //============
@@ -60,14 +49,9 @@ namespace University.Controllers
         {
             if (ModelState.IsValid)
             {
-                var coursePrerequisite = new CoursePrerequisite
-                {
-                    MinGradeRequired = coursePrerequisiteCreateDto.MinGradeRequired,
-                    CourseId = coursePrerequisiteCreateDto.CourseId,
-                    PrerequisiteCourseId = coursePrerequisiteCreateDto.PrerequisiteCourseId
-                };
 
-                _coursePrerequisiteRepository.AddCoursePrerequisite(coursePrerequisite);
+
+                _coursePrerequisiteService.AddCoursePrerequisite(coursePrerequisiteCreateDto);
                 return RedirectToAction("Index");
             }
             ModelState.AddModelError("", "Please fill in all required fields.");
@@ -82,40 +66,33 @@ namespace University.Controllers
         [HttpGet]
         public IActionResult Edit(string uuid)
         {
-            var crsp = _coursePrerequisiteRepository.GetCoursePrerequisiteByUuid(uuid);
+            var crsp = _coursePrerequisiteService.GetCoursePrerequisiteByUuid(uuid);
             if (crsp == null)
             {
                 return NotFound();
             }
-            var dto = new CoursePrerequisiteUpdateDto
-            {
-                Uuid = crsp.Uuid,
-                MinGradeRequired = crsp.MinGradeRequired,
-                CourseId = crsp.CourseId,
-                PrerequisiteCourseId = crsp.PrerequisiteCourseId
-            };
+
             LoadCourses();
-            return View(dto);
+            return View(crsp);
         }
         [HttpPost]
         public IActionResult Edit(CoursePrerequisiteUpdateDto coursePrerequisiteUpdateDto)
         {
             if (ModelState.IsValid)
             {
-                var oldcrsp = _coursePrerequisiteRepository.GetCoursePrerequisiteByUuid(coursePrerequisiteUpdateDto.Uuid);
-                if(oldcrsp == null)
+                try
+                {
+                    _coursePrerequisiteService.UpdateCoursePrerequisite(coursePrerequisiteUpdateDto);
+                    return RedirectToAction("Index");
+                }
+                catch (KeyNotFoundException)
                 {
                     return NotFound();
                 }
-                oldcrsp.MinGradeRequired = coursePrerequisiteUpdateDto.MinGradeRequired;
-                oldcrsp.CourseId = coursePrerequisiteUpdateDto.CourseId;
-                oldcrsp.PrerequisiteCourseId = coursePrerequisiteUpdateDto.PrerequisiteCourseId;
-
-                _coursePrerequisiteRepository.UpdateCoursePrerequisite(oldcrsp);
-                return RedirectToAction("Index");
             }
 
             ModelState.AddModelError("", "Please fill all the required fields.");
+            LoadCourses();
             return View(coursePrerequisiteUpdateDto);
         }
         //===========
@@ -124,36 +101,30 @@ namespace University.Controllers
         [HttpGet]
         public IActionResult Delete(string uuid)
         {
-            var crsp = _coursePrerequisiteRepository.GetCoursePrerequisiteByUuid(uuid);
-            if (crsp == null)
-            {
-                return NotFound();
-            }
-            var dto = new CoursePrerequisiteUpdateDto
-            {
-                Uuid = crsp.Uuid,
-                MinGradeRequired = crsp.MinGradeRequired,
-                CourseId = crsp.CourseId,
-                PrerequisiteCourseId = crsp.PrerequisiteCourseId
-            };
-            return View(dto);
-        }
-        [HttpPost]
-        [ActionName("Delete")]
-        public IActionResult DeleteConfirm(string uuid)
-        {
-            var crsp = _coursePrerequisiteRepository.GetCoursePrerequisiteByUuid(uuid);
+            var crsp = _coursePrerequisiteService.GetCoursePrerequisiteByUuid(uuid);
             if (crsp == null)
             {
                 return NotFound();
             }
 
-            _coursePrerequisiteRepository.DeleteCoursePrerequisite(uuid);
+            return View(crsp);
+        }
+        [HttpPost]
+        [ActionName("Delete")]
+        public IActionResult DeleteConfirm(string uuid)
+        {
+            var crsp = _coursePrerequisiteService.GetCoursePrerequisiteByUuid(uuid);
+            if (crsp == null)
+            {
+                return NotFound();
+            }
+
+            _coursePrerequisiteService.DeleteCoursePrerequisite(uuid);
             return RedirectToAction("Index");
         }
         public void LoadCourses()
         {
-            var courses = _coursePrerequisiteRepository.GetCourses();
+            var courses = _coursePrerequisiteService.GetCourses();
             SelectList selectListItems = new SelectList(courses, "Id", "Code");
             ViewBag.Courses = selectListItems;
         }
