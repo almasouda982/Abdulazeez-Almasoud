@@ -1,3 +1,4 @@
+import 'package:firstapp/pages/drawerpage.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -15,7 +16,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: Scaffold(),
+      home: DrawerPage(),
+
     );
   }
 }
