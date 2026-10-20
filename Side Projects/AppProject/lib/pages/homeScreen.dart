@@ -1,6 +1,3 @@
-
-
-// صفحة Home
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -11,12 +8,12 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home Screen'),
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.blue,
       ),
       body: const Center(
-        child: const Text(
-          'Welcome Home 👋',
-          style: const TextStyle(fontSize: 22),
+        child: Text(
+          'Home Screen',
+          style: TextStyle(fontSize: 18),
         ),
       ),
     );
