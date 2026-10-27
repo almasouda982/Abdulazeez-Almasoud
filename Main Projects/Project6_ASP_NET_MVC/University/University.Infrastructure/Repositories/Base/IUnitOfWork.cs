@@ -10,5 +10,6 @@
         ICourseSectionRepository CourseSectionRepository { get; }
         IDegreeRequirementRepository DegreeRequirementRepository { get; }
         IDegreeProgramRepository DegreeProgramRepository { get; }
+        IUserRepository UserRepository { get; }
     }
 }
