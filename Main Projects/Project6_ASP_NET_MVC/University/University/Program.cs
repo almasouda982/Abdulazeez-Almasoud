@@ -37,6 +37,7 @@ builder.Services.AddScoped<ICourseSectionRepository, CourseSectionRepository>();
 builder.Services.AddScoped<IDegreeRequirementRepository, DegreeRequirementRepository>();
 builder.Services.AddScoped<ICourseRepository, CourseRepository>();
 builder.Services.AddScoped<IDegreeProgramRepository, DegreeProgramRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 
 //base repos
@@ -51,6 +52,7 @@ builder.Services.AddScoped<ICourseSectionService, CourseSectionService>();
 builder.Services.AddScoped<IDegreeRequirementService, DegreeRequirementService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<IDegreeProgramService, DegreeProgramService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 
