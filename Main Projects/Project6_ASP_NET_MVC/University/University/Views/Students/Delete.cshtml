@@ -42,6 +42,11 @@
             <label class="control-label">GPA</label>
             <input asp-for="GPA" class="form-control" readonly/>
         </div>
+        <div class="form-group mb-3">
+            <label asp-for="ImageFile" class="control-label">Identification Picture</label>
+            <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" disabled />
+            <span asp-validation-for="ImageFile" class="text-danger"></span>
+        </div>
         <div class="form-group">
             <label class="control-label d-block mb-2">Enrollment Status</label>
             <div class="btn-group" role="group" aria-label="Enrollment Status Toggle">

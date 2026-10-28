@@ -65,7 +65,7 @@ namespace University.Application.Services
             //file upload logic (img)
             if (studentCreateDto.ImageFile != null)
             {
-                var allowedExtensions = new[] { ".jpg", ".jpeg", "png" };
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
                 var extension = Path.GetExtension(studentCreateDto.ImageFile.FileName).ToLowerInvariant();
 
                 if (!allowedExtensions.Contains(extension))
@@ -100,19 +100,18 @@ namespace University.Application.Services
                 throw new KeyNotFoundException("Student not found");
             }
 
-            string? imageUrl = null;
 
             //file upload logic (img)
             if (studentUpdateDto.ImageFile != null)
             {
-                var allowedExtensions = new[] { ".jpg", ".jpeg", "png" };
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
                 var extension = Path.GetExtension(studentUpdateDto.ImageFile.FileName).ToLowerInvariant();
 
                 if (!allowedExtensions.Contains(extension))
                 {
                     throw new InvalidOperationException("Only Image files are accepted");
                 }
-                imageUrl = UploadImage(studentUpdateDto.ImageFile);
+                oldstd.ImageUrl = UploadImage(studentUpdateDto.ImageFile);
             }
 
 
