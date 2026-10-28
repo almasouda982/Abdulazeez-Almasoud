@@ -19,6 +19,7 @@
                 <th>Course Section Code</th>
                 <th>Final Grade</th>
                 <th>Letter Grade Points</th>
+                <th>Transcript</th>
                 <th>Status</th>
                 <th>Actions</th>
 
@@ -34,6 +35,18 @@
                     <td>@enrollment.SectionNumber</td>
                     <td>@enrollment.FinalGrade</td>
                     <td>@enrollment.LetterGradePoints</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(enrollment.DocumentUrl))
+                        {
+                            <a href="@enrollment.DocumentUrl" target="_blank" class="text-decoration-none fw-bold">
+                                @(enrollment.LastName ?? "Student").transcript
+                            </a>
+                        }
+                        else
+                        {
+                            <span class="text-muted small">No Transcript</span>
+                        }
+                    </td>
                     <td>@(enrollment.Status ? "Enrolled" : "Not Enrolled")</td>
                     <td>
                         <a asp-action="Edit" asp-route-Uuid="@enrollment.Uuid" class="btn btn-sm btn-warning">Edit</a>

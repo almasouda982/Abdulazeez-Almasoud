@@ -1,7 +1,8 @@
-﻿using University.Application.Dtos;
+﻿using Microsoft.AspNetCore.Http;
+using University.Application.Dtos;
+using University.Application.Services.Base;
 using University.Domain.Models;
 using University.Infrastructure.Repositories.Base;
-using University.Application.Services.Base;
 
 namespace University.Application.Services
 {
@@ -25,7 +26,8 @@ namespace University.Application.Services
                 Code = c.Code,
                 Title = c.Title,
                 Credits = c.Credits,
-                Description = c.Description
+                Description = c.Description,
+                ImageUrl = c.ImageUrl,
             }).ToList();
         }
 
@@ -43,18 +45,34 @@ namespace University.Application.Services
                 Code = crs.Code,
                 Title = crs.Title,
                 Credits = crs.Credits,
-                Description = crs.Description
+                Description = crs.Description,
+                ImageUrl = crs.ImageUrl,
             };
         }
 
         public void AddCourse(CourseCreateDto courseCreateDto)
         {
+            string? imageUrl = null;
+
+            if (courseCreateDto.ImageFile != null)
+            {
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
+                var extension = Path.GetExtension(courseCreateDto.ImageFile.FileName).ToLowerInvariant();
+
+                if (!allowedExtensions.Contains(extension))
+                {
+                    throw new InvalidOperationException("Only image files are accepted.");
+                }
+                imageUrl = UploadImage(courseCreateDto.ImageFile);
+            }
+
             var course = new Course
             {
                 Code = courseCreateDto.Code,
                 Title = courseCreateDto.Title,
                 Credits = courseCreateDto.Credits,
-                Description = courseCreateDto.Description
+                Description = courseCreateDto.Description,
+                ImageUrl= imageUrl,
             };
 
             _unitOfWork.CourseRepository.AddCourse(course);
@@ -66,6 +84,18 @@ namespace University.Application.Services
             if (oldcrs == null)
             {
                 throw new KeyNotFoundException("Course not found");
+            }
+
+            if (courseUpdateDto.ImageFile != null)
+            {
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
+                var extension = Path.GetExtension(courseUpdateDto.ImageFile.FileName).ToLowerInvariant();
+
+                if (!allowedExtensions.Contains(extension))
+                {
+                    throw new InvalidOperationException("Only image files are accepted.");
+                }
+                oldcrs.ImageUrl = UploadImage(courseUpdateDto.ImageFile);
             }
 
             oldcrs.Code = courseUpdateDto.Code;
@@ -83,6 +113,29 @@ namespace University.Application.Services
             {
                 _unitOfWork.CourseRepository.DeleteCourse(uuid);
             }
+        }
+
+        private string UploadImage(IFormFile file)
+        {
+            string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+
+            string folderPath = Path.Combine(
+                Directory.GetCurrentDirectory(),
+                "wwwroot",
+                "images",
+                "courses"
+            );
+
+            Directory.CreateDirectory(folderPath);
+
+            string filePath = Path.Combine(folderPath, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                file.CopyTo(stream);
+            }
+
+            return "/images/courses/" + fileName;
         }
     }
 }

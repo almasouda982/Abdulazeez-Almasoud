@@ -1,4 +1,6 @@
-﻿namespace University.Application.Dtos
+﻿using Microsoft.AspNetCore.Http;
+
+namespace University.Application.Dtos
 {
     public class CourseDto
     {
@@ -17,7 +19,7 @@
         public string Title { get; set; } = string.Empty;
         public int Credits { get; set; } = 0;
         public string? Description { get; set; } = string.Empty;
-        public string? ImageFile { get; set; } = string.Empty;
+        public IFormFile? ImageFile { get; set; }
     }
     public class CourseUpdateDto : CourseCreateDto
     {
