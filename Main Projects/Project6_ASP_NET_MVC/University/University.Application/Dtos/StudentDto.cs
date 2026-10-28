@@ -1,5 +1,7 @@
 ﻿//using Microsoft.Identity.Client;
 
+using Microsoft.AspNetCore.Http;
+
 namespace University.Application.Dtos
 {
     public class StudentDto
@@ -14,6 +16,7 @@ namespace University.Application.Dtos
         public string Standing { get; set; } = string.Empty;
         public double GPA { get; set; }
         public bool EnrollmentStatus { get; set; }
+        public string? ImageUrl { get; set; }
 
     }
     public class StudentCreateDto
@@ -27,9 +30,11 @@ namespace University.Application.Dtos
         public string Standing { get; set; } = string.Empty;
         public double GPA { get; set; }
         public bool EnrollmentStatus { get; set; }
+        public IFormFile? ImageFile { get; set; }
     }
     public class StudentUpdateDto : StudentCreateDto
     {
         public string Uuid { get; set; } = string.Empty;
+        public string? ImageUrl { get; set; }
     }
 }

@@ -38,6 +38,9 @@ namespace University.Domain.Models
         [Required]
         [Range(0.0, 4.0, ErrorMessage = "GPA must be between 0.0 and 4.0")]
         public double GPA { get; set; } = 0.0;
+
+        public string? ImageUrl { get; set; }
+
         [Required]
         public bool EnrollmentStatus { get; set; } = false;
 

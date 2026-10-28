@@ -9,6 +9,7 @@
         public string FinalGrade { get; set; } = string.Empty;
         public decimal LetterGradePoints { get; set; } = 0;
         public bool Status { get; set; }
+        public string? DocumentUrl { get; set; } = string.Empty;
     }
 
     public class EnrollmentCreateDto
@@ -18,10 +19,12 @@
         public string FinalGrade { get; set; } = string.Empty;
         public decimal LetterGradePoints { get; set; } = 0;
         public bool Status { get; set; }
+        public string? DocumentFile { get; set; } = string.Empty;
     }
 
     public class EnrollmentUpdateDto : EnrollmentCreateDto
     {
         public string Uuid { get; set; } = string.Empty;
+        public string? DocumentUrl { get; set; }
     }
 }

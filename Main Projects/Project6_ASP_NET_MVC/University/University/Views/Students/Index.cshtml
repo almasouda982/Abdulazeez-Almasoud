@@ -20,6 +20,7 @@
                 <th>Phone</th>
                 <th>Standing</th>
                 <th>GPA</th>
+                <th>ID Picture</th>
                 <th>EnrollmentStatus</th>
                 <th>Action</th>
 
@@ -38,6 +39,16 @@
                     <td>@student.Phone</td>
                     <td>@student.Standing</td>
                     <td>@student.GPA</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(student.ImageUrl))
+                        {
+                            <img src="@student.ImageUrl" alt="ID Picture" style="max-width: 100px; max-height: 100px;"/>
+                        }
+                        else
+                        {
+                            <span> No Image</span>
+                        }
+                    </td>
                     <td>@(student.EnrollmentStatus ? "Enrolled" : "Not Enrolled")</td>
                     <td>
                         <a asp-action="Edit" asp-route-Uuid="@student.Uuid" class="btn btn-sm btn-warning">Edit</a>
