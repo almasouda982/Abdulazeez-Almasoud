@@ -25,6 +25,9 @@ namespace University.Domain.Models
         public string FinalGrade { get; set; } = "";
         [Required]
         public bool Status { get; set; }
+
+        public string? DocumentUrl { get; set; } = "";
+
         [Required]
         [DisplayName("Letter Grade Points")]
         [Range(0.00, 4.00, ErrorMessage = "Grade points must be between 0.00 and 4.00.")]

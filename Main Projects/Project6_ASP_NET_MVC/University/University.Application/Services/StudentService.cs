@@ -2,6 +2,7 @@
 using University.Domain.Models;
 using University.Infrastructure.Repositories.Base;
 using University.Application.Services.Base;
+using Microsoft.AspNetCore.Http;
 
 namespace University.Application.Services
 {
@@ -29,7 +30,8 @@ namespace University.Application.Services
                 Phone = s.Phone,
                 Standing = s.Standing,
                 GPA = s.GPA,
-                EnrollmentStatus = s.EnrollmentStatus
+                EnrollmentStatus = s.EnrollmentStatus,
+                ImageUrl = s.ImageUrl,
             }).ToList();
         }
 
@@ -51,12 +53,28 @@ namespace University.Application.Services
                 Phone = std.Phone,
                 Standing = std.Standing,
                 GPA = std.GPA,
-                EnrollmentStatus = std.EnrollmentStatus
+                EnrollmentStatus = std.EnrollmentStatus,
+                ImageUrl = std.ImageUrl,
             };
         }
 
         public void AddStudent(StudentCreateDto studentCreateDto)
         {
+            string? imageUrl = null;
+
+            //file upload logic (img)
+            if (studentCreateDto.ImageFile != null)
+            {
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
+                var extension = Path.GetExtension(studentCreateDto.ImageFile.FileName).ToLowerInvariant();
+
+                if (!allowedExtensions.Contains(extension))
+                {
+                    throw new InvalidOperationException("Only Image files are accepted");
+                }
+                imageUrl = UploadImage(studentCreateDto.ImageFile);
+            }
+
             var newStudent = new Student
             {
                 Uuid = Guid.NewGuid().ToString(),
@@ -67,7 +85,8 @@ namespace University.Application.Services
                 Phone = studentCreateDto.Phone,
                 Standing = studentCreateDto.Standing,
                 GPA = studentCreateDto.GPA,
-                EnrollmentStatus = studentCreateDto.EnrollmentStatus
+                EnrollmentStatus = studentCreateDto.EnrollmentStatus,
+                ImageUrl = imageUrl,
             };
 
             _unitOfWork.StudentRepository.AddStudent(newStudent);
@@ -81,6 +100,21 @@ namespace University.Application.Services
                 throw new KeyNotFoundException("Student not found");
             }
 
+
+            //file upload logic (img)
+            if (studentUpdateDto.ImageFile != null)
+            {
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
+                var extension = Path.GetExtension(studentUpdateDto.ImageFile.FileName).ToLowerInvariant();
+
+                if (!allowedExtensions.Contains(extension))
+                {
+                    throw new InvalidOperationException("Only Image files are accepted");
+                }
+                oldstd.ImageUrl = UploadImage(studentUpdateDto.ImageFile);
+            }
+
+
             oldstd.DegreeProgramId = studentUpdateDto.DegreeProgramId;
             oldstd.FirstName = studentUpdateDto.FirstName;
             oldstd.LastName = studentUpdateDto.LastName;
@@ -89,6 +123,7 @@ namespace University.Application.Services
             oldstd.Standing = studentUpdateDto.Standing;
             oldstd.GPA = studentUpdateDto.GPA;
             oldstd.EnrollmentStatus = studentUpdateDto.EnrollmentStatus;
+
 
             _unitOfWork.StudentRepository.UpdateStudent(oldstd);
         }
@@ -105,6 +140,30 @@ namespace University.Application.Services
         public IEnumerable<DegreeProgram> GetDegreePrograms()
         {
             return _unitOfWork.StudentRepository.GetDegreePrograms();
+        }
+
+
+        private string UploadImage(IFormFile file)
+        {
+            string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+
+            string folderPath = Path.Combine(
+                Directory.GetCurrentDirectory(),
+                "wwwroot",
+                "images",
+                "students"
+            );
+
+            Directory.CreateDirectory(folderPath);
+
+            string filePath = Path.Combine(folderPath, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                file.CopyTo(stream);
+            }
+
+            return "/images/students/" + fileName;
         }
     }
 }

@@ -2,6 +2,7 @@
 using University.Domain.Models;
 using University.Infrastructure.Repositories.Base;
 using University.Application.Services.Base;
+using Microsoft.AspNetCore.Http;
 
 namespace University.Application.Services
 {
@@ -26,7 +27,8 @@ namespace University.Application.Services
                 SectionNumber = e.CourseSection != null ? e.CourseSection.SectionNumber : (int?)null,
                 FinalGrade = e.FinalGrade,
                 LetterGradePoints = e.LetterGradePoints,
-                Status = e.Status
+                Status = e.Status,
+                DocumentUrl = e.DocumentUrl,
             }).ToList();
         }
 
@@ -45,19 +47,34 @@ namespace University.Application.Services
                 CourseSectionId = enr.CourseSectionId,
                 FinalGrade = enr.FinalGrade,
                 LetterGradePoints = enr.LetterGradePoints,
-                Status = enr.Status
+                Status = enr.Status,
+                DocumentUrl = enr.DocumentUrl,
             };
         }
 
         public void AddEnrollment(EnrollmentCreateDto enrollmentCreateDto)
         {
+            string? documentUrl = null;
+
+            if (enrollmentCreateDto.DocumentFile != null)
+            {
+                var extension = Path.GetExtension(enrollmentCreateDto.DocumentFile.FileName).ToLowerInvariant();
+                if (extension != ".pdf")
+                {
+                    throw new InvalidOperationException("Only PDF files are accepted for transcripts.");
+                }
+                documentUrl = UploadTranscript(enrollmentCreateDto.DocumentFile);
+            }
+
             var enrollment = new Enrollment
             {
                 StudentId = enrollmentCreateDto.StudentId,
                 CourseSectionId = enrollmentCreateDto.CourseSectionId,
                 FinalGrade = enrollmentCreateDto.FinalGrade,
                 LetterGradePoints = enrollmentCreateDto.LetterGradePoints,
-                Status = enrollmentCreateDto.Status
+                Status = enrollmentCreateDto.Status,
+                DocumentUrl = documentUrl
+                
             };
 
             _unitOfWork.EnrollmentRepository.AddEnrollment(enrollment);
@@ -69,6 +86,17 @@ namespace University.Application.Services
             if (oldenr == null)
             {
                 throw new KeyNotFoundException("Enrollment not found");
+            }
+
+
+            if (enrollmentUpdateDto.DocumentFile != null)
+            {
+                var extension = Path.GetExtension(enrollmentUpdateDto.DocumentFile.FileName).ToLowerInvariant();
+                if (extension != ".pdf")
+                {
+                    throw new InvalidOperationException("Only PDF files only.");
+                }
+                oldenr.DocumentUrl = UploadTranscript(enrollmentUpdateDto.DocumentFile);
             }
 
             oldenr.StudentId = enrollmentUpdateDto.StudentId;
@@ -98,5 +126,30 @@ namespace University.Application.Services
         {
             return _unitOfWork.EnrollmentRepository.GetCourseSections();
         }
+
+        private string UploadTranscript(IFormFile file)
+        {
+            string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+
+            string folderPath = Path.Combine(
+                Directory.GetCurrentDirectory(),
+                "wwwroot",
+                "pdfs",
+                "documents",
+                "transcripts"
+            );
+
+            Directory.CreateDirectory(folderPath);
+
+            string filePath = Path.Combine(folderPath, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                file.CopyTo(stream);
+            }
+
+            return "/pdfs/documents/transcripts/" + fileName;
+        }
+
     }
 }

@@ -17,6 +17,7 @@
                 <th>Title</th>
                 <th>Credits</th>
                 <th>Description</th>
+                <th>Book Image</th>
                 <th>Actions</th>
 
             </tr>
@@ -31,6 +32,16 @@
                     <td>@course.Title</td>
                     <td>@course.Credits</td>
                     <td>@course.Description</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(course.ImageUrl))
+                        {
+                            <img src="@course.ImageUrl" alt="Cover" class="rounded" style="width: 80px; height: 95px; object-fit: cover;" />
+                        }
+                        else
+                        {
+                            <span class="text-muted small">No Image</span>
+                        }
+                    </td>
                     <td>
                         <a asp-action="Edit" asp-route-Uuid="@course.Uuid" class="btn btn-sm btn-warning">Edit</a>
                         <a asp-action="Delete" asp-route-Uuid="@course.Uuid" class="btn btn-sm btn-danger">Delete</a>

@@ -22,7 +22,7 @@ namespace University.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("University.Models.Course", b =>
+            modelBuilder.Entity("University.Domain.Models.Course", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -41,6 +41,9 @@ namespace University.Infrastructure.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -55,7 +58,7 @@ namespace University.Infrastructure.Migrations
                     b.ToTable("Courses");
                 });
 
-            modelBuilder.Entity("University.Models.CoursePrerequisite", b =>
+            modelBuilder.Entity("University.Domain.Models.CoursePrerequisite", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -83,7 +86,7 @@ namespace University.Infrastructure.Migrations
                     b.ToTable("CoursePrerequisites");
                 });
 
-            modelBuilder.Entity("University.Models.CourseSection", b =>
+            modelBuilder.Entity("University.Domain.Models.CourseSection", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -123,7 +126,7 @@ namespace University.Infrastructure.Migrations
                     b.ToTable("CourseSections");
                 });
 
-            modelBuilder.Entity("University.Models.DegreeProgram", b =>
+            modelBuilder.Entity("University.Domain.Models.DegreeProgram", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -151,7 +154,7 @@ namespace University.Infrastructure.Migrations
                     b.ToTable("DegreePrograms");
                 });
 
-            modelBuilder.Entity("University.Models.DegreeRequirement", b =>
+            modelBuilder.Entity("University.Domain.Models.DegreeRequirement", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -185,7 +188,7 @@ namespace University.Infrastructure.Migrations
                     b.ToTable("DegreeRequirements");
                 });
 
-            modelBuilder.Entity("University.Models.Enrollment", b =>
+            modelBuilder.Entity("University.Domain.Models.Enrollment", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -195,6 +198,9 @@ namespace University.Infrastructure.Migrations
 
                     b.Property<int>("CourseSectionId")
                         .HasColumnType("int");
+
+                    b.Property<string>("DocumentUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FinalGrade")
                         .IsRequired()
@@ -222,7 +228,7 @@ namespace University.Infrastructure.Migrations
                     b.ToTable("Enrollments");
                 });
 
-            modelBuilder.Entity("University.Models.Student", b =>
+            modelBuilder.Entity("University.Domain.Models.Student", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -248,6 +254,9 @@ namespace University.Infrastructure.Migrations
                     b.Property<double>("GPA")
                         .HasColumnType("float");
 
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -272,7 +281,7 @@ namespace University.Infrastructure.Migrations
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("University.Models.User", b =>
+            modelBuilder.Entity("University.Domain.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -308,7 +317,7 @@ namespace University.Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("University.Models.WaitlistEntry", b =>
+            modelBuilder.Entity("University.Domain.Models.WaitlistEntry", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -347,10 +356,10 @@ namespace University.Infrastructure.Migrations
                     b.ToTable("WaitlistEntries");
                 });
 
-            modelBuilder.Entity("University.Models.CoursePrerequisite", b =>
+            modelBuilder.Entity("University.Domain.Models.CoursePrerequisite", b =>
                 {
-                    b.HasOne("University.Models.Course", "Course")
-                        .WithMany()
+                    b.HasOne("University.Domain.Models.Course", "Course")
+                        .WithMany("CoursePrerequisites")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -358,9 +367,9 @@ namespace University.Infrastructure.Migrations
                     b.Navigation("Course");
                 });
 
-            modelBuilder.Entity("University.Models.CourseSection", b =>
+            modelBuilder.Entity("University.Domain.Models.CourseSection", b =>
                 {
-                    b.HasOne("University.Models.Course", "Course")
+                    b.HasOne("University.Domain.Models.Course", "Course")
                         .WithMany("CourseSections")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -369,9 +378,9 @@ namespace University.Infrastructure.Migrations
                     b.Navigation("Course");
                 });
 
-            modelBuilder.Entity("University.Models.DegreeRequirement", b =>
+            modelBuilder.Entity("University.Domain.Models.DegreeRequirement", b =>
                 {
-                    b.HasOne("University.Models.DegreeProgram", "DegreeProgram")
+                    b.HasOne("University.Domain.Models.DegreeProgram", "DegreeProgram")
                         .WithMany("DegreeRequirements")
                         .HasForeignKey("DegreeProgramId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -380,15 +389,15 @@ namespace University.Infrastructure.Migrations
                     b.Navigation("DegreeProgram");
                 });
 
-            modelBuilder.Entity("University.Models.Enrollment", b =>
+            modelBuilder.Entity("University.Domain.Models.Enrollment", b =>
                 {
-                    b.HasOne("University.Models.CourseSection", "CourseSection")
+                    b.HasOne("University.Domain.Models.CourseSection", "CourseSection")
                         .WithMany("Enrollments")
                         .HasForeignKey("CourseSectionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("University.Models.Student", "Student")
+                    b.HasOne("University.Domain.Models.Student", "Student")
                         .WithMany("Enrollments")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -399,9 +408,9 @@ namespace University.Infrastructure.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("University.Models.Student", b =>
+            modelBuilder.Entity("University.Domain.Models.Student", b =>
                 {
-                    b.HasOne("University.Models.DegreeProgram", "DegreeProgram")
+                    b.HasOne("University.Domain.Models.DegreeProgram", "DegreeProgram")
                         .WithMany("Students")
                         .HasForeignKey("DegreeProgramId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -410,15 +419,15 @@ namespace University.Infrastructure.Migrations
                     b.Navigation("DegreeProgram");
                 });
 
-            modelBuilder.Entity("University.Models.WaitlistEntry", b =>
+            modelBuilder.Entity("University.Domain.Models.WaitlistEntry", b =>
                 {
-                    b.HasOne("University.Models.CourseSection", "CourseSection")
+                    b.HasOne("University.Domain.Models.CourseSection", "CourseSection")
                         .WithMany("WaitlistEntries")
                         .HasForeignKey("CourseSectionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("University.Models.Student", "Student")
+                    b.HasOne("University.Domain.Models.Student", "Student")
                         .WithMany("WaitlistEntries")
                         .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -429,26 +438,28 @@ namespace University.Infrastructure.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("University.Models.Course", b =>
+            modelBuilder.Entity("University.Domain.Models.Course", b =>
                 {
+                    b.Navigation("CoursePrerequisites");
+
                     b.Navigation("CourseSections");
                 });
 
-            modelBuilder.Entity("University.Models.CourseSection", b =>
+            modelBuilder.Entity("University.Domain.Models.CourseSection", b =>
                 {
                     b.Navigation("Enrollments");
 
                     b.Navigation("WaitlistEntries");
                 });
 
-            modelBuilder.Entity("University.Models.DegreeProgram", b =>
+            modelBuilder.Entity("University.Domain.Models.DegreeProgram", b =>
                 {
                     b.Navigation("DegreeRequirements");
 
                     b.Navigation("Students");
                 });
 
-            modelBuilder.Entity("University.Models.Student", b =>
+            modelBuilder.Entity("University.Domain.Models.Student", b =>
                 {
                     b.Navigation("Enrollments");
 
