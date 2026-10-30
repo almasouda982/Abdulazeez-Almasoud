@@ -12,8 +12,8 @@ using University.Infrastructure.Data;
 namespace University.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20261028003012_attachmentsUrl")]
-    partial class attachmentsUrl
+    [Migration("20261030113434_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

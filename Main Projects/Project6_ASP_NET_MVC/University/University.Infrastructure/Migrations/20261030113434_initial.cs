@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace University.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class intial : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,7 +21,8 @@ namespace University.Infrastructure.Migrations
                     Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Credits = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true)
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -146,6 +147,7 @@ namespace University.Infrastructure.Migrations
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Standing = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     GPA = table.Column<double>(type: "float", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     EnrollmentStatus = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -170,6 +172,7 @@ namespace University.Infrastructure.Migrations
                     CourseSectionId = table.Column<int>(type: "int", nullable: false),
                     FinalGrade = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<bool>(type: "bit", nullable: false),
+                    DocumentUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LetterGradePoints = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
