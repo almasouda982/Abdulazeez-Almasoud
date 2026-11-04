@@ -20,7 +20,8 @@ namespace University.API.Controllers
             var students = _studentService.GetAllStudents().Select(s => new
             {
                 s.Id,
-                s.Name,
+                Name = $"{s.FirstName} {s.LastName}", 
+                DegreeProgramName = s.Name,           
                 s.Uuid,
                 s.FirstName,
                 s.LastName,
