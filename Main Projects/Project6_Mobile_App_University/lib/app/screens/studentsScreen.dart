@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:universitymobileapp/app/studentDetailsScreen.dart';
-import '../data/StudentService.dart';
-import '../data/connection.dart';
+import 'package:universitymobileapp/app/screens/detailScreens/studentDetailsScreen.dart';
+import '../../data/StudentService.dart';
+import '../../data/connection.dart';
 
 class StudentsScreen extends StatefulWidget {
   const StudentsScreen({super.key});

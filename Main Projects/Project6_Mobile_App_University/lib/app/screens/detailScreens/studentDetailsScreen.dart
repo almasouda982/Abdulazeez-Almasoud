@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../data/connection.dart';
+import '../../../data/connection.dart';
 
 class StudentDetailsScreen extends StatelessWidget {
   final dynamic student;

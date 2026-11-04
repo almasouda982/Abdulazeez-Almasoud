@@ -3,5 +3,10 @@ class ConnectionString {
   static String dashboard = 'https://lz4pvw68-7199.inc1.devtunnels.ms/';
   static String login = '$baseUrl/Users/Login';
   static String register = '$baseUrl/Users/Register';
+
+  //student related
   static String students = '$baseUrl/Students';
+
+  // course related
+  static String course ='$baseUrl/Courses';
 }
