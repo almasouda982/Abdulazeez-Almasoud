@@ -38,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (user != null) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
+          MaterialPageRoute(builder: (context) => HomeScreen(user['username'], user['userId'], user['email'] )),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(

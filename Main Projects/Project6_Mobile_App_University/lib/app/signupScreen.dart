@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:universitymobileapp/data/UserService.dart';
+import '../data/UserService.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -9,24 +9,19 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController usernameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final namecontroller = TextEditingController();
+  final emailcontroller = TextEditingController();
+  final usernamecontroller = TextEditingController();
+  final passwordcontroller = TextEditingController();
+
+  final formKey = GlobalKey<FormState>();
 
   final UserService userService = UserService();
+
   bool isLoading = false;
 
-  void register(BuildContext context) async {
-    String name = nameController.text.trim();
-    String username = usernameController.text.trim();
-    String email = emailController.text.trim();
-    String password = passwordController.text;
-
-    if (name.isEmpty|| username.isEmpty || email.isEmpty || password.isEmpty){
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('please fill in all fields')),
-      );
+  void register() async {
+    if (!formKey.currentState!.validate()) {
       return;
     }
 
@@ -35,156 +30,171 @@ class _SignupScreenState extends State<SignupScreen> {
     });
 
     try {
-      final user = await userService.register(name, username, email, password);
-      if(!context.mounted) return;
+      final user = await userService.register(
+        namecontroller.text.trim(),
+        usernamecontroller.text.trim(),
+        emailcontroller.text.trim(),
+        passwordcontroller.text,
+      );
 
-      if(user != null){
+      if (!mounted) return;
+
+      if (user != null) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Registration successful! Please log in.'),
+            content: Text('Registration Successful'),
             backgroundColor: Colors.green,
-            duration: Duration(seconds: 3),
           ),
         );
+
         Navigator.pop(context);
-      }
-      else {
+      } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('Username or email already exists'),
-            behavior: SnackBarBehavior.floating,
-            duration: const Duration(seconds: 3),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-            ),
-            backgroundColor: Colors.black38,
+          const SnackBar(
+            content: Text('Username or Email already exists'),
+            backgroundColor: Colors.red,
           ),
         );
       }
-      }
-    catch (e){
-      if (!context.mounted) return;
+    } catch (e) {
+      if (!mounted) return;
+
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Failed to connect to server'),
+        SnackBar(
+          content: Text('Error: $e'),
           backgroundColor: Colors.red,
         ),
       );
-
-    }
-    finally {
-      if (mounted){
+    } finally {
+      if (mounted) {
         setState(() {
           isLoading = false;
         });
       }
     }
-
   }
 
-@override
-void dispose(){
-    nameController.dispose();
-    usernameController.dispose();
-    emailController.dispose();
-    passwordController.dispose();
+  @override
+  void dispose() {
+    namecontroller.dispose();
+    emailcontroller.dispose();
+    usernamecontroller.dispose();
+    passwordcontroller.dispose();
     super.dispose();
-}
-
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sign up'),
+        title: const Text('Signup Screen'),
         backgroundColor: Colors.indigo,
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 30),
-              const Icon(Icons.person_add, size: 100, color:Colors.indigo),
-              const SizedBox(height: 20),
-
-              TextField(
-                controller: nameController,
-                decoration: const InputDecoration(
-                  labelText: 'Full Name',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.badge),
+          padding: const EdgeInsets.all(16),
+          child: Form(
+            key: formKey,
+            child: Column(
+              children: [
+                const SizedBox(height: 30),
+                const Icon(
+                  Icons.person_add,
+                  size: 100,
+                  color: Colors.indigo,
                 ),
-              ),
-
-              const SizedBox(height: 20),
-
-              TextField(
-                controller: usernameController,
-                decoration: const InputDecoration(
-                  labelText: 'Username',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.person),
+                const SizedBox(height: 30),
+                TextFormField(
+                  controller: namecontroller,
+                  decoration: const InputDecoration(
+                    labelText: 'Full Name',
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.person),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Please enter your name';
+                    }
+                    return null;
+                  },
                 ),
-              ),
+                const SizedBox(height: 20),
+                TextFormField(
+                  controller: emailcontroller,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: const InputDecoration(
+                    labelText: 'Email',
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.email),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Please enter your email';
+                    }
 
-              const SizedBox(height: 20),
+                    if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$')
+                        .hasMatch(value.trim())) {
+                      return 'Please enter a valid email';
+                    }
 
-              TextField(
-                controller: emailController,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.email),
+                    return null;
+                  },
                 ),
-              ),
-
-              const SizedBox(height: 20),
-
-              TextField(
-                controller: passwordController,
-                decoration: const InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.password),
+                const SizedBox(height: 20),
+                TextFormField(
+                  controller: usernamecontroller,
+                  decoration: const InputDecoration(
+                    labelText: 'Username',
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.account_circle),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Please enter username';
+                    }
+                    return null;
+                  },
                 ),
-              ),
+                const SizedBox(height: 20),
+                TextFormField(
+                  controller: passwordcontroller,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    labelText: 'Password',
+                    border: OutlineInputBorder(),
+                    prefixIcon: Icon(Icons.lock),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter password';
+                    }
 
-              const SizedBox(height: 20),
+                    if (value.length < 6) {
+                      return 'Password must be at least 6 characters';
+                    }
 
-              ElevatedButton(
-                  onPressed: isLoading ? null : () => register(context),
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 30),
+                ElevatedButton(
+                  onPressed: isLoading ? null : register,
                   child: isLoading
                       ? const CircularProgressIndicator()
-                      : const Text('Sign up'),
-              ),
-
-              const SizedBox(height: 20),
-
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text('Already have an account?'),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text(
-                      ' Login',
-                      style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        color: Colors.blue,
-                      ),
-                    ),
-                  )
-                ],
-              )
-
-            ],
-          )
+                      : const Text('Register'),
+                ),
+                const SizedBox(height: 20),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text(
+                    'Already have an account? Login',
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

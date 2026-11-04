@@ -28,7 +28,7 @@ namespace University.API.Controllers
             {
 
                 message = "Login successful",
-                id = user.Id,
+                Userid = user.Id,
                 name = user.Name,
                 username = user.UserName,
                 email = user.Email,
