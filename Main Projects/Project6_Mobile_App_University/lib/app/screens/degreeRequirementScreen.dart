@@ -57,7 +57,6 @@ class _DegreeRequirementScreenState extends State<DegreeRequirementScreen> {
                 ),
                 child: ListTile(
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  // Using camelCase 'degreeProgram' matching your API projection
                   title: Text(
                     req['degreeProgram']?.toString() ?? 'N/A',
                     style: const TextStyle(

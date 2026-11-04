@@ -15,6 +15,7 @@ class _CoursesScreenState extends State<CoursesScreen> {
   final CourseService courseService = CourseService();
   late Future<List<dynamic>> courses;
 
+  @override
   void initState(){
     super.initState();
     courses = courseService.getCourses();

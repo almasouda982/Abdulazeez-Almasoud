@@ -57,7 +57,6 @@ class _CourseSectionScreenState extends State<CourseSectionScreen> {
                 ),
                 child: ListTile(
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  // Using camelCase 'course' matching your API projection
                   title: Text(
                     'Course: ${section['course']?.toString() ?? 'N/A'}',
                     style: const TextStyle(
