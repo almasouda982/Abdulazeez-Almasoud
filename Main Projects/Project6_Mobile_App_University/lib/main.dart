@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:universitymobileapp/app/screens/enrollmentScreen.dart';
 import 'package:universitymobileapp/app/screens/loginScreen.dart';
 
 void main() {

@@ -71,23 +71,23 @@ class _CoursesScreenState extends State<CoursesScreen> {
                     child: imageUrl.isNotEmpty
                         ? Image.network(
                       imageUrl,
-                      width: 70,
-                      height: 50,
+                      width: 50,
+                      height: 70,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) {
                         return Container(
-                          width: 70,
-                          height: 50,
+                          width: 50,
+                          height: 70,
                           color: Colors.grey[200],
-                          child: const Icon(Icons.badge, size: 30),
+                          child: const Icon(Icons.book, size: 30),
                         );
                       },
                     )
                         : Container(
-                      width: 70,
-                      height: 50,
+                      width: 50,
+                      height: 70,
                       color: Colors.grey[200],
-                      child: const Icon(Icons.badge, size: 30),
+                      child: const Icon(Icons.book, size: 30),
                     ),
                   ),
                   title: Text(

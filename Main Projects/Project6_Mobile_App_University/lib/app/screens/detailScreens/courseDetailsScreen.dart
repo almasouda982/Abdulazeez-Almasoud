@@ -4,7 +4,7 @@ import '../../../data/connection.dart';
 
 class CourseDetailsScreen extends StatelessWidget {
   final dynamic course;
-  const CourseDetailsScreen(this.course,{super.key});
+  const CourseDetailsScreen(this.course, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,18 +24,20 @@ class CourseDetailsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              width: double.infinity,
-              height: 250,
-              child: imageUrl.isNotEmpty
-                  ? Image.network(
-                imageUrl,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return const Icon(Icons.person, size: 100);
-                },
-              )
-                  : const Icon(Icons.person, size: 100),
+            const SizedBox(height: 20),
+            Center(
+              child: SizedBox(
+                height: 320,
+                child: imageUrl.isNotEmpty
+                    ? Image.network(
+                  imageUrl,
+                  fit: BoxFit.contain,
+                  errorBuilder: (context, error, stackTrace) {
+                    return const Icon(Icons.book, size: 100);
+                  },
+                )
+                    : const Icon(Icons.book, size: 100),
+              ),
             ),
             const SizedBox(height: 20),
             Padding(
@@ -52,20 +54,10 @@ class CourseDetailsScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    'Course Title: ${course['title'] ?? 'N/A'}',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.indigo,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
                     'Course Code: ${course['code'] ?? 'N/A'}',
                     style: const TextStyle(fontSize: 16),
                   ),
                   const SizedBox(height: 8),
-
                   Text(
                     'Credits: ${course['credits'] ?? 'N/A'}',
                     style: const TextStyle(
@@ -74,18 +66,11 @@ class CourseDetailsScreen extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-
-                  const SizedBox(height: 8),
-                  Text(
-                    'Phone: ${course['phone'] ?? 'N/A'}',
-                    style: const TextStyle(fontSize: 16),
-                  ),
                   const SizedBox(height: 8),
                   Text(
                     'Description: ${course['description'] ?? 'N/A'}',
                     style: const TextStyle(fontSize: 16),
                   ),
-
                 ],
               ),
             ),

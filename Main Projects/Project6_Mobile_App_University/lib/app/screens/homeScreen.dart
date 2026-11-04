@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:universitymobileapp/app/screens/coursesScreen.dart';
+import 'package:universitymobileapp/app/screens/enrollmentScreen.dart';
 import 'package:universitymobileapp/app/screens/studentsScreen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -23,7 +24,14 @@ class HomeScreen extends StatelessWidget {
       'title': 'Courses',
       'icon': Icons.school,
       'screen': const CoursesScreen(),
-    }
+    },
+
+    {
+      'title': 'Enrollments',
+      'icon': Icons.app_registration,
+      'screen': const EnrollmentScreen(),
+    },
+
   ];
 
   @override
