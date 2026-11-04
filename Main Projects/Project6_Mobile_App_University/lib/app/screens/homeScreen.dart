@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:universitymobileapp/app/screens/coursePrerequisiteScreen.dart';
+import 'package:universitymobileapp/app/screens/courseSectionScreen.dart';
 import 'package:universitymobileapp/app/screens/coursesScreen.dart';
+import 'package:universitymobileapp/app/screens/degreeProgramScreen.dart';
+import 'package:universitymobileapp/app/screens/degreeRequirementScreen.dart';
 import 'package:universitymobileapp/app/screens/enrollmentScreen.dart';
 import 'package:universitymobileapp/app/screens/studentsScreen.dart';
+import 'package:universitymobileapp/app/screens/waitlistEntryScreen.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen(
@@ -21,16 +26,43 @@ class HomeScreen extends StatelessWidget {
       'screen': const StudentsScreen(),
     },
     {
+      'title': 'Enrollments',
+      'icon': Icons.app_registration,
+      'screen': const EnrollmentScreen(),
+    },
+    {
       'title': 'Courses',
       'icon': Icons.school,
       'screen': const CoursesScreen(),
     },
 
     {
-      'title': 'Enrollments',
-      'icon': Icons.app_registration,
-      'screen': const EnrollmentScreen(),
+      'title': 'Course Section',
+      'icon': Icons.bookmark_add_outlined,
+      'screen': const CourseSectionScreen(),
     },
+    {
+      'title': 'Course Prerequisites',
+      'icon': Icons.bookmark_add,
+      'screen': const CoursePrerequisiteScreen(),
+    },
+    {
+      'title': 'Waitlist Entry',
+      'icon': Icons.access_time_filled_outlined,
+      'screen': const WaitlistEntryScreen(),
+    },
+
+    {
+      'title': 'Degree Programs',
+      'icon': Icons.sticky_note_2_outlined,
+      'screen': const DegreeProgramScreen(),
+    },
+    {
+      'title': 'Degree Requirements',
+      'icon': Icons.sticky_note_2,
+      'screen': const DegreeRequirementScreen(),
+    },
+
 
   ];
 
@@ -59,18 +91,6 @@ class HomeScreen extends StatelessWidget {
               title: const Text('Home'),
               onTap: () {
                 Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.perm_identity),
-              title: const Text('Students'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const StudentsScreen(),
-                  ),
-                );
               },
             ),
           ],
