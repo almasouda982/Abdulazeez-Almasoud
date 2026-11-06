@@ -1,0 +1,45 @@
+﻿@using University.Application.Dtos
+@model IEnumerable<BookDto>
+
+<div class="container">
+    <h1>Books Catalog</h1>
+    <div class="text-end">
+        <a asp-action="Create" class="btn btn-primary mb-3">New Book</a>
+    </div>
+
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th>Cover</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var book in Model)
+            {
+                <tr>
+                    <td>
+                        @if (!string.IsNullOrEmpty(book.ImageUrl))
+                        {
+                            <img src="@book.ImageUrl" alt="Cover" class="rounded" style="width: 60px; height: 80px; object-fit: cover;" />
+                        }
+                        else
+                        {
+                            <span class="text-muted small">No Image</span>
+                        }
+                    </td>
+                    <td>@book.Title</td>
+                    <td>@book.Author</td>
+                    <td>@book.Price.ToString("C")</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-Uuid="@book.Uuid" class="btn btn-sm btn-warning">Edit</a>
+                        <a asp-action="Delete" asp-route-Uuid="@book.Uuid" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

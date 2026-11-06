@@ -46,6 +46,6 @@ namespace University.Domain.Models
 
         public ICollection<Enrollment>? Enrollments { get; set; }
         public ICollection<WaitlistEntry>? WaitlistEntries { get; set; }
-        public ICollection<Book>? Books { get; set; }
+
     }
 }

@@ -1,9 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using University.Domain.Models;
 using University.Infrastructure.Data;
 
@@ -20,18 +15,12 @@ namespace University.Infrastructure.Repositories
 
         public IEnumerable<Book> GetAll()
         {
-            return _db.Books
-                .Include(e => e.Student)
-                .Include(e => e.Course)
-                .ToList();
+            return _db.Books.ToList();
         }
 
         public Book? GetBookByUuid(string uuid)
         {
-            return _db.Books
-                .Include(e => e.Student)
-                .Include(e => e.Course)
-                .FirstOrDefault(e => e.Uuid == uuid);
+            return _db.Books.FirstOrDefault(e => e.Uuid == uuid);
         }
 
         public void AddBook(Book book)
@@ -42,6 +31,7 @@ namespace University.Infrastructure.Repositories
 
         public void UpdateBook(Book book)
         {
+            _db.Books.Update(book);
             _db.SaveChanges();
         }
 
@@ -54,16 +44,5 @@ namespace University.Infrastructure.Repositories
                 _db.SaveChanges();
             }
         }
-
-        public IEnumerable<Student> GetStudents()
-        {
-            return _db.Students.ToList();
-        }
-
-        public IEnumerable<Course> GetCourses()
-        {
-            return _db.Courses.ToList();
-        }
-
     }
 }

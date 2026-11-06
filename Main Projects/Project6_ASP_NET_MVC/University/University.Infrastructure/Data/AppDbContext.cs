@@ -25,12 +25,11 @@ namespace University.Infrastructure.Data
         //{
         //    base.OnModelCreating(modelBuilder);
 
-        //    modelBuilder.Entity<CoursePrerequisite>()
-        //        .HasOne(cp => cp.PrerequisiteCourse)
-        //        .WithMany()
-        //        .HasForeignKey(cp => cp.PrerequisiteCourseId)
-        //        .OnDelete(DeleteBehavior.Restrict);
-
+        //    modelBuilder.Entity<Course>()
+        //        .HasOne(c => c.Book)
+        //        .WithMany() 
+        //        .HasForeignKey(c => c.BookId)
+        //        .OnDelete(DeleteBehavior.SetNull); 
         //}
     }
 }

@@ -14,10 +14,9 @@ namespace University.Domain.Models
         public string Title { get; set; } = "";
         public string Author { get; set; } = "";
         public decimal Price { get; set; }
-        public int CourseId { get; set; }
-        public Course? Course { get; set; }
-        public long StudentId { get; set; }
-        public Student? Student { get; set; }
+        public string? ImageUrl { get; set; } = "";
+
+        public ICollection<Course>? Courses { get; set; }
 
     }
 }

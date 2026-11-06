@@ -27,7 +27,10 @@ namespace University.Application.Services
                 Title = c.Title,
                 Credits = c.Credits,
                 Description = c.Description,
-                ImageUrl = c.ImageUrl,
+                BookId = c.BookId,
+                BookTitle = c.Book != null ? c.Book.Title : null,
+                BookImageUrl = c.Book?.ImageUrl
+
             }).ToList();
         }
 
@@ -46,33 +49,20 @@ namespace University.Application.Services
                 Title = crs.Title,
                 Credits = crs.Credits,
                 Description = crs.Description,
-                ImageUrl = crs.ImageUrl,
+                BookId = crs.BookId,
+                
             };
         }
 
         public void AddCourse(CourseCreateDto courseCreateDto)
         {
-            string? imageUrl = null;
-
-            if (courseCreateDto.ImageFile != null)
-            {
-                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
-                var extension = Path.GetExtension(courseCreateDto.ImageFile.FileName).ToLowerInvariant();
-
-                if (!allowedExtensions.Contains(extension))
-                {
-                    throw new InvalidOperationException("Only image files are accepted.");
-                }
-                imageUrl = UploadImage(courseCreateDto.ImageFile);
-            }
-
             var course = new Course
             {
                 Code = courseCreateDto.Code,
                 Title = courseCreateDto.Title,
                 Credits = courseCreateDto.Credits,
                 Description = courseCreateDto.Description,
-                ImageUrl= imageUrl,
+                BookId = courseCreateDto.BookId
             };
 
             _unitOfWork.CourseRepository.AddCourse(course);
@@ -86,22 +76,11 @@ namespace University.Application.Services
                 throw new KeyNotFoundException("Course not found");
             }
 
-            if (courseUpdateDto.ImageFile != null)
-            {
-                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
-                var extension = Path.GetExtension(courseUpdateDto.ImageFile.FileName).ToLowerInvariant();
-
-                if (!allowedExtensions.Contains(extension))
-                {
-                    throw new InvalidOperationException("Only image files are accepted.");
-                }
-                oldcrs.ImageUrl = UploadImage(courseUpdateDto.ImageFile);
-            }
-
             oldcrs.Code = courseUpdateDto.Code;
             oldcrs.Title = courseUpdateDto.Title;
             oldcrs.Credits = courseUpdateDto.Credits;
             oldcrs.Description = courseUpdateDto.Description;
+            oldcrs.BookId = courseUpdateDto.BookId;
 
             _unitOfWork.CourseRepository.UpdateCourse(oldcrs);
         }
@@ -114,28 +93,10 @@ namespace University.Application.Services
                 _unitOfWork.CourseRepository.DeleteCourse(uuid);
             }
         }
-
-        private string UploadImage(IFormFile file)
+        public IEnumerable<Book> GetBooks()
         {
-            string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-
-            string folderPath = Path.Combine(
-                Directory.GetCurrentDirectory(),
-                "wwwroot",
-                "images",
-                "courses"
-            );
-
-            Directory.CreateDirectory(folderPath);
-
-            string filePath = Path.Combine(folderPath, fileName);
-
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                file.CopyTo(stream);
-            }
-
-            return "/images/courses/" + fileName;
+            return _unitOfWork.CourseRepository.GetBooks();
         }
+
     }
 }

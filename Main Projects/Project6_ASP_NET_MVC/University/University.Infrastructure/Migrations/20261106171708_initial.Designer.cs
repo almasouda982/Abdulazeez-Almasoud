@@ -12,8 +12,8 @@ using University.Infrastructure.Data;
 namespace University.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20261028003012_attachmentsUrl")]
-    partial class attachmentsUrl
+    [Migration("20261106171708_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,6 +25,37 @@ namespace University.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("University.Domain.Models.Book", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Author")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Uuid")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Books");
+                });
+
             modelBuilder.Entity("University.Domain.Models.Course", b =>
                 {
                     b.Property<int>("Id")
@@ -32,6 +63,9 @@ namespace University.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("BookId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -44,9 +78,6 @@ namespace University.Infrastructure.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -57,6 +88,8 @@ namespace University.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("BookId");
 
                     b.ToTable("Courses");
                 });
@@ -359,6 +392,15 @@ namespace University.Infrastructure.Migrations
                     b.ToTable("WaitlistEntries");
                 });
 
+            modelBuilder.Entity("University.Domain.Models.Course", b =>
+                {
+                    b.HasOne("University.Domain.Models.Book", "Book")
+                        .WithMany("Courses")
+                        .HasForeignKey("BookId");
+
+                    b.Navigation("Book");
+                });
+
             modelBuilder.Entity("University.Domain.Models.CoursePrerequisite", b =>
                 {
                     b.HasOne("University.Domain.Models.Course", "Course")
@@ -439,6 +481,11 @@ namespace University.Infrastructure.Migrations
                     b.Navigation("CourseSection");
 
                     b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("University.Domain.Models.Book", b =>
+                {
+                    b.Navigation("Courses");
                 });
 
             modelBuilder.Entity("University.Domain.Models.Course", b =>

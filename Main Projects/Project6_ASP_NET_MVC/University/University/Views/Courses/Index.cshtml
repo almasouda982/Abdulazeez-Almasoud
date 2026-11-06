@@ -9,7 +9,7 @@
         <a asp-action="Create" class="btn btn-primary mb-3">New Course</a>
     </div>
 
-    <table class="table table-striped">
+    <table class="table table-striped align-middle">
         <thead>
             <tr>
                 <th>Id</th>
@@ -17,15 +17,13 @@
                 <th>Title</th>
                 <th>Credits</th>
                 <th>Description</th>
-                <th>Book Image</th>
+                <th>Textbook Cover</th> 
                 <th>Actions</th>
-
             </tr>
         </thead>
         <tbody>
             @foreach (var course in Model)
             {
-
                 <tr>
                     <td>@course.Id</td>
                     <td>@course.Code</td>
@@ -33,27 +31,24 @@
                     <td>@course.Credits</td>
                     <td>@course.Description</td>
                     <td>
-                        @if (!string.IsNullOrEmpty(course.ImageUrl))
+                        @if (!string.IsNullOrEmpty(course.BookImageUrl))
                         {
-                            <img src="@course.ImageUrl" alt="Cover" class="rounded" style="width: 80px; height: 95px; object-fit: cover;" />
+                            <div class="d-flex align-items-center gap-2">
+                                <img src="@course.BookImageUrl" alt="Book Cover" class="rounded" style="width: 40px; height: 55px; object-fit: cover;" />
+                                <span class="small text-muted">@course.BookTitle</span>
+                            </div>
                         }
                         else
                         {
-                            <span class="text-muted small">No Image</span>
+                            <span class="text-muted small">No Textbook Assigned</span>
                         }
                     </td>
                     <td>
                         <a asp-action="Edit" asp-route-Uuid="@course.Uuid" class="btn btn-sm btn-warning">Edit</a>
                         <a asp-action="Delete" asp-route-Uuid="@course.Uuid" class="btn btn-sm btn-danger">Delete</a>
-
                     </td>
-
                 </tr>
-
             }
-
-
         </tbody>
-
     </table>
 </div>

@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.AspNetCore.Http;
 using University.Application.Dtos;
 using University.Application.Services.Base;
 using University.Domain.Models;
@@ -15,7 +16,6 @@ namespace University.Application.Services
             _unitOfWork = unitOfWork;
         }
 
-
         public IEnumerable<BookDto> GetAllBooks()
         {
             var books = _unitOfWork.BookRepository.GetAll();
@@ -24,13 +24,11 @@ namespace University.Application.Services
                 Id = b.Id,
                 Uuid = b.Uuid,
                 Title = b.Title,
-                LastName = b.Student != null ? b.Student.LastName : null,
                 Author = b.Author,
                 Price = b.Price,
-                Code = b.Course != null ? b.Course.Code : null,
+                ImageUrl = b.ImageUrl
             });
         }
-
 
         public BookUpdateDto? GetBookByUuid(string uuid)
         {
@@ -40,69 +38,96 @@ namespace University.Application.Services
             {
                 Uuid = book.Uuid,
                 Title = book.Title,
-                StudentId = book.StudentId,
                 Author = book.Author,
                 Price = book.Price,
-                CourseId = book.CourseId,
+                ImageUrl = book.ImageUrl
             };
         }
 
         public void AddBook(BookCreateDto bookCreateDto)
         {
+            string? imageUrl = null;
+
+            if (bookCreateDto.ImageFile != null)
+            {
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
+                var extension = Path.GetExtension(bookCreateDto.ImageFile.FileName).ToLowerInvariant();
+
+                if (!allowedExtensions.Contains(extension))
+                {
+                    throw new InvalidOperationException("Only image files are accepted.");
+                }
+                imageUrl = UploadImage(bookCreateDto.ImageFile);
+            }
+
             var book = new Book
             {
                 Title = bookCreateDto.Title,
-                StudentId = bookCreateDto.StudentId,
                 Author = bookCreateDto.Author,
                 Price = bookCreateDto.Price,
-                CourseId = bookCreateDto.CourseId,
+                ImageUrl = imageUrl
             };
             _unitOfWork.BookRepository.AddBook(book);
         }
 
-
         public void UpdateBook(BookUpdateDto bookDto)
         {
             var oldbook = _unitOfWork.BookRepository.GetBookByUuid(bookDto.Uuid);
-            if (oldbook != null)
+            if (oldbook == null)
             {
                 throw new KeyNotFoundException($"Book with UUID not found.");
-
             }
 
-                oldbook.Title = bookDto.Title;
-                oldbook.StudentId = bookDto.StudentId;
-                oldbook.Author = bookDto.Author;
-                oldbook.Price = bookDto.Price;
-                oldbook.CourseId = bookDto.CourseId;
-                _unitOfWork.BookRepository.UpdateBook(oldbook);
-            
+            if (bookDto.ImageFile != null)
+            {
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
+                var extension = Path.GetExtension(bookDto.ImageFile.FileName).ToLowerInvariant();
+
+                if (!allowedExtensions.Contains(extension))
+                {
+                    throw new InvalidOperationException("Only image files are accepted.");
+                }
+                oldbook.ImageUrl = UploadImage(bookDto.ImageFile);
+            }
+
+            oldbook.Title = bookDto.Title;
+            oldbook.Author = bookDto.Author;
+            oldbook.Price = bookDto.Price;
+
+            _unitOfWork.BookRepository.UpdateBook(oldbook);
         }
 
         public void DeleteBook(string uuid)
         {
             var book = _unitOfWork.BookRepository.GetBookByUuid(uuid);
-            if (book == null)
+            if (book != null)
             {
                 _unitOfWork.BookRepository.DeleteBook(uuid);
             }
-
         }
 
 
-        public IEnumerable<Student> GetStudents()
+        private string UploadImage(IFormFile file)
         {
-            return _unitOfWork.BookRepository.GetStudents();
+            string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+
+            string folderPath = Path.Combine(
+                Directory.GetCurrentDirectory(),
+                "wwwroot",
+                "images",
+                "books"
+            );
+
+            Directory.CreateDirectory(folderPath);
+
+            string filePath = Path.Combine(folderPath, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                file.CopyTo(stream);
+            }
+
+            return "/images/books/" + fileName;
         }
-
-        public IEnumerable<Course> GetCourses()
-        {
-            return _unitOfWork.BookRepository.GetCourses();
-        }
-
-
-
-
-
     }
 }

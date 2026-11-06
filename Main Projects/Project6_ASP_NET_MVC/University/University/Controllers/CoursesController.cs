@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using University.Application.Dtos;
 using University.Application.Services.Base;
 
@@ -14,23 +15,6 @@ namespace University.Controllers
         {
             _courseService = courseService;
         }
-        //public IActionResult Index()
-        //{
-        //    IEnumerable<Course> courses = _db.Courses.ToList();
-        //    return View(courses);
-        //}
-
-
-        //public async Task<IActionResult> Index()
-        //{
-        //    IEnumerable<Course> courses = await _db.Courses
-
-        //        .Include(cp => cp.CoursePrerequisites)
-        //        .Include(d => d.CourseSections).ToListAsync();
-
-        //    return View(courses);
-        //}
-
 
         public IActionResult Index()
         {
@@ -38,27 +22,28 @@ namespace University.Controllers
             return View(coursesDtos);
         }
 
-
         //==============================
         // Create
         //==============================
         [HttpGet]
         public IActionResult Create()
         {
+            PopulateBooksDropDownList();
             return View();
         }
+
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(CourseCreateDto courseCreateDto)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-
                 _courseService.AddCourse(courseCreateDto);
                 return RedirectToAction("Index");
             }
             ModelState.AddModelError("", "Please fill in all required fields.");
+            PopulateBooksDropDownList(courseCreateDto.BookId);
             return View(courseCreateDto);
-        
         }
 
         //==============================
@@ -73,9 +58,12 @@ namespace University.Controllers
                 return NotFound();
             }
 
+            PopulateBooksDropDownList(crs.BookId);
             return View(crs);
         }
+
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit(CourseUpdateDto courseUpdateDto)
         {
             if (ModelState.IsValid)
@@ -92,6 +80,7 @@ namespace University.Controllers
             }
 
             ModelState.AddModelError("", "Please fill all the required fields.");
+            PopulateBooksDropDownList(courseUpdateDto.BookId);
             return View(courseUpdateDto);
         }
 
@@ -109,8 +98,10 @@ namespace University.Controllers
 
             return View(crs);
         }
+
         [HttpPost]
         [ActionName("Delete")]
+        [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirm(string uuid)
         {
             var crs = _courseService.GetCourseByUuid(uuid);
@@ -122,12 +113,12 @@ namespace University.Controllers
             _courseService.DeleteCourse(uuid);
             return RedirectToAction("Index");
         }
-        // no viewbags so far
-        //public void LoadCourses()
-        //{
-        //    var courses = _db.Courses.ToList();
-        //    ViewBag.Courses = courses;
-        //}
 
+        // Helper method for book dropdowns
+        private void PopulateBooksDropDownList(object? selectedBook = null)
+        {
+            var books = _courseService.GetBooks();
+            ViewBag.Books = new SelectList(books, "Id", "Title", selectedBook);
+        }
     }
 }

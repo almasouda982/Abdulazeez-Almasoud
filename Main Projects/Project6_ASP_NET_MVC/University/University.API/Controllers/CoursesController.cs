@@ -26,7 +26,9 @@ namespace University.API.Controllers
                 c.Title,
                 c.Credits,
                 c.Description,
-                c.ImageUrl,
+                c.BookId,
+                c.BookTitle,
+                c.BookImageUrl
             });
             return Ok(courses);
         }
