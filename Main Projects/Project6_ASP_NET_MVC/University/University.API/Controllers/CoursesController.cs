@@ -26,10 +26,17 @@ namespace University.API.Controllers
                 c.Title,
                 c.Credits,
                 c.Description,
-                c.ImageUrl,
+                Books = c.Books.Select(b => new
+                {
+                    b.Id,
+                    b.Uuid,
+                    b.Title,
+                    b.Author,
+                    b.Price,
+                    b.ImageUrl
+                })
             });
             return Ok(courses);
         }
-
     }
 }

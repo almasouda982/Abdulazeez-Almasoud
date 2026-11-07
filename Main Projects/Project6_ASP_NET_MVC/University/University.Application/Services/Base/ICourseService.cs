@@ -1,4 +1,5 @@
 ﻿using University.Application.Dtos;
+using University.Domain.Models;
 
 namespace University.Application.Services.Base
 {
@@ -9,5 +10,8 @@ namespace University.Application.Services.Base
         void AddCourse(CourseCreateDto courseCreateDto);
         void UpdateCourse(CourseUpdateDto courseUpdateDto);
         void DeleteCourse(string uuid);
+        IEnumerable<Book> GetBooks();
+        void AssignBookToCourse(AssignBookToCourseRequest request);
+        void RemoveBookFromCourse(int courseId, int bookId);
     }
 }

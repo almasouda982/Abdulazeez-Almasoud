@@ -27,7 +27,16 @@ namespace University.Application.Services
                 Title = c.Title,
                 Credits = c.Credits,
                 Description = c.Description,
-                ImageUrl = c.ImageUrl,
+                // Map the collection of stacked books through CourseBooks
+                Books = c.CourseBooks != null ? c.CourseBooks.Select(cb => new BookDto
+                {
+                    Id = cb.Book.Id,
+                    Uuid = cb.Book.Uuid,
+                    Title = cb.Book.Title,
+                    Author = cb.Book.Author,
+                    Price = cb.Book.Price,
+                    ImageUrl = cb.Book.ImageUrl
+                }).ToList() : new List<BookDto>()
             }).ToList();
         }
 
@@ -45,34 +54,18 @@ namespace University.Application.Services
                 Code = crs.Code,
                 Title = crs.Title,
                 Credits = crs.Credits,
-                Description = crs.Description,
-                ImageUrl = crs.ImageUrl,
+                Description = crs.Description
             };
         }
 
         public void AddCourse(CourseCreateDto courseCreateDto)
         {
-            string? imageUrl = null;
-
-            if (courseCreateDto.ImageFile != null)
-            {
-                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
-                var extension = Path.GetExtension(courseCreateDto.ImageFile.FileName).ToLowerInvariant();
-
-                if (!allowedExtensions.Contains(extension))
-                {
-                    throw new InvalidOperationException("Only image files are accepted.");
-                }
-                imageUrl = UploadImage(courseCreateDto.ImageFile);
-            }
-
             var course = new Course
             {
                 Code = courseCreateDto.Code,
                 Title = courseCreateDto.Title,
                 Credits = courseCreateDto.Credits,
-                Description = courseCreateDto.Description,
-                ImageUrl= imageUrl,
+                Description = courseCreateDto.Description
             };
 
             _unitOfWork.CourseRepository.AddCourse(course);
@@ -84,18 +77,6 @@ namespace University.Application.Services
             if (oldcrs == null)
             {
                 throw new KeyNotFoundException("Course not found");
-            }
-
-            if (courseUpdateDto.ImageFile != null)
-            {
-                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png" };
-                var extension = Path.GetExtension(courseUpdateDto.ImageFile.FileName).ToLowerInvariant();
-
-                if (!allowedExtensions.Contains(extension))
-                {
-                    throw new InvalidOperationException("Only image files are accepted.");
-                }
-                oldcrs.ImageUrl = UploadImage(courseUpdateDto.ImageFile);
             }
 
             oldcrs.Code = courseUpdateDto.Code;
@@ -115,27 +96,19 @@ namespace University.Application.Services
             }
         }
 
-        private string UploadImage(IFormFile file)
+        public IEnumerable<Book> GetBooks()
         {
-            string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+            return _unitOfWork.CourseRepository.GetBooks();
+        }
 
-            string folderPath = Path.Combine(
-                Directory.GetCurrentDirectory(),
-                "wwwroot",
-                "images",
-                "courses"
-            );
+        public void AssignBookToCourse(AssignBookToCourseRequest request)
+        {
+            _unitOfWork.CourseRepository.AddBookToCourse(request.CourseId, request.BookId);
+        }
 
-            Directory.CreateDirectory(folderPath);
-
-            string filePath = Path.Combine(folderPath, fileName);
-
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                file.CopyTo(stream);
-            }
-
-            return "/images/courses/" + fileName;
+        public void RemoveBookFromCourse(int courseId, int bookId)
+        {
+            _unitOfWork.CourseRepository.RemoveBookFromCourse(courseId, bookId);
         }
     }
 }

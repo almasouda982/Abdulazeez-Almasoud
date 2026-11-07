@@ -1,0 +1,79 @@
+﻿@model IEnumerable<University.Application.Dtos.CourseBookDto>
+
+@{
+    ViewData["Title"] = "Manage Course Textbooks";
+    int courseId = ViewBag.CourseId;
+}
+
+<div class="container mt-4">
+    <h1>Manage Stacked Textbooks for Course</h1>
+    <p class="text-muted">Add or remove multiple books assigned to this course.</p>
+
+    <div class="card p-3 mb-4 bg-light">
+        <h4>Assign a Book</h4>
+        <form asp-action="AssignBook" method="post" class="row g-3 align-items-center">
+            <input type="hidden" name="CourseId" value="@courseId" />
+
+            <div class="col-auto flex-grow-1">
+                <select name="BookId" class="form-control" asp-items="ViewBag.Books" required>
+                    <option value="">-- Select a Book to Stack --</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Add Book</button>
+            </div>
+        </form>
+    </div>
+
+    <table class="table table-striped align-middle">
+        <thead>
+            <tr>
+                <th>Cover</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var cb in Model)
+                {
+                    <tr>
+                        <td>
+                            @if (!string.IsNullOrEmpty(cb.Book.ImageUrl))
+                            {
+                                <img src="@cb.Book.ImageUrl" alt="Book Cover" class="rounded" style="width: 40px; height: 55px; object-fit: cover;" />
+                            }
+                            else
+                            {
+                                <span class="text-muted small">No Image</span>
+                            }
+                        </td>
+                        <td>@cb.Book.Title</td>
+                        <td>@cb.Book.Author</td>
+                        <td>$@cb.Book.Price.ToString("0.00")</td>
+                        <td>
+                            <form asp-action="RemoveBook" method="post" class="d-inline">
+                                <input type="hidden" name="courseId" value="@courseId" />
+                                <input type="hidden" name="bookId" value="@cb.BookId" />
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to remove this book from the course?');">Remove</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5" class="text-center text-muted">No books currently stacked for this course.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="mt-3">
+        <a asp-controller="Courses" asp-action="Index" class="btn btn-secondary">Back to Courses</a>
+    </div>
+</div>

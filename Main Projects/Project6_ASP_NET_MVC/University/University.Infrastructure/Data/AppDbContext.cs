@@ -19,17 +19,22 @@ namespace University.Infrastructure.Data
         public DbSet<Enrollment> Enrollments { get; set; }
         public DbSet<WaitlistEntry> WaitlistEntries { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Book> Books { get; set; }
+        public DbSet<CourseBook> CourseBooks { get; set; }
 
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    base.OnModelCreating(modelBuilder);
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
 
-        //    modelBuilder.Entity<CoursePrerequisite>()
-        //        .HasOne(cp => cp.PrerequisiteCourse)
-        //        .WithMany()
-        //        .HasForeignKey(cp => cp.PrerequisiteCourseId)
-        //        .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<CourseBook>()
+                .HasOne(cb => cb.Course)
+                .WithMany(c => c.CourseBooks)
+                .HasForeignKey(cb => cb.CourseId);
 
-        //}
+            modelBuilder.Entity<CourseBook>()
+                .HasOne(cb => cb.Book)
+                .WithMany(b => b.CourseBooks)
+                .HasForeignKey(cb => cb.BookId);
+        }
     }
 }

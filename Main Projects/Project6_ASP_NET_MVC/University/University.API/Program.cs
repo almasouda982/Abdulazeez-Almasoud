@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using System;
 using University.Application.Services;
 using University.Application.Services.Base;
 using University.Infrastructure.Data;
@@ -29,6 +28,8 @@ builder.Services.AddScoped<IDegreeRequirementService, DegreeRequirementService>(
 builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<IDegreeProgramService, DegreeProgramService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<ICourseBookService, CourseBookService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

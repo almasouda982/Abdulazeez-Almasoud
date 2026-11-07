@@ -17,7 +17,9 @@ namespace University.Infrastructure.Repositories.Base
             DegreeRequirementRepository = new DegreeRequirementRepository(_db);
             DegreeProgramRepository = new DegreeProgramRepository(_db);
             UserRepository = new UserRepository(_db);
-            
+            BookRepository = new BookRepository(_db);
+            CourseBookRepository = new CourseBookRepository(_db);
+
         }
         public IStudentRepository StudentRepository { get; }
         public ICourseRepository CourseRepository { get; }
@@ -28,5 +30,7 @@ namespace University.Infrastructure.Repositories.Base
         public IDegreeRequirementRepository DegreeRequirementRepository { get; }
         public IDegreeProgramRepository DegreeProgramRepository { get; }
         public IUserRepository UserRepository { get; }
-    }
+        public IBookRepository BookRepository { get; }
+        public ICourseBookRepository CourseBookRepository { get; }
+        }
 }
