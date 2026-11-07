@@ -20,16 +20,21 @@ namespace University.Infrastructure.Data
         public DbSet<WaitlistEntry> WaitlistEntries { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Book> Books { get; set; }
+        public DbSet<CourseBook> CourseBooks { get; set; }
 
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    base.OnModelCreating(modelBuilder);
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
 
-        //    modelBuilder.Entity<Course>()
-        //        .HasOne(c => c.Book)
-        //        .WithMany() 
-        //        .HasForeignKey(c => c.BookId)
-        //        .OnDelete(DeleteBehavior.SetNull); 
-        //}
+            modelBuilder.Entity<CourseBook>()
+                .HasOne(cb => cb.Course)
+                .WithMany(c => c.CourseBooks)
+                .HasForeignKey(cb => cb.CourseId);
+
+            modelBuilder.Entity<CourseBook>()
+                .HasOne(cb => cb.Book)
+                .WithMany(b => b.CourseBooks)
+                .HasForeignKey(cb => cb.BookId);
+        }
     }
 }

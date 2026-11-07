@@ -22,15 +22,8 @@ namespace University.Controllers
             return View(coursesDtos);
         }
 
-        //==============================
-        // Create
-        //==============================
         [HttpGet]
-        public IActionResult Create()
-        {
-            PopulateBooksDropDownList();
-            return View();
-        }
+        public IActionResult Create() => View();
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -42,23 +35,14 @@ namespace University.Controllers
                 return RedirectToAction("Index");
             }
             ModelState.AddModelError("", "Please fill in all required fields.");
-            PopulateBooksDropDownList(courseCreateDto.BookId);
             return View(courseCreateDto);
         }
 
-        //==============================
-        // Edit
-        //==============================
         [HttpGet]
         public IActionResult Edit(string uuid)
         {
             var crs = _courseService.GetCourseByUuid(uuid);
-            if (crs == null)
-            {
-                return NotFound();
-            }
-
-            PopulateBooksDropDownList(crs.BookId);
+            if (crs == null) return NotFound();
             return View(crs);
         }
 
@@ -80,22 +64,14 @@ namespace University.Controllers
             }
 
             ModelState.AddModelError("", "Please fill all the required fields.");
-            PopulateBooksDropDownList(courseUpdateDto.BookId);
             return View(courseUpdateDto);
         }
 
-        //===========
-        // Delete
-        //===========
         [HttpGet]
         public IActionResult Delete(string uuid)
         {
             var crs = _courseService.GetCourseByUuid(uuid);
-            if (crs == null)
-            {
-                return NotFound();
-            }
-
+            if (crs == null) return NotFound();
             return View(crs);
         }
 
@@ -105,20 +81,10 @@ namespace University.Controllers
         public IActionResult DeleteConfirm(string uuid)
         {
             var crs = _courseService.GetCourseByUuid(uuid);
-            if (crs == null)
-            {
-                return NotFound();
-            }
+            if (crs == null) return NotFound();
 
             _courseService.DeleteCourse(uuid);
             return RedirectToAction("Index");
-        }
-
-        // Helper method for book dropdowns
-        private void PopulateBooksDropDownList(object? selectedBook = null)
-        {
-            var books = _courseService.GetBooks();
-            ViewBag.Books = new SelectList(books, "Id", "Title", selectedBook);
         }
     }
 }

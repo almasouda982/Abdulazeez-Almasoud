@@ -137,6 +137,32 @@ namespace University.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CourseBooks",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CourseId = table.Column<int>(type: "int", nullable: false),
+                    BookId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CourseBooks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CourseBooks_Books_BookId",
+                        column: x => x.BookId,
+                        principalTable: "Books",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CourseBooks_Courses_CourseId",
+                        column: x => x.CourseId,
+                        principalTable: "Courses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CoursePrerequisites",
                 columns: table => new
                 {
@@ -246,6 +272,16 @@ namespace University.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_CourseBooks_BookId",
+                table: "CourseBooks",
+                column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CourseBooks_CourseId",
+                table: "CourseBooks",
+                column: "CourseId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CoursePrerequisites_CourseId",
                 table: "CoursePrerequisites",
                 column: "CourseId");
@@ -294,6 +330,9 @@ namespace University.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "CourseBooks");
+
             migrationBuilder.DropTable(
                 name: "CoursePrerequisites");
 

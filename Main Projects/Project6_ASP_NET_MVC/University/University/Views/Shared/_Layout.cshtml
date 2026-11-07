@@ -81,7 +81,6 @@
                                 <a class="nav-link" asp-controller="CoursePrerequisits" asp-action="Index">CoursesPrerequisits</a>
                                 <a class="nav-link" asp-controller="CourseSections" asp-action="Index">CourseSections</a>
                                 <a class="nav-link" asp-controller="WaitlistEntrys" asp-action="Index">WaitlistEntrys</a>
-                                <a class="nav-link" asp-controller="Books" asp-action="Index">Books</a>
 
                             </nav>
                         </div>
@@ -95,6 +94,17 @@
                             <nav class="sb-sidenav-menu-nested nav">
                                 <a class="nav-link" asp-controller="DegreePrograms" asp-action="Index">DegreePrograms</a>
                                 <a class="nav-link" asp-controller="DegreeRequirements" asp-action="Index">DegreeRequirements</a>
+                            </nav>
+                        </div>
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts3" aria-expanded="false" aria-controls="collapseLayouts">
+                            <div class="sb-nav-link-icon"><i class="fas fa-graduation-cap"></i></div>
+                            Library
+                            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                        </a>
+                        <div class="collapse" id="collapseLayouts3" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                            <nav class="sb-sidenav-menu-nested nav">
+                                <a class="nav-link" asp-controller="Books" asp-action="Index">Books</a>
+                                @* <a class="nav-link" asp-controller="CourseBooks" asp-action="Index">CourseBooks</a> *@
                             </nav>
                         </div>
 

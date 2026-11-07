@@ -27,10 +27,16 @@ namespace University.Application.Services
                 Title = c.Title,
                 Credits = c.Credits,
                 Description = c.Description,
-                BookId = c.BookId,
-                BookTitle = c.Book != null ? c.Book.Title : null,
-                BookImageUrl = c.Book?.ImageUrl
-
+                // Map the collection of stacked books through CourseBooks
+                Books = c.CourseBooks != null ? c.CourseBooks.Select(cb => new BookDto
+                {
+                    Id = cb.Book.Id,
+                    Uuid = cb.Book.Uuid,
+                    Title = cb.Book.Title,
+                    Author = cb.Book.Author,
+                    Price = cb.Book.Price,
+                    ImageUrl = cb.Book.ImageUrl
+                }).ToList() : new List<BookDto>()
             }).ToList();
         }
 
@@ -48,9 +54,7 @@ namespace University.Application.Services
                 Code = crs.Code,
                 Title = crs.Title,
                 Credits = crs.Credits,
-                Description = crs.Description,
-                BookId = crs.BookId,
-                
+                Description = crs.Description
             };
         }
 
@@ -61,8 +65,7 @@ namespace University.Application.Services
                 Code = courseCreateDto.Code,
                 Title = courseCreateDto.Title,
                 Credits = courseCreateDto.Credits,
-                Description = courseCreateDto.Description,
-                BookId = courseCreateDto.BookId
+                Description = courseCreateDto.Description
             };
 
             _unitOfWork.CourseRepository.AddCourse(course);
@@ -80,7 +83,6 @@ namespace University.Application.Services
             oldcrs.Title = courseUpdateDto.Title;
             oldcrs.Credits = courseUpdateDto.Credits;
             oldcrs.Description = courseUpdateDto.Description;
-            oldcrs.BookId = courseUpdateDto.BookId;
 
             _unitOfWork.CourseRepository.UpdateCourse(oldcrs);
         }
@@ -93,10 +95,20 @@ namespace University.Application.Services
                 _unitOfWork.CourseRepository.DeleteCourse(uuid);
             }
         }
+
         public IEnumerable<Book> GetBooks()
         {
             return _unitOfWork.CourseRepository.GetBooks();
         }
 
+        public void AssignBookToCourse(AssignBookToCourseRequest request)
+        {
+            _unitOfWork.CourseRepository.AddBookToCourse(request.CourseId, request.BookId);
+        }
+
+        public void RemoveBookFromCourse(int courseId, int bookId)
+        {
+            _unitOfWork.CourseRepository.RemoveBookFromCourse(courseId, bookId);
+        }
     }
 }

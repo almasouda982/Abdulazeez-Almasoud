@@ -26,6 +26,7 @@ namespace University.Domain.Models
         public string? Description { get; set; } = "";
         public int? BookId { get; set; }
         public Book? Book { get; set; }
+        public ICollection<CourseBook>? CourseBooks { get; set; }
         public ICollection<CourseSection>? CourseSections { get; set; }
         public ICollection<CoursePrerequisite>? CoursePrerequisites { get; set; }
 

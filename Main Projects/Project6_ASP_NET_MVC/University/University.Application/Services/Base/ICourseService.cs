@@ -11,5 +11,7 @@ namespace University.Application.Services.Base
         void UpdateCourse(CourseUpdateDto courseUpdateDto);
         void DeleteCourse(string uuid);
         IEnumerable<Book> GetBooks();
+        void AssignBookToCourse(AssignBookToCourseRequest request);
+        void RemoveBookFromCourse(int courseId, int bookId);
     }
 }

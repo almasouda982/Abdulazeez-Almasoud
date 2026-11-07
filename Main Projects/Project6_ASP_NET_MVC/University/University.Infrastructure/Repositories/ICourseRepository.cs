@@ -10,5 +10,7 @@ namespace University.Infrastructure.Repositories
         void UpdateCourse(Course course);
         void DeleteCourse(string uuid);
         IEnumerable<Book> GetBooks();
+        void AddBookToCourse(int courseId, int bookId);
+        void RemoveBookFromCourse(int courseId, int bookId);
     }
 }

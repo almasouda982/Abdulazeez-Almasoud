@@ -1,5 +1,4 @@
-﻿@using University.Application.Dtos
-@model IEnumerable<CourseDto>
+﻿@model IEnumerable<University.Application.Dtos.CourseDto>
 
 <div class="container">
 
@@ -17,7 +16,7 @@
                 <th>Title</th>
                 <th>Credits</th>
                 <th>Description</th>
-                <th>Textbook Cover</th> 
+                <th>Stacked Textbooks</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -31,16 +30,17 @@
                     <td>@course.Credits</td>
                     <td>@course.Description</td>
                     <td>
-                        @if (!string.IsNullOrEmpty(course.BookImageUrl))
+                        @if (course.Books != null && course.Books.Any())
                         {
                             <div class="d-flex align-items-center gap-2">
-                                <img src="@course.BookImageUrl" alt="Book Cover" class="rounded" style="width: 40px; height: 55px; object-fit: cover;" />
-                                <span class="small text-muted">@course.BookTitle</span>
+                                <span class="badge bg-info text-dark">@course.Books.Count() Book(s)</span>
+                                <a asp-controller="CourseBooks" asp-action="Index" asp-route-courseId="@course.Id" class="btn btn-sm btn-outline-primary">Manage Books</a>
                             </div>
                         }
                         else
                         {
-                            <span class="text-muted small">No Textbook Assigned</span>
+                            <span class="text-muted small">No Books Assigned </span>
+                            <a asp-controller="CourseBooks" asp-action="Index" asp-route-courseId="@course.Id" class="btn btn-sm btn-outline-secondary ms-2">Add Books</a>
                         }
                     </td>
                     <td>

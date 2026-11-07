@@ -12,5 +12,6 @@
         IDegreeProgramRepository DegreeProgramRepository { get; }
         IUserRepository UserRepository { get; }
         IBookRepository BookRepository { get; }
+        ICourseBookRepository CourseBookRepository { get; }
     }
 }

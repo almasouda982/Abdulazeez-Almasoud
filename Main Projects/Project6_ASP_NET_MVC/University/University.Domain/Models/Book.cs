@@ -16,7 +16,7 @@ namespace University.Domain.Models
         public decimal Price { get; set; }
         public string? ImageUrl { get; set; } = "";
 
-        public ICollection<Course>? Courses { get; set; }
-
+        public ICollection<CourseBook> CourseBooks { get; set; } = new List<CourseBook>();
     }
 }
+

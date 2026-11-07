@@ -12,7 +12,7 @@ using University.Infrastructure.Data;
 namespace University.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20261106171708_initial")]
+    [Migration("20261107034349_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -92,6 +92,29 @@ namespace University.Infrastructure.Migrations
                     b.HasIndex("BookId");
 
                     b.ToTable("Courses");
+                });
+
+            modelBuilder.Entity("University.Domain.Models.CourseBook", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("CourseBooks");
                 });
 
             modelBuilder.Entity("University.Domain.Models.CoursePrerequisite", b =>
@@ -395,10 +418,29 @@ namespace University.Infrastructure.Migrations
             modelBuilder.Entity("University.Domain.Models.Course", b =>
                 {
                     b.HasOne("University.Domain.Models.Book", "Book")
-                        .WithMany("Courses")
+                        .WithMany()
                         .HasForeignKey("BookId");
 
                     b.Navigation("Book");
+                });
+
+            modelBuilder.Entity("University.Domain.Models.CourseBook", b =>
+                {
+                    b.HasOne("University.Domain.Models.Book", "Book")
+                        .WithMany("CourseBooks")
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("University.Domain.Models.Course", "Course")
+                        .WithMany("CourseBooks")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+
+                    b.Navigation("Course");
                 });
 
             modelBuilder.Entity("University.Domain.Models.CoursePrerequisite", b =>
@@ -485,11 +527,13 @@ namespace University.Infrastructure.Migrations
 
             modelBuilder.Entity("University.Domain.Models.Book", b =>
                 {
-                    b.Navigation("Courses");
+                    b.Navigation("CourseBooks");
                 });
 
             modelBuilder.Entity("University.Domain.Models.Course", b =>
                 {
+                    b.Navigation("CourseBooks");
+
                     b.Navigation("CoursePrerequisites");
 
                     b.Navigation("CourseSections");
