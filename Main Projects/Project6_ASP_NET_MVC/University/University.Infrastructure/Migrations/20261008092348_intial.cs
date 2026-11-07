@@ -6,26 +6,26 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace University.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class intial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Books",
+                name: "Courses",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Uuid = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Author = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Credits = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Books", x => x.Id);
+                    table.PrimaryKey("PK_Courses", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -60,106 +60,6 @@ namespace University.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Courses",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Uuid = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    Credits = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
-                    BookId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Courses", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Courses_Books_BookId",
-                        column: x => x.BookId,
-                        principalTable: "Books",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "DegreeRequirements",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Uuid = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DegreeProgramId = table.Column<int>(type: "int", nullable: false),
-                    CategoryName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    RequiredCredits = table.Column<int>(type: "int", nullable: false),
-                    MinLevel = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DegreeRequirements", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_DegreeRequirements_DegreePrograms_DegreeProgramId",
-                        column: x => x.DegreeProgramId,
-                        principalTable: "DegreePrograms",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Students",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Uuid = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DegreeProgramId = table.Column<int>(type: "int", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Standing = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    GPA = table.Column<double>(type: "float", nullable: false),
-                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    EnrollmentStatus = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Students", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Students_DegreePrograms_DegreeProgramId",
-                        column: x => x.DegreeProgramId,
-                        principalTable: "DegreePrograms",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CourseBooks",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CourseId = table.Column<int>(type: "int", nullable: false),
-                    BookId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CourseBooks", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CourseBooks_Books_BookId",
-                        column: x => x.BookId,
-                        principalTable: "Books",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CourseBooks_Courses_CourseId",
-                        column: x => x.CourseId,
-                        principalTable: "Courses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -210,6 +110,56 @@ namespace University.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DegreeRequirements",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Uuid = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DegreeProgramId = table.Column<int>(type: "int", nullable: false),
+                    CategoryName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    RequiredCredits = table.Column<int>(type: "int", nullable: false),
+                    MinLevel = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DegreeRequirements", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DegreeRequirements_DegreePrograms_DegreeProgramId",
+                        column: x => x.DegreeProgramId,
+                        principalTable: "DegreePrograms",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Students",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Uuid = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DegreeProgramId = table.Column<int>(type: "int", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Standing = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    GPA = table.Column<double>(type: "float", nullable: false),
+                    EnrollmentStatus = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Students", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Students_DegreePrograms_DegreeProgramId",
+                        column: x => x.DegreeProgramId,
+                        principalTable: "DegreePrograms",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Enrollments",
                 columns: table => new
                 {
@@ -220,7 +170,6 @@ namespace University.Infrastructure.Migrations
                     CourseSectionId = table.Column<int>(type: "int", nullable: false),
                     FinalGrade = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<bool>(type: "bit", nullable: false),
-                    DocumentUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LetterGradePoints = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
@@ -272,24 +221,9 @@ namespace University.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_CourseBooks_BookId",
-                table: "CourseBooks",
-                column: "BookId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CourseBooks_CourseId",
-                table: "CourseBooks",
-                column: "CourseId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_CoursePrerequisites_CourseId",
                 table: "CoursePrerequisites",
                 column: "CourseId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Courses_BookId",
-                table: "Courses",
-                column: "BookId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CourseSections_CourseId",
@@ -331,9 +265,6 @@ namespace University.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CourseBooks");
-
-            migrationBuilder.DropTable(
                 name: "CoursePrerequisites");
 
             migrationBuilder.DropTable(
@@ -359,9 +290,6 @@ namespace University.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "DegreePrograms");
-
-            migrationBuilder.DropTable(
-                name: "Books");
         }
     }
 }
