@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:universitymobileapp/app/screens/bookScreen.dart';
+import 'package:universitymobileapp/app/screens/courseBookScreen.dart';
 import 'package:universitymobileapp/app/screens/coursePrerequisiteScreen.dart';
 import 'package:universitymobileapp/app/screens/courseSectionScreen.dart';
 import 'package:universitymobileapp/app/screens/coursesScreen.dart';
 import 'package:universitymobileapp/app/screens/degreeProgramScreen.dart';
 import 'package:universitymobileapp/app/screens/degreeRequirementScreen.dart';
+import 'package:universitymobileapp/app/screens/detailScreens/courseBookDetailsScreen.dart';
 import 'package:universitymobileapp/app/screens/enrollmentScreen.dart';
 import 'package:universitymobileapp/app/screens/studentsScreen.dart';
 import 'package:universitymobileapp/app/screens/waitlistEntryScreen.dart';
@@ -61,6 +64,11 @@ class HomeScreen extends StatelessWidget {
       'title': 'Degree Requirements',
       'icon': Icons.sticky_note_2,
       'screen': const DegreeRequirementScreen(),
+    },
+    {
+      'title': 'Books',
+      'icon': Icons.book,
+      'screen': const BooksScreen(),
     },
 
 

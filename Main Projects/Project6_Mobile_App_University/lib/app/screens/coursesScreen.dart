@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:universitymobileapp/data/CourseService.dart';
-
-import '../../data/connection.dart';
 import 'detailScreens/courseDetailsScreen.dart';
 
 class CoursesScreen extends StatefulWidget {
@@ -16,12 +14,10 @@ class _CoursesScreenState extends State<CoursesScreen> {
   late Future<List<dynamic>> courses;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     courses = courseService.getCourses();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -52,13 +48,7 @@ class _CoursesScreenState extends State<CoursesScreen> {
             itemCount: coursesList.length,
             itemBuilder: (context, index) {
               final course = coursesList[index];
-
-              final String imagePath = course['imageUrl']?.toString() ?? '';
-              final String imageUrl = imagePath.isEmpty
-                  ? ''
-                  : Uri.parse(ConnectionString.dashboard)
-                  .resolve(imagePath)
-                  .toString();
+              final books = course['books'] as List<dynamic>? ?? [];
 
               return Card(
                 elevation: 3,
@@ -67,29 +57,15 @@ class _CoursesScreenState extends State<CoursesScreen> {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: ListTile(
-                  leading: ClipRRect(
-                    borderRadius: BorderRadius.circular(6),
-                    child: imageUrl.isNotEmpty
-                        ? Image.network(
-                      imageUrl,
-                      width: 50,
-                      height: 70,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          width: 50,
-                          height: 70,
-                          color: Colors.grey[200],
-                          child: const Icon(Icons.book, size: 30),
-                        );
-                      },
-                    )
-                        : Container(
-                      width: 50,
-                      height: 70,
-                      color: Colors.grey[200],
-                      child: const Icon(Icons.book, size: 30),
+                  contentPadding: const EdgeInsets.all(12),
+                  leading: Container(
+                    width: 50,
+                    height: 70,
+                    decoration: BoxDecoration(
+                      color: Colors.indigo.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(6),
                     ),
+                    child: const Icon(Icons.school, color: Colors.indigo, size: 30),
                   ),
                   title: Text(
                     course['title']?.toString() ?? '',
@@ -98,9 +74,11 @@ class _CoursesScreenState extends State<CoursesScreen> {
                   subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      const SizedBox(height: 4),
                       Text(course['code']?.toString() ?? ''),
+                      const SizedBox(height: 2),
                       Text(
-                        'Credits: ${course['credits'] ?? 'N/A'}',
+                        'Credits: ${course['credits'] ?? 'N/A'} | Books: ${books.length}',
                         style: const TextStyle(color: Colors.blue, fontSize: 12),
                       ),
                     ],
