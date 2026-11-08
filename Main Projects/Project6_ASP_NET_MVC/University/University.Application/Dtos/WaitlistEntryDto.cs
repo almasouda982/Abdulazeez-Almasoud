@@ -1,4 +1,6 @@
-﻿namespace University.Application.Dtos
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace University.Application.Dtos
 {
     public class WaitlistEntryDto
     {
@@ -16,6 +18,8 @@
     {
         public long StudentId { get; set; }
         public int CourseSectionId { get; set; }
+        [Required]
+        [Range(1, 500, ErrorMessage = "Waitlist position must be between 1 and 500.")]
         public int Position { get; set; }
         public DateTime? OfferedAt { get; set; }
         public DateTime? ExpiresAt { get; set; }

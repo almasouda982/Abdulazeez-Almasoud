@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace University.Application.Dtos
 {
@@ -18,6 +20,9 @@ namespace University.Application.Dtos
     {
         public long StudentId { get; set; }
         public int CourseSectionId { get; set; }
+        [Required]
+        [DisplayName("Final Grade")]
+        [RegularExpression(@"^(A[+-]?|B[+-]?|C[+-]?|D[+-]?|F)$", ErrorMessage = "Must be a valid letter grade (e.g., A+, B, C-).")]
         public string FinalGrade { get; set; } = string.Empty;
         public decimal LetterGradePoints { get; set; } = 0;
         public bool Status { get; set; }
