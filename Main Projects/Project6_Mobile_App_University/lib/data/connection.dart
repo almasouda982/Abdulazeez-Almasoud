@@ -1,6 +1,6 @@
 class ConnectionString {
-  static String baseUrl = 'https://tjk0zqhn-7130.inc1.devtunnels.ms/api';
-  static String dashboard = 'https://tjk0zqhn-7199.inc1.devtunnels.ms/';
+  static String baseUrl = 'https://xqpmc7bw-7130.inc1.devtunnels.ms/api';
+  static String dashboard = 'https://xqpmc7bw-7199.inc1.devtunnels.ms/';
   static String login = '$baseUrl/Users/Login';
   static String register = '$baseUrl/Users/Register';
 
