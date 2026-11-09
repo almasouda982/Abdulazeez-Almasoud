@@ -4,75 +4,83 @@
     ViewData["Title"] = "Edit Course Section";
 }
 
-<div class="container">
-    <h1>Edit Course Section</h1>
-    <form asp-action="Edit" asp-route-Uuid="@Model.Uuid" method="post">
-
-        <div class="text-danger" asp-validation-summary="All"></div>
-
-        <div class="form-group">
-            <label asp-for="CourseId" class="control-label">Course Code</label>
-            <select asp-for="CourseId" class="form-control" asp-items="ViewBag.Courses">
-                <option value="">-- Select Course --</option>
-            </select>
-            <span asp-validation-for="CourseId" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label class="control-label">Semester</label>
-            <input asp-for="Semester" class="form-control" />
-            <span asp-validation-for="Semester" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label class="control-label">Section Number</label>
-            <input asp-for="SectionNumber" class="form-control" />
-            <span asp-validation-for="SectionNumber" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label class="control-label">Max Capacity</label>
-            <input asp-for="MaxCapacity" class="form-control" />
-            <span asp-validation-for="MaxCapacity" class="text-danger"></span>
-        </div>
-        <div class="form-group mt-2">
-            <label class="control-label fw-bold">Days Of Week</label>
-            <div class="d-flex gap-3 my-1">
-                <div class="form-check"><input type="checkbox" class="day-checkbox form-check-input" value="M" /> M</div>
-                <div class="form-check"><input type="checkbox" class="day-checkbox form-check-input" value="T" /> T</div>
-                <div class="form-check"><input type="checkbox" class="day-checkbox form-check-input" value="W" /> W</div>
-                <div class="form-check"><input type="checkbox" class="day-checkbox form-check-input" value="TH" /> TH</div>
-                <div class="form-check"><input type="checkbox" class="day-checkbox form-check-input" value="F" /> F</div>
-            </div>
-            <input type="hidden" asp-for="DaysOfWeek" id="DaysOfWeekInput" />
-            <span asp-validation-for="DaysOfWeek" class="text-danger"></span>
-        </div>
-
-        <div class="form-group mt-2">
-            <label class="control-label fw-bold">Time Slot</label>
-            <div class="row">
-                <div class="col">
-                    <label class="small text-muted">Start Time</label>
-                    <input type="time" id="StartTime" class="form-control" />
+<div class="container-fluid px-4 py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-header bg-warning text-dark py-3 px-4 rounded-top-4">
+                    <h4 class="mb-0 fw-bold"><i class="fas fa-calendar-alt me-2"></i> Edit Course Section</h4>
                 </div>
-                <div class="col">
-                    <label class="small text-muted">End Time</label>
-                    <input type="time" id="EndTime" class="form-control" />
+                <div class="card-body p-4 p-sm-5">
+                    <form asp-action="Edit" asp-route-Uuid="@Model.Uuid" method="post">
+                        <div class="text-danger small mb-3" asp-validation-summary="All"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="CourseId" class="form-label fw-semibold text-dark">Course Code</label>
+                            <select asp-for="CourseId" class="form-select rounded-3" asp-items="ViewBag.Courses">
+                                <option value="">-- Select Course --</option>
+                            </select>
+                            <span asp-validation-for="CourseId" class="text-danger small"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold text-dark">Semester</label>
+                                <input asp-for="Semester" class="form-control rounded-3" />
+                                <span asp-validation-for="Semester" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold text-dark">Section Number</label>
+                                <input asp-for="SectionNumber" class="form-control rounded-3" />
+                                <span asp-validation-for="SectionNumber" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-dark">Max Capacity</label>
+                            <input asp-for="MaxCapacity" class="form-control rounded-3" />
+                            <span asp-validation-for="MaxCapacity" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3 p-3 bg-light rounded-3 border">
+                            <label class="form-label fw-bold text-dark mb-2">Days Of Week</label>
+                            <div class="d-flex gap-4 my-1">
+                                <div class="form-check"><input type="checkbox" class="day-checkbox form-check-input" value="M" id="dayM" /><label class="form-check-label" for="dayM">M</label></div>
+                                <div class="form-check"><input type="checkbox" class="day-checkbox form-check-input" value="T" id="dayT" /><label class="form-check-label" for="dayT">T</label></div>
+                                <div class="form-check"><input type="checkbox" class="day-checkbox form-check-input" value="W" id="dayW" /><label class="form-check-label" for="dayW">W</label></div>
+                                <div class="form-check"><input type="checkbox" class="day-checkbox form-check-input" value="TH" id="dayTH" /><label class="form-check-label" for="dayTH">TH</label></div>
+                                <div class="form-check"><input type="checkbox" class="day-checkbox form-check-input" value="F" id="dayF" /><label class="form-check-label" for="dayF">F</label></div>
+                            </div>
+                            <input type="hidden" asp-for="DaysOfWeek" id="DaysOfWeekInput" />
+                            <span asp-validation-for="DaysOfWeek" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4 p-3 bg-light rounded-3 border">
+                            <label class="form-label fw-bold text-dark mb-2">Time Slot</label>
+                            <div class="row">
+                                <div class="col-md-6 mb-2 mb-md-0">
+                                    <label class="small text-muted mb-1">Start Time</label>
+                                    <input type="time" id="StartTime" class="form-control rounded-3" />
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="small text-muted mb-1">End Time</label>
+                                    <input type="time" id="EndTime" class="form-control rounded-3" />
+                                </div>
+                            </div>
+                            <input type="hidden" asp-for="TimeSlot" id="TimeSlotInput" />
+                            <span asp-validation-for="TimeSlot" class="text-danger small"></span>
+                        </div>
+
+                        <div class="d-flex align-items-center justify-content-between mt-4">
+                            <a asp-action="Index" class="text-muted text-decoration-none fw-semibold"><i class="fas fa-arrow-left me-1"></i> Back to List</a>
+                            <input type="submit" value="Update Section" class="btn btn-warning px-4 py-2 rounded-3 fw-bold text-dark" />
+                        </div>
+                    </form>
                 </div>
             </div>
-            <input type="hidden" asp-for="TimeSlot" id="TimeSlotInput" />
-            <span asp-validation-for="TimeSlot" class="text-danger"></span>
         </div>
-
-
-        <div class="form-group">
-            <input type="submit" value="Update" class="btn btn-warning" />
-        </div>
-    </form>
-    <div>
-        <a asp-action="Index">Back to List</a>
     </div>
 </div>
-
-
-
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
@@ -80,7 +88,7 @@
     <script>
         const currentDays = "@Model.DaysOfWeek";
         document.querySelectorAll('.day-checkbox').forEach(chk => {
-            if (currentDays.includes(chk.value)) {
+            if (currentDays && currentDays.includes(chk.value)) {
                 chk.checked = true;
             }
             chk.addEventListener('change', updateDaysInput);
@@ -96,16 +104,22 @@
         const currentTimeSlot = "@Model.TimeSlot";
         if (currentTimeSlot && currentTimeSlot.includes('-')) {
             const parts = currentTimeSlot.split(' - ');
-            document.getElementById('StartTime').value = convertTo24Hour(parts[0].trim());
-            document.getElementById('EndTime').value = convertTo24Hour(parts[1].trim());
+            const start24 = convertTo24Hour(parts[0].trim());
+            const end24 = convertTo24Hour(parts[1].trim());
+            if (start24) document.getElementById('StartTime').value = start24;
+            if (end24) document.getElementById('EndTime').value = end24;
         }
 
         function convertTo24Hour(timeStr) {
-            let [time, modifier] = timeStr.split(' ');
-            let [hours, minutes] = time.split(':');
-            if (hours === '12') hours = '00';
-            if (modifier === 'PM') hours = parseInt(hours, 10) + 12;
-            return `${String(hours).padStart(2, '0')}:${minutes}`;
+            try {
+                let [time, modifier] = timeStr.split(' ');
+                let [hours, minutes] = time.split(':');
+                if (hours === '12') hours = '00';
+                if (modifier === 'PM' || modifier === 'pm') hours = parseInt(hours, 10) + 12;
+                return `${String(hours).padStart(2, '0')}:${minutes}`;
+            } catch (e) {
+                return '';
+            }
         }
 
         function updateTimeSlot() {

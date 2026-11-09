@@ -4,72 +4,89 @@
     ViewData["Title"] = "Create Student";
 }
 
-<div class="container">
-    <h1>Create Student</h1>
-    <form asp-action="Create" method="post" enctype="multipart/form-data">
-        <div class="text-danger" asp-validation-summary="All"></div>
+<div class="container-fluid px-4 py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-header bg-indigo text-white py-3 px-4 rounded-top-4" style="background-color: #4f46e5;">
+                    <h4 class="mb-0 fw-bold"><i class="fas fa-user-plus me-2"></i> Create New Student</h4>
+                </div>
+                <div class="card-body p-4 p-sm-5">
+                    <form asp-action="Create" method="post" enctype="multipart/form-data">
+                        <div class="text-danger small mb-3" asp-validation-summary="All"></div>
 
-        <div class="form-group">
-            <label asp-for="DegreeProgramId" class="control-label">Degree Program Name</label>
-            <select asp-for="DegreeProgramId" class="form-control" asp-items="ViewBag.DegreePrograms">
-                <option value="">-- Select Degree Program --</option>
-            </select>
-            <span asp-validation-for="DegreeProgramId" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label class="control-label">First Name</label>
-            <input asp-for="FirstName" class="form-control" />
-            <span asp-validation-for="FirstName" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label class="control-label">Last Name</label>
-            <input asp-for="LastName" class="form-control" />
-            <span asp-validation-for="LastName" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label class="control-label">Email</label>
-            <input asp-for="Email" class="form-control" />
-            <span asp-validation-for="Email" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label class="control-label">Phone Number</label>
-            <input asp-for="Phone" class="form-control" />
-            <span asp-validation-for="Phone" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label class="control-label">Standing</label>
-            <input asp-for="Standing" class="form-control" placeholder="Standing Position" />
-            <span asp-validation-for="Standing" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label class="control-label">GPA</label>
-            <input asp-for="GPA" class="form-control" />
-            <span asp-validation-for="GPA" class="text-danger"></span>
-        </div>
+                        <div class="mb-3">
+                            <label asp-for="DegreeProgramId" class="form-label fw-semibold text-dark">Degree Program Name</label>
+                            <select asp-for="DegreeProgramId" class="form-select rounded-3" asp-items="ViewBag.DegreePrograms">
+                                <option value="">-- Select Degree Program --</option>
+                            </select>
+                            <span asp-validation-for="DegreeProgramId" class="text-danger small"></span>
+                        </div>
 
-        <div class="form-group mb-3">
-            <label asp-for="ImageFile" class="control-label">Identification Picture</label>
-            <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" />
-            <span asp-validation-for="ImageFile" class="text-danger"></span>
-        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold text-dark">First Name</label>
+                                <input asp-for="FirstName" class="form-control rounded-3" placeholder="Enter first name" />
+                                <span asp-validation-for="FirstName" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold text-dark">Last Name</label>
+                                <input asp-for="LastName" class="form-control rounded-3" placeholder="Enter last name" />
+                                <span asp-validation-for="LastName" class="text-danger small"></span>
+                            </div>
+                        </div>
 
-        <div class="form-group">
-            <label class="control-label d-block mb-2">Enrollment Status</label>
-            <div class="btn-group" role="group" aria-label="Enrollment Status Toggle">
-                <input type="radio" class="btn-check" asp-for="EnrollmentStatus" value="true" id="enrollTrue" autocomplete="off" />
-                <label class="btn btn-outline-success" for="enrollTrue">Enrolled</label>
-                <input type="radio" class="btn-check" asp-for="EnrollmentStatus" value="false" id="enrollFalse" autocomplete="off" />
-                <label class="btn btn-outline-danger" for="enrollFalse">Not Enrolled</label>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold text-dark">Email</label>
+                                <input asp-for="Email" class="form-control rounded-3" placeholder="name@example.com" />
+                                <span asp-validation-for="Email" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold text-dark">Phone Number</label>
+                                <input asp-for="Phone" class="form-control rounded-3" placeholder="Enter phone number" />
+                                <span asp-validation-for="Phone" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold text-dark">Standing</label>
+                                <input asp-for="Standing" class="form-control rounded-3" placeholder="Standing Position" />
+                                <span asp-validation-for="Standing" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold text-dark">GPA</label>
+                                <input asp-for="GPA" class="form-control rounded-3" placeholder="e.g. 3.80" />
+                                <span asp-validation-for="GPA" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ImageFile" class="form-label fw-semibold text-dark">Identification Picture</label>
+                            <input asp-for="ImageFile" type="file" class="form-control rounded-3" accept="image/*" />
+                            <span asp-validation-for="ImageFile" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label d-block fw-semibold text-dark mb-2">Enrollment Status</label>
+                            <div class="btn-group w-100" role="group" aria-label="Enrollment Status Toggle">
+                                <input type="radio" class="btn-check" asp-for="EnrollmentStatus" value="true" id="enrollTrue" autocomplete="off" />
+                                <label class="btn btn-outline-success py-2 fw-semibold" for="enrollTrue">Enrolled</label>
+                                <input type="radio" class="btn-check" asp-for="EnrollmentStatus" value="false" id="enrollFalse" autocomplete="off" />
+                                <label class="btn btn-outline-danger py-2 fw-semibold" for="enrollFalse">Not Enrolled</label>
+                            </div>
+                            <span asp-validation-for="EnrollmentStatus" class="text-danger small d-block mt-1"></span>
+                        </div>
+
+                        <div class="d-flex align-items-center justify-content-between mt-4">
+                            <a asp-action="Index" class="text-muted text-decoration-none fw-semibold"><i class="fas fa-arrow-left me-1"></i> Back to List</a>
+                            <input type="submit" value="Create Student" class="btn btn-indigo px-4 py-2 rounded-3 fw-bold text-white" style="background-color: #4f46e5;" />
+                        </div>
+                    </form>
+                </div>
             </div>
-            <span asp-validation-for="EnrollmentStatus" class="text-danger d-block mt-1"></span>
         </div>
-
-        <div class="form-group">
-            <input type="submit" value="Create" class="btn btn-primary mt-3 mb-3" />
-        </div>
-    </form>
-    <div>
-        <a asp-action="Index">Back to List</a>
     </div>
 </div>
 

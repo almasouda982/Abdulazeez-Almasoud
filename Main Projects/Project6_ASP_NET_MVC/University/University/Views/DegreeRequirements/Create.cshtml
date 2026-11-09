@@ -1,52 +1,55 @@
 ﻿@using University.Application.Dtos
 @model DegreeRequirementCreateDto
 @{
-    ViewData["Title"] = "Degree Requirement";
+    ViewData["Title"] = "Create Degree Requirement";
 }
 
+<div class="container-fluid px-4 py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-header bg-indigo text-white py-3 px-4 rounded-top-4" style="background-color: #4f46e5;">
+                    <h4 class="mb-0 fw-bold"><i class="fas fa-tasks me-2"></i> Create Degree Requirement</h4>
+                </div>
+                <div class="card-body p-4 p-sm-5">
+                    <form asp-action="Create" method="post">
+                        <div class="text-danger small mb-3" asp-validation-summary="All"></div>
 
-<div class="container">
-    <h1>Create Degree Requirement</h1>
-    <form asp-action="Create" method="post">
-        <div class="text-danger" asp-validation-summary="All"></div>
+                        <div class="mb-3">
+                            <label asp-for="DegreeProgramId" class="form-label fw-semibold text-dark">Degree Program Name</label>
+                            <select asp-for="DegreeProgramId" class="form-select rounded-3" asp-items="ViewBag.DegreePrograms">
+                                <option value="">-- Select Degree Program --</option>
+                            </select>
+                            <span asp-validation-for="DegreeProgramId" class="text-danger small"></span>
+                        </div>
 
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold text-dark">Category Name</label>
+                            <input asp-for="CategoryName" class="form-control rounded-3" placeholder="e.g. Core Courses, Electives" />
+                            <span asp-validation-for="CategoryName" class="text-danger small"></span>
+                        </div>
 
-        @* <div class="form-group">
-            <label class="control-label">Degree Program Id</label>
-            <input asp-for="DegreeProgramId" class="form-control" />
-            <span asp-validation-for="DegreeProgramId" class="text-danger"></span>
-        </div> *@
-        <div class="form-group">
-            <label asp-for="DegreeProgramId" class="control-label">Degree Program Name</label>
-            <select asp-for="DegreeProgramId" class="form-control" asp-items="ViewBag.DegreePrograms">
-                <option value="">-- Select Degree Program --</option>
-            </select>
-            <span asp-validation-for="DegreeProgramId" class="text-danger"></span>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold text-dark">Required Credits</label>
+                                <input asp-for="RequiredCredits" class="form-control rounded-3" placeholder="e.g. 40" />
+                                <span asp-validation-for="RequiredCredits" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-semibold text-dark">Minimum Level</label>
+                                <input asp-for="MinLevel" class="form-control rounded-3" placeholder="e.g. 200" />
+                                <span asp-validation-for="MinLevel" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex align-items-center justify-content-between mt-4">
+                            <a asp-action="Index" class="text-muted text-decoration-none fw-semibold"><i class="fas fa-arrow-left me-1"></i> Back to List</a>
+                            <input type="submit" value="Create Requirement" class="btn btn-indigo px-4 py-2 rounded-3 fw-bold text-white" style="background-color: #4f46e5;" />
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label class="control-label">Category Name</label>
-            <input asp-for="CategoryName" class="form-control" />
-            <span asp-validation-for="CategoryName" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label class="control-label">Required Credits</label>
-            <input asp-for="RequiredCredits" class="form-control" />
-            <span asp-validation-for="RequiredCredits" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label class="control-label">Minimum Level</label>
-            <input asp-for="MinLevel" class="form-control" />
-            <span asp-validation-for="MinLevel" class="text-danger"></span>
-        </div>
-
-
-
-        <div class="form-group">
-            <input type="submit" value="Create" class="btn btn-primary mt-3 mb-3" />
-        </div>
-    </form>
-    <div>
-        <a asp-action="Index">Back to List</a>
     </div>
 </div>
 

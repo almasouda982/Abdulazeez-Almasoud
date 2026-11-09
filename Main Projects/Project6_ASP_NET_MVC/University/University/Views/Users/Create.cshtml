@@ -4,55 +4,62 @@
     ViewData["Title"] = "Create User";
 }
 
-<h1>Create User</h1>
+<div class="container-fluid px-4 py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-header bg-indigo text-white py-3 px-4 rounded-top-4" style="background-color: #4f46e5;">
+                    <h4 class="mb-0 fw-bold"><i class="fas fa-user-plus me-2"></i> Create New User</h4>
+                </div>
+                <div class="card-body p-4 p-sm-5">
+                    <form asp-action="Create" method="post">
+                        <div class="text-danger small mb-3" asp-validation-summary="All"></div>
 
-<form asp-action="Create" method="post">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Name" class="form-label fw-semibold text-dark">Name</label>
+                                <input asp-for="Name" class="form-control rounded-3" placeholder="Enter full name" />
+                                <span asp-validation-for="Name" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="UserName" class="form-label fw-semibold text-dark">Username</label>
+                                <input asp-for="UserName" class="form-control rounded-3" placeholder="Enter username" />
+                                <span asp-validation-for="UserName" class="text-danger small"></span>
+                            </div>
+                        </div>
 
-    <div class="mb-3">
-        <label asp-for="Name"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name"
-              class="text-danger"></span>
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label fw-semibold text-dark">Email Address</label>
+                            <input asp-for="Email" type="email" class="form-control rounded-3" placeholder="name@example.com" />
+                            <span asp-validation-for="Email" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Password" class="form-label fw-semibold text-dark">Password</label>
+                            <input asp-for="Password" type="password" class="form-control rounded-3" placeholder="Enter password" />
+                            <span asp-validation-for="Password" class="text-danger small"></span>
+                        </div>
+
+                        <div class="form-check mb-4 p-3 bg-light rounded-3 border">
+                            <input asp-for="IsLocked" class="form-check-input ms-0 me-2" id="isLockedCheck" />
+                            <label asp-for="IsLocked" class="form-check-label fw-semibold text-dark" for="isLockedCheck">
+                                Locked Account
+                            </label>
+                        </div>
+
+                        <div class="d-flex align-items-center justify-content-between mt-4">
+                            <a asp-action="Index" class="text-muted text-decoration-none fw-semibold"><i class="fas fa-arrow-left me-1"></i> Back</a>
+                            <button type="submit" class="btn btn-indigo px-4 py-2 rounded-3 fw-bold text-white shadow-sm" style="background-color: #4f46e5;">
+                                Create User
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
 
-    <div class="mb-3">
-        <label asp-for="UserName"></label>
-        <input asp-for="UserName" class="form-control" />
-        <span asp-validation-for="UserName"
-              class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Email"></label>
-        <input asp-for="Email"
-               type="email"
-               class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Password"></label>
-        <input asp-for="Password"
-               type="password"
-               class="form-control" />
-    </div>
-
-    <div class="form-check mb-3">
-        <input asp-for="IsLocked"
-               class="form-check-input" />
-
-        <label asp-for="IsLocked"
-               class="form-check-label">
-            Locked
-        </label>
-    </div>
-
-    <button type="submit" class="btn btn-primary">
-        Create
-    </button>
-
-    <a asp-action="Index"
-       class="btn btn-secondary">
-        Back
-    </a>
-
-</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
