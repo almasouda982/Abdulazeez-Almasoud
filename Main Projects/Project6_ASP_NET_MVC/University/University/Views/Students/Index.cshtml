@@ -1,67 +1,91 @@
 ﻿@using University.Application.Dtos
 @model IEnumerable<StudentDto>
 
-<div class="container">
+@{
+    ViewData["Title"] = "Students Directory";
+}
 
-    <h1>Students</h1>
-
-    <div class="text-end">
-        <a asp-action="Create" class="btn btn-primary mb-3">New Student</a>
+<div class="container-fluid px-4 py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold text-dark mb-1">Students Directory</h2>
+            <p class="text-muted small mb-0">Manage registered students, academic standings, and profiles.</p>
+        </div>
+        <a asp-action="Create" class="btn btn-indigo text-white px-3 py-2 rounded-3 fw-bold shadow-sm" style="background-color: #4f46e5;">
+            <i class="fas fa-user-plus me-2"></i> New Student
+        </a>
     </div>
 
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Degree Program Name</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Standing</th>
-                <th>GPA</th>
-                <th>ID Picture</th>
-                <th>EnrollmentStatus</th>
-                <th>Action</th>
-
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var student in Model)
-            {
-
-                <tr>
-                    <td>@student.Id</td>
-                    <td>@student.Name</td>
-                    <td>@student.FirstName</td>
-                    <td>@student.LastName</td>
-                    <td>@student.Email</td>
-                    <td>@student.Phone</td>
-                    <td>@student.Standing</td>
-                    <td>@student.GPA</td>
-                    <td>
-                        @if (!string.IsNullOrEmpty(student.ImageUrl))
+    <div class="card border-0 rounded-4 shadow-sm overflow-hidden">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light text-uppercase fs-7 text-muted">
+                        <tr>
+                            <th class="py-3 ps-4">Id</th>
+                            <th class="py-3">Degree Program</th>
+                            <th class="py-3">Full Name</th>
+                            <th class="py-3">Email</th>
+                            <th class="py-3">Phone</th>
+                            <th class="py-3">Standing</th>
+                            <th class="py-3">GPA</th>
+                            <th class="py-3 text-center">ID Card Picture</th>
+                            <th class="py-3">Status</th>
+                            <th class="py-3 pe-4 text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var student in Model)
                         {
-                            <img src="@student.ImageUrl" alt="ID Picture" style="max-width: 100px; max-height: 100px;"/>
+                            // GPA coloring logic matching mobile requirements
+                            var gpaVal = student.GPA;
+                            string gpaColorClass = gpaVal >= 3.5 ? "text-success bg-success-subtle" : (gpaVal >= 2.0 ? "text-warning bg-warning-subtle" : "text-danger bg-danger-subtle");
+
+                            <tr>
+                                <td class="ps-4 fw-semibold text-secondary">@student.Id</td>
+                                <td><span class="badge px-2 py-1 rounded-2" style="background-color: rgba(79, 70, 229, 0.1); color: #4f46e5;">@student.Name</span></td>
+                                <td class="fw-bold text-dark">@student.FirstName @student.LastName</td>
+                                <td class="text-muted">@student.Email</td>
+                                <td class="text-muted">@student.Phone</td>
+                                <td><span class="badge bg-light text-dark border">@student.Standing</span></td>
+                                <td>
+                                    <span class="badge @gpaColorClass px-2 py-1 fw-bold">@student.GPA.ToString("0.00")</span>
+                                </td>
+                                <td class="text-center">
+                                    @if (!string.IsNullOrEmpty(student.ImageUrl))
+                                    {
+                                        <img src="@student.ImageUrl" alt="ID Card" class="rounded-3 shadow-sm border" style="width: 75px; height: 45px; object-fit: cover;" />
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted small fst-italic">No Image</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (student.EnrollmentStatus)
+                                    {
+                                        <span class="badge bg-success-subtle text-success px-2 py-1 rounded-pill">Enrolled</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger-subtle text-danger px-2 py-1 rounded-pill">Not Enrolled</span>
+                                    }
+                                </td>
+                                <td class="pe-4 text-end">
+                                    <div class="btn-group" role="group">
+                                        <a asp-action="Edit" asp-route-Uuid="@student.Uuid" class="btn btn-sm btn-outline-warning rounded-start-3 px-2 py-1" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-Uuid="@student.Uuid" class="btn btn-sm btn-outline-danger rounded-end-3 px-2 py-1" title="Delete">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
                         }
-                        else
-                        {
-                            <span> No Image</span>
-                        }
-                    </td>
-                    <td>@(student.EnrollmentStatus ? "Enrolled" : "Not Enrolled")</td>
-                    <td>
-                        <a asp-action="Edit" asp-route-Uuid="@student.Uuid" class="btn btn-sm btn-warning">Edit</a>
-                        <a asp-action="Delete" asp-route-Uuid="@student.Uuid" class="btn btn-sm btn-danger">Delete</a>
-
-                    </td>
-
-                </tr>
-
-            }
-
-
-        </tbody>
-
-    </table>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>

@@ -5,51 +5,58 @@
     ViewData["Title"] = "Edit Book";
 }
 
-<div class="container">
-    <h1>Edit Book</h1>
-    <form asp-action="Edit" asp-route-Uuid="@Model.Uuid" method="post" enctype="multipart/form-data">
-        <div class="text-danger" asp-validation-summary="All"></div>
+<div class="container-fluid px-4 py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-header bg-warning text-dark py-3 px-4 rounded-top-4">
+                    <h4 class="mb-0 fw-bold"><i class="fas fa-edit me-2"></i> Edit Book</h4>
+                </div>
+                <div class="card-body p-4 p-sm-5">
+                    <form asp-action="Edit" asp-route-Uuid="@Model.Uuid" method="post" enctype="multipart/form-data">
+                        <div class="text-danger small mb-3" asp-validation-summary="All"></div>
 
-        <div class="form-group mb-3">
-            <label asp-for="Title" class="control-label"></label>
-            <input asp-for="Title" class="form-control" />
-            <span asp-validation-for="Title" class="text-danger"></span>
-        </div>
+                        <div class="mb-3">
+                            <label asp-for="Title" class="form-label fw-semibold text-dark">Title</label>
+                            <input asp-for="Title" class="form-control rounded-3" />
+                            <span asp-validation-for="Title" class="text-danger small"></span>
+                        </div>
 
-        <div class="form-group mb-3">
-            <label asp-for="Author" class="control-label"></label>
-            <input asp-for="Author" class="form-control" />
-            <span asp-validation-for="Author" class="text-danger"></span>
-        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Author" class="form-label fw-semibold text-dark">Author</label>
+                                <input asp-for="Author" class="form-control rounded-3" />
+                                <span asp-validation-for="Author" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Price" class="form-label fw-semibold text-dark">Price</label>
+                                <input asp-for="Price" class="form-control rounded-3" />
+                                <span asp-validation-for="Price" class="text-danger small"></span>
+                            </div>
+                        </div>
 
-        <div class="form-group mb-3">
-            <label asp-for="Price" class="control-label"></label>
-            <input asp-for="Price" class="form-control" />
-            <span asp-validation-for="Price" class="text-danger"></span>
-        </div>
+                        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                        {
+                            <div class="mb-3">
+                                <label class="form-label fw-semibold text-dark d-block">Current Cover</label>
+                                <img src="@Model.ImageUrl" alt="Current Cover" class="rounded-3 shadow-sm border mb-2" style="width: 90px; height: 120px; object-fit: cover;" />
+                            </div>
+                        }
 
+                        <div class="mb-4">
+                            <label asp-for="ImageFile" class="form-label fw-semibold text-dark">Upload New Cover Image (Optional)</label>
+                            <input asp-for="ImageFile" type="file" class="form-control rounded-3" accept="image/*" />
+                            <span asp-validation-for="ImageFile" class="text-danger small"></span>
+                        </div>
 
-
-        @if (!string.IsNullOrEmpty(Model.ImageUrl))
-        {
-            <div class="form-group mb-3">
-                <label class="control-label d-block">Current Cover</label>
-                <img src="@Model.ImageUrl" alt="Current Cover" class="rounded mb-2" style="width: 80px; height: 100px; object-fit: cover;" />
+                        <div class="d-flex align-items-center justify-content-between mt-4">
+                            <a asp-action="Index" class="text-muted text-decoration-none fw-semibold"><i class="fas fa-arrow-left me-1"></i> Back to List</a>
+                            <input type="submit" value="Update Book" class="btn btn-warning px-4 py-2 rounded-3 fw-bold text-dark" />
+                        </div>
+                    </form>
+                </div>
             </div>
-        }
-
-        <div class="form-group mb-3">
-            <label asp-for="ImageFile" class="control-label">Upload New Cover Image (Optional)</label>
-            <input asp-for="ImageFile" type="file" class="form-control" accept="image/*" />
-            <span asp-validation-for="ImageFile" class="text-danger"></span>
         </div>
-
-        <div class="form-group">
-            <input type="submit" value="Update" class="btn btn-warning mt-2 mb-3" />
-        </div>
-    </form>
-    <div>
-        <a asp-action="Index">Back to List</a>
     </div>
 </div>
 

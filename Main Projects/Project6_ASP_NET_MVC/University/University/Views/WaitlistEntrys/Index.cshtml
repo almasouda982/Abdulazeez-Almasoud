@@ -1,52 +1,74 @@
 ﻿@using University.Application.Dtos
 @model IEnumerable<WaitlistEntryDto>
 
-<div class="container">
+@{
+    ViewData["Title"] = "Waitlist Entries Management";
+}
 
-    <h1>Waitlist Entry</h1>
-
-    <div class="text-end">
-        <a asp-action="Create" class="btn btn-primary mb-3">New Waitlist Entry</a>
+<div class="container-fluid px-4 py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold text-dark mb-1">Waitlist Entries</h2>
+            <p class="text-muted small mb-0">Monitor queue positions, seat offerings, and expiration tracking.</p>
+        </div>
+        <a asp-action="Create" class="btn btn-indigo text-white px-3 py-2 rounded-3 fw-bold shadow-sm" style="background-color: #4f46e5;">
+            <i class="fas fa-plus-circle me-2"></i> New Waitlist Entry
+        </a>
     </div>
 
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Student Last Name</th>
-                <th>Course Section Code</th>
-                <th>Position</th>
-                <th>Offered At</th>
-                <th>ExpiresAt</th>
-                <th>Status</th>
-                <th>Actions</th>
-
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var waitlistEntry in Model)
-            {
-
-                <tr>
-                    <td>@waitlistEntry.Id</td>
-                    <td>@waitlistEntry.LastName</td>
-                    <td>@waitlistEntry.SectionNumber</td>
-                    <td>@waitlistEntry.Position</td>
-                    <td>@waitlistEntry.OfferedAt</td>
-                    <td>@waitlistEntry.ExpiresAt</td>
-                    <td>@(waitlistEntry.Status ? "Seat Offered" : "Waiting")</td>
-                    <td>
-                        <a asp-action="Edit" asp-route-Uuid="@waitlistEntry.Uuid" class="btn btn-sm btn-warning">Edit</a>
-                        <a asp-action="Delete" asp-route-Uuid="@waitlistEntry.Uuid" class="btn btn-sm btn-danger">Delete</a>
-
-                    </td>
-
-                </tr>
-
-            }
-
-
-        </tbody>
-
-    </table>
+    <div class="card border-0 rounded-4 shadow-sm overflow-hidden">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light text-uppercase fs-7 text-muted">
+                        <tr>
+                            <th class="py-3 ps-4">Id</th>
+                            <th class="py-3">Student Last Name</th>
+                            <th class="py-3">Section Code</th>
+                            <th class="py-3">Position</th>
+                            <th class="py-3">Offered At</th>
+                            <th class="py-3">Expires At</th>
+                            <th class="py-3">Status</th>
+                            <th class="py-3 pe-4 text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var waitlistEntry in Model)
+                        {
+                            <tr>
+                                <td class="ps-4 fw-semibold text-secondary">@waitlistEntry.Id</td>
+                                <td class="fw-bold text-dark">@waitlistEntry.LastName</td>
+                                <td><span class="badge px-2 py-1 rounded-2" style="background-color: rgba(79, 70, 229, 0.1); color: #4f46e5;">@waitlistEntry.SectionNumber</span></td>
+                                <td>
+                                    <span class="badge bg-light text-dark border">@waitlistEntry.Position</span>
+                                </td>
+                                <td class="text-muted small">@waitlistEntry.OfferedAt</td>
+                                <td class="text-muted small">@waitlistEntry.ExpiresAt</td>
+                                <td>
+                                    @if (waitlistEntry.Status)
+                                    {
+                                        <span class="badge bg-success-subtle text-success px-2 py-1 rounded-pill fw-bold">Seat Offered</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning-subtle text-warning px-2 py-1 rounded-pill fw-bold">Waiting</span>
+                                    }
+                                </td>
+                                <td class="pe-4 text-end">
+                                    <div class="btn-group" role="group">
+                                        <a asp-action="Edit" asp-route-Uuid="@waitlistEntry.Uuid" class="btn btn-sm btn-outline-warning rounded-start-3 px-2 py-1" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-Uuid="@waitlistEntry.Uuid" class="btn btn-sm btn-outline-danger rounded-end-3 px-2 py-1" title="Delete">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>

@@ -1,54 +1,87 @@
 ﻿@model IEnumerable<University.Application.Dtos.CourseDto>
 
-<div class="container">
+@{
+    ViewData["Title"] = "Courses Management";
+}
 
-    <h1>Courses</h1>
-
-    <div class="text-end">
-        <a asp-action="Create" class="btn btn-primary mb-3">New Course</a>
+<div class="container-fluid px-4 py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold text-dark mb-1">Courses Catalog</h2>
+            <p class="text-muted small mb-0">Browse available courses, program descriptions, and assigned textbooks.</p>
+        </div>
+        <a asp-action="Create" class="btn btn-indigo text-white px-3 py-2 rounded-3 fw-bold shadow-sm" style="background-color: #4f46e5;">
+            <i class="fas fa-plus-circle me-2"></i> New Course
+        </a>
     </div>
 
-    <table class="table table-striped align-middle">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Code</th>
-                <th>Title</th>
-                <th>Credits</th>
-                <th>Description</th>
-                <th>Stacked Textbooks</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var course in Model)
-            {
-                <tr>
-                    <td>@course.Id</td>
-                    <td>@course.Code</td>
-                    <td>@course.Title</td>
-                    <td>@course.Credits</td>
-                    <td>@course.Description</td>
-                    <td>
-                        @if (course.Books != null && course.Books.Any())
+    <div class="card border-0 rounded-4 shadow-sm overflow-hidden">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light text-uppercase fs-7 text-muted">
+                        <tr>
+                            <th class="py-3 ps-4">Id</th>
+                            <th class="py-3">Code</th>
+                            <th class="py-3">Title</th>
+                            <th class="py-3">Credits</th>
+                            <th class="py-3">Description</th>
+                            <th class="py-3">Stacked Textbooks</th>
+                            <th class="py-3 pe-4 text-end">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var course in Model)
                         {
-                            <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-info text-dark">@course.Books.Count() Book(s)</span>
-                                <a asp-controller="CourseBooks" asp-action="Index" asp-route-courseId="@course.Id" class="btn btn-sm btn-outline-primary">Manage Books</a>
-                            </div>
+                            <tr>
+                                <td class="ps-4 fw-semibold text-secondary">@course.Id</td>
+                                <td>
+                                    <span class="badge px-2 py-1 rounded-2" style="background-color: rgba(79, 70, 229, 0.1); color: #4f46e5;">@course.Code</span>
+                                </td>
+                                <td class="fw-bold text-dark">@course.Title</td>
+                                <td>
+                                    <span class="badge bg-light text-dark border">@course.Credits</span>
+                                </td>
+                                <td class="text-muted text-truncate" style="max-width: 250px;" title="@course.Description">@course.Description</td>
+                                <td>
+                                    @if (course.Books != null && course.Books.Any())
+                                    {
+                                        <div class="d-flex align-items-center gap-2">
+                                            <span class="badge bg-info-subtle text-info fw-bold px-2 py-1">@course.Books.Count() Book(s)</span>
+                                            <a asp-controller="CourseBooks" asp-action="Index" asp-route-courseId="@course.Id" class="btn btn-sm btn-outline-indigo px-2 py-1" style="color: #4f46e5; border-color: #4f46e5;">Manage Books</a>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="d-flex align-items-center gap-2">
+                                            <span class="text-muted small fst-italic">No Books Assigned</span>
+                                            <a asp-controller="CourseBooks" asp-action="Index" asp-route-courseId="@course.Id" class="btn btn-sm btn-outline-secondary px-2 py-1">Add Books</a>
+                                        </div>
+                                    }
+                                </td>
+                                <td class="pe-4 text-end">
+                                    <div class="btn-group" role="group">
+                                        <a asp-action="Edit" asp-route-Uuid="@course.Uuid" class="btn btn-sm btn-outline-warning rounded-start-3 px-2 py-1" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-Uuid="@course.Uuid" class="btn btn-sm btn-outline-danger rounded-end-3 px-2 py-1" title="Delete">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
                         }
-                        else
-                        {
-                            <span class="text-muted small">No Books Assigned </span>
-                            <a asp-controller="CourseBooks" asp-action="Index" asp-route-courseId="@course.Id" class="btn btn-sm btn-outline-secondary ms-2">Add Books</a>
-                        }
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-Uuid="@course.Uuid" class="btn btn-sm btn-warning">Edit</a>
-                        <a asp-action="Delete" asp-route-Uuid="@course.Uuid" class="btn btn-sm btn-danger">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
+
+<style>
+    .btn-outline-indigo:hover {
+        background-color: #4f46e5;
+        color: white !important;
+        border-color: #4f46e5 !important;
+    }
+</style>

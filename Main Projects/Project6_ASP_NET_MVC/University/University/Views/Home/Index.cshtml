@@ -2,7 +2,235 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container-fluid px-4">
+    <div class="card bg-indigo text-white mb-4 rounded-4 shadow-sm border-0 mt-4" style="background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);">
+        <div class="card-body p-4 p-sm-5">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <span class="badge bg-white text-indigo px-3 py-2 rounded-pill fw-bold mb-3 shadow-sm">Admin Portal</span>
+                    <h1 class="display-6 fw-bold mb-2">Welcome Back!</h1>
+                    <p class="lead text-white-50 mb-0">Manage university records, student enrollments, course catalogs, and academic pathways all in one centralized platform.</p>
+                </div>
+                <div class="col-lg-4 text-end d-none d-lg-block">
+                    <i class="fas fa-university fa-5x text-white-50 opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h4 class="fw-bold text-dark mb-3">Management Modules</h4>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4 mb-5">
+        <!-- Students -->
+        <div class="col">
+            <div class="card h-100 border-0 rounded-4 shadow-sm hover-card">
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="p-3 bg-indigo-subtle rounded-3 text-indigo me-3" style="background-color: rgba(79, 70, 229, 0.1);">
+                                <i class="fas fa-users fa-lg text-indigo" style="color: #4f46e5;"></i>
+                            </div>
+                            <h5 class="card-title fw-bold text-dark mb-0">Students</h5>
+                        </div>
+                        <p class="card-text text-muted small">Manage student profiles, academic histories, and administrative records.</p>
+                    </div>
+                    <a asp-controller="Students" asp-action="Index" class="btn btn-outline-indigo mt-3 rounded-3 fw-semibold text-decoration-none d-flex align-items-center justify-content-between">
+                        <span>View Students</span>
+                        <i class="fas fa-arrow-right small"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enrollments -->
+        <div class="col">
+            <div class="card h-100 border-0 rounded-4 shadow-sm hover-card">
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="p-3 rounded-3 me-3" style="background-color: rgba(79, 70, 229, 0.1);">
+                                <i class="fas fa-clipboard-list fa-lg" style="color: #4f46e5;"></i>
+                            </div>
+                            <h5 class="card-title fw-bold text-dark mb-0">Enrollments</h5>
+                        </div>
+                        <p class="card-text text-muted small">Track student class registrations, final grades, and transcripts.</p>
+                    </div>
+                    <a asp-controller="Enrollments" asp-action="Index" class="btn btn-outline-indigo mt-3 rounded-3 fw-semibold text-decoration-none d-flex align-items-center justify-content-between">
+                        <span>View Enrollments</span>
+                        <i class="fas fa-arrow-right small"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Courses -->
+        <div class="col">
+            <div class="card h-100 border-0 rounded-4 shadow-sm hover-card">
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="p-3 rounded-3 me-3" style="background-color: rgba(79, 70, 229, 0.1);">
+                                <i class="fas fa-book-open fa-lg" style="color: #4f46e5;"></i>
+                            </div>
+                            <h5 class="card-title fw-bold text-dark mb-0">Courses</h5>
+                        </div>
+                        <p class="card-text text-muted small">Browse available courses, descriptions, credits, and assigned books.</p>
+                    </div>
+                    <a asp-controller="Courses" asp-action="Index" class="btn btn-outline-indigo mt-3 rounded-3 fw-semibold text-decoration-none d-flex align-items-center justify-content-between">
+                        <span>View Courses</span>
+                        <i class="fas fa-arrow-right small"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Course Sections -->
+        <div class="col">
+            <div class="card h-100 border-0 rounded-4 shadow-sm hover-card">
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="p-3 rounded-3 me-3" style="background-color: rgba(79, 70, 229, 0.1);">
+                                <i class="fas fa-calendar-alt fa-lg" style="color: #4f46e5;"></i>
+                            </div>
+                            <h5 class="card-title fw-bold text-dark mb-0">Course Sections</h5>
+                        </div>
+                        <p class="card-text text-muted small">Configure semesters, timetables, time slots, and classroom capacities.</p>
+                    </div>
+                    <a asp-controller="CourseSections" asp-action="Index" class="btn btn-outline-indigo mt-3 rounded-3 fw-semibold text-decoration-none d-flex align-items-center justify-content-between">
+                        <span>View Sections</span>
+                        <i class="fas fa-arrow-right small"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prerequisites -->
+        <div class="col">
+            <div class="card h-100 border-0 rounded-4 shadow-sm hover-card">
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="p-3 rounded-3 me-3" style="background-color: rgba(79, 70, 229, 0.1);">
+                                <i class="fas fa-project-diagram fa-lg" style="color: #4f46e5;"></i>
+                            </div>
+                            <h5 class="card-title fw-bold text-dark mb-0">Prerequisites</h5>
+                        </div>
+                        <p class="card-text text-muted small">Set minimum grade prerequisites and required antecedent courses.</p>
+                    </div>
+                    <a asp-controller="CoursePrerequisits" asp-action="Index" class="btn btn-outline-indigo mt-3 rounded-3 fw-semibold text-decoration-none d-flex align-items-center justify-content-between">
+                        <span>View Prerequisites</span>
+                        <i class="fas fa-arrow-right small"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Waitlist Entries -->
+        <div class="col">
+            <div class="card h-100 border-0 rounded-4 shadow-sm hover-card">
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="p-3 rounded-3 me-3" style="background-color: rgba(79, 70, 229, 0.1);">
+                                <i class="fas fa-clock fa-lg" style="color: #4f46e5;"></i>
+                            </div>
+                            <h5 class="card-title fw-bold text-dark mb-0">Waitlist Entries</h5>
+                        </div>
+                        <p class="card-text text-muted small">Monitor queue positions, seat offerings, and expiration tracking.</p>
+                    </div>
+                    <a asp-controller="WaitlistEntrys" asp-action="Index" class="btn btn-outline-indigo mt-3 rounded-3 fw-semibold text-decoration-none d-flex align-items-center justify-content-between">
+                        <span>View Waitlists</span>
+                        <i class="fas fa-arrow-right small"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Degree Programs -->
+        <div class="col">
+            <div class="card h-100 border-0 rounded-4 shadow-sm hover-card">
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="p-3 rounded-3 me-3" style="background-color: rgba(79, 70, 229, 0.1);">
+                                <i class="fas fa-graduation-cap fa-lg" style="color: #4f46e5;"></i>
+                            </div>
+                            <h5 class="card-title fw-bold text-dark mb-0">Degree Programs</h5>
+                        </div>
+                        <p class="card-text text-muted small">Manage faculty catalog years and total graduation credit requirements.</p>
+                    </div>
+                    <a asp-controller="DegreePrograms" asp-action="Index" class="btn btn-outline-indigo mt-3 rounded-3 fw-semibold text-decoration-none d-flex align-items-center justify-content-between">
+                        <span>View Programs</span>
+                        <i class="fas fa-arrow-right small"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Degree Requirements -->
+        <div class="col">
+            <div class="card h-100 border-0 rounded-4 shadow-sm hover-card">
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="p-3 rounded-3 me-3" style="background-color: rgba(79, 70, 229, 0.1);">
+                                <i class="fas fa-tasks fa-lg" style="color: #4f46e5;"></i>
+                            </div>
+                            <h5 class="card-title fw-bold text-dark mb-0">Requirements</h5>
+                        </div>
+                        <p class="card-text text-muted small">Define category minimum credits and level thresholds for programs.</p>
+                    </div>
+                    <a asp-controller="DegreeRequirements" asp-action="Index" class="btn btn-outline-indigo mt-3 rounded-3 fw-semibold text-decoration-none d-flex align-items-center justify-content-between">
+                        <span>View Requirements</span>
+                        <i class="fas fa-arrow-right small"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Books Catalog -->
+        <div class="col">
+            <div class="card h-100 border-0 rounded-4 shadow-sm hover-card">
+                <div class="card-body p-4 d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="p-3 rounded-3 me-3" style="background-color: rgba(79, 70, 229, 0.1);">
+                                <i class="fas fa-book fa-lg" style="color: #4f46e5;"></i>
+                            </div>
+                            <h5 class="card-title fw-bold text-dark mb-0">Books Catalog</h5>
+                        </div>
+                        <p class="card-text text-muted small">Manage textbook inventory, pricing, authors, and course book linkages.</p>
+                    </div>
+                    <a asp-controller="Books" asp-action="Index" class="btn btn-outline-indigo mt-3 rounded-3 fw-semibold text-decoration-none d-flex align-items-center justify-content-between">
+                        <span>View Books</span>
+                        <i class="fas fa-arrow-right small"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<style>
+    .btn-outline-indigo {
+        color: #4f46e5;
+        border-color: #4f46e5;
+        background-color: transparent;
+        transition: all 0.2s ease-in-out;
+    }
+
+        .btn-outline-indigo:hover {
+            background-color: #4f46e5;
+            color: white;
+            border-color: #4f46e5;
+        }
+
+    .hover-card {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+
+        .hover-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 .5rem 1rem rgba(0,0,0,.08) !important;
+        }
+</style>
