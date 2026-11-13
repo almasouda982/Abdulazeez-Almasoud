@@ -1,49 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:universitymobileapp/app/screens/detailScreens/enrollmentDetailsScreen.dart';
-import '../../data/EnrollmentService.dart';
-import '../../data/connection.dart';
+import '../../data/CourseService.dart';
+import 'detailScreens/courseDetailsScreen.dart';
 
-class EnrollmentScreen extends StatefulWidget {
-  const EnrollmentScreen({super.key});
+class CoursesScreen extends StatefulWidget {
+  const CoursesScreen({super.key});
 
   @override
-  State<EnrollmentScreen> createState() => _EnrollmentScreenState();
+  State<CoursesScreen> createState() => _CoursesScreenState();
 }
 
-class _EnrollmentScreenState extends State<EnrollmentScreen> {
-  final EnrollmentService enrollmentService = EnrollmentService();
-  late Future<List<dynamic>> enrollments;
+class _CoursesScreenState extends State<CoursesScreen> {
+  final CourseService courseService = CourseService();
+  late Future<List<dynamic>> courses;
 
   @override
   void initState() {
     super.initState();
-    enrollments = enrollmentService.getEnrollments();
-  }
-
-  Color _getGradeColor(String? grade) {
-    if (grade == null) return Colors.grey;
-    final cleanGrade = grade.trim().toUpperCase();
-    const greenGrades = ['A+', 'A', 'A-', 'B+', 'B'];
-    const amberGrades = ['B-', 'C+', 'C', 'C-'];
-
-    if (greenGrades.contains(cleanGrade)) {
-      return Colors.green;
-    } else if (amberGrades.contains(cleanGrade)) {
-      return Colors.amber.shade700;
-    } else {
-      return Colors.red;
-    }
-  }
-
-  String _formatStatus(dynamic rawStatus) {
-    if (rawStatus == null) return 'N/A';
-    if (rawStatus is bool) {
-      return rawStatus ? 'Enrolled' : 'Not Enrolled';
-    }
-    final str = rawStatus.toString().toLowerCase();
-    if (str == 'true') return 'Enrolled';
-    if (str == 'false') return 'Not Enrolled';
-    return rawStatus.toString();
+    courses = courseService.getCourses();
   }
 
   @override
@@ -52,7 +25,7 @@ class _EnrollmentScreenState extends State<EnrollmentScreen> {
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
         title: const Text(
-          'Enrollments Management',
+          'Courses Directory',
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
         backgroundColor: Colors.indigo,
@@ -61,7 +34,7 @@ class _EnrollmentScreenState extends State<EnrollmentScreen> {
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: FutureBuilder<List<dynamic>>(
-        future: enrollments,
+        future: courses,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
@@ -78,17 +51,17 @@ class _EnrollmentScreenState extends State<EnrollmentScreen> {
             );
           }
 
-          final enrollmentsList = snapshot.data ?? [];
+          final coursesList = snapshot.data ?? [];
 
-          if (enrollmentsList.isEmpty) {
+          if (coursesList.isEmpty) {
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.app_registration_rounded, size: 64, color: Colors.grey[400]),
+                  Icon(Icons.school_outlined, size: 64, color: Colors.grey[400]),
                   const SizedBox(height: 16),
                   Text(
-                    'No Enrollments Found',
+                    'No Courses Found',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -102,12 +75,13 @@ class _EnrollmentScreenState extends State<EnrollmentScreen> {
 
           return ListView.builder(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            itemCount: enrollmentsList.length,
+            itemCount: coursesList.length,
             itemBuilder: (context, index) {
-              final enrollment = enrollmentsList[index];
-              final gradeStr = enrollment['finalGrade']?.toString() ?? 'N/A';
-              final gradeColor = _getGradeColor(gradeStr);
-              final statusText = _formatStatus(enrollment['status']);
+              final course = coursesList[index];
+              final books = course['books'] as List<dynamic>? ?? [];
+              final int booksCount = books.length;
+
+              final Color booksColor = booksCount > 0 ? Colors.green : Colors.grey;
 
               return Container(
                 margin: const EdgeInsets.symmetric(vertical: 6),
@@ -132,24 +106,25 @@ class _EnrollmentScreenState extends State<EnrollmentScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => EnrollmentDetailsScreen(enrollment),
+                          builder: (context) => CourseDetailsScreen(course),
                         ),
                       );
                     },
                     child: Padding(
-                      padding: const EdgeInsets.all(16.0),
+                      padding: const EdgeInsets.all(12.0),
                       child: Row(
                         children: [
                           Container(
-                            padding: const EdgeInsets.all(12),
+                            width: 50,
+                            height: 64,
                             decoration: BoxDecoration(
                               color: Colors.indigo.withOpacity(0.08),
-                              shape: BoxShape.circle,
+                              borderRadius: BorderRadius.circular(10),
                             ),
                             child: const Icon(
-                              Icons.bookmark_outlined,
+                              Icons.school_outlined,
                               color: Colors.indigo,
-                              size: 24,
+                              size: 26,
                             ),
                           ),
                           const SizedBox(width: 16),
@@ -158,7 +133,7 @@ class _EnrollmentScreenState extends State<EnrollmentScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  enrollment['lastName']?.toString() ?? 'N/A',
+                                  course['title']?.toString() ?? 'N/A',
                                   style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
@@ -167,9 +142,10 @@ class _EnrollmentScreenState extends State<EnrollmentScreen> {
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  'Section: ${enrollment['sectionNumber']?.toString() ?? 'N/A'}',
+                                  course['code']?.toString() ?? '',
                                   style: TextStyle(
                                     fontSize: 13,
+                                    fontWeight: FontWeight.w500,
                                     color: Colors.grey[600],
                                   ),
                                 ),
@@ -182,13 +158,13 @@ class _EnrollmentScreenState extends State<EnrollmentScreen> {
                                         vertical: 2,
                                       ),
                                       decoration: BoxDecoration(
-                                        color: gradeColor.withOpacity(0.1),
+                                        color: Colors.indigo.withOpacity(0.08),
                                         borderRadius: BorderRadius.circular(6),
                                       ),
                                       child: Text(
-                                        'Grade: $gradeStr',
-                                        style: TextStyle(
-                                          color: gradeColor,
+                                        'Credits: ${course['credits'] ?? 'N/A'}',
+                                        style: const TextStyle(
+                                          color: Colors.indigo,
                                           fontSize: 11,
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -201,15 +177,15 @@ class _EnrollmentScreenState extends State<EnrollmentScreen> {
                                         vertical: 2,
                                       ),
                                       decoration: BoxDecoration(
-                                        color: Colors.blue.withOpacity(0.08),
+                                        color: booksColor.withOpacity(0.08),
                                         borderRadius: BorderRadius.circular(6),
                                       ),
                                       child: Text(
-                                        'Status: $statusText',
-                                        style: const TextStyle(
-                                          color: Colors.blue,
+                                        'Books: $booksCount',
+                                        style: TextStyle(
+                                          color: booksColor,
                                           fontSize: 11,
-                                          fontWeight: FontWeight.w600,
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                     ),

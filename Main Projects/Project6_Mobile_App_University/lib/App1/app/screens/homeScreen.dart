@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:universitymobileapp/app/screens/bookScreen.dart';
-import 'package:universitymobileapp/app/screens/courseBookScreen.dart';
-import 'package:universitymobileapp/app/screens/coursePrerequisiteScreen.dart';
-import 'package:universitymobileapp/app/screens/courseSectionScreen.dart';
-import 'package:universitymobileapp/app/screens/coursesScreen.dart';
-import 'package:universitymobileapp/app/screens/degreeProgramScreen.dart';
-import 'package:universitymobileapp/app/screens/degreeRequirementScreen.dart';
-import 'package:universitymobileapp/app/screens/enrollmentScreen.dart';
-import 'package:universitymobileapp/app/screens/studentsScreen.dart';
-import 'package:universitymobileapp/app/screens/waitlistEntryScreen.dart';
+import 'package:universitymobileapp/App1/app/screens/bookScreen.dart';
+import 'package:universitymobileapp/App1/app/screens/courseBookScreen.dart';
+import 'package:universitymobileapp/App1/app/screens/coursePrerequisiteScreen.dart';
+import 'package:universitymobileapp/App1/app/screens/courseSectionScreen.dart';
+import 'package:universitymobileapp/App1/app/screens/coursesScreen.dart';
+import 'package:universitymobileapp/App1/app/screens/degreeProgramScreen.dart';
+import 'package:universitymobileapp/App1/app/screens/degreeRequirementScreen.dart';
+import 'package:universitymobileapp/App1/app/screens/enrollmentScreen.dart';
+import 'package:universitymobileapp/App1/app/screens/studentsScreen.dart';
+import 'package:universitymobileapp/App1/app/screens/waitlistEntryScreen.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen(

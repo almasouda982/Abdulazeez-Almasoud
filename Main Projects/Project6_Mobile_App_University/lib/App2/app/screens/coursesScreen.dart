@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:universitymobileapp/app/screens/detailScreens/studentDetailsScreen.dart';
-import '../../data/StudentService.dart';
-import '../../data/connection.dart';
+import '../../data/CourseService.dart';
+import 'detailScreens/courseDetailsScreen.dart';
 
-class StudentsScreen extends StatefulWidget {
-  const StudentsScreen({super.key});
+class CoursesScreen extends StatefulWidget {
+  const CoursesScreen({super.key});
 
   @override
-  State<StudentsScreen> createState() => _StudentsScreenState();
+  State<CoursesScreen> createState() => _CoursesScreenState();
 }
 
-class _StudentsScreenState extends State<StudentsScreen> {
-  final StudentService studentService = StudentService();
-  late Future<List<dynamic>> students;
+class _CoursesScreenState extends State<CoursesScreen> {
+  final CourseService courseService = CourseService();
+  late Future<List<dynamic>> courses;
 
   @override
   void initState() {
     super.initState();
-    students = studentService.getStudents();
+    courses = courseService.getCourses();
   }
 
   @override
@@ -26,7 +25,7 @@ class _StudentsScreenState extends State<StudentsScreen> {
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
         title: const Text(
-          'Students Directory',
+          'Courses Directory',
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
         backgroundColor: Colors.indigo,
@@ -35,7 +34,7 @@ class _StudentsScreenState extends State<StudentsScreen> {
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: FutureBuilder<List<dynamic>>(
-        future: students,
+        future: courses,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
@@ -52,17 +51,17 @@ class _StudentsScreenState extends State<StudentsScreen> {
             );
           }
 
-          final studentsList = snapshot.data ?? [];
+          final coursesList = snapshot.data ?? [];
 
-          if (studentsList.isEmpty) {
+          if (coursesList.isEmpty) {
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.badge_outlined, size: 64, color: Colors.grey[400]),
+                  Icon(Icons.school_outlined, size: 64, color: Colors.grey[400]),
                   const SizedBox(height: 16),
                   Text(
-                    'No Students Found',
+                    'No Courses Found',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -76,16 +75,13 @@ class _StudentsScreenState extends State<StudentsScreen> {
 
           return ListView.builder(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            itemCount: studentsList.length,
+            itemCount: coursesList.length,
             itemBuilder: (context, index) {
-              final student = studentsList[index];
+              final course = coursesList[index];
+              final books = course['books'] as List<dynamic>? ?? [];
+              final int booksCount = books.length;
 
-              final String imagePath = student['imageUrl']?.toString() ?? '';
-              final String imageUrl = imagePath.isEmpty
-                  ? ''
-                  : Uri.parse(ConnectionString.dashboard)
-                  .resolve(imagePath)
-                  .toString();
+              final Color booksColor = booksCount > 0 ? Colors.green : Colors.grey;
 
               return Container(
                 margin: const EdgeInsets.symmetric(vertical: 6),
@@ -110,7 +106,7 @@ class _StudentsScreenState extends State<StudentsScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => StudentDetailsScreen(student),
+                          builder: (context) => CourseDetailsScreen(course),
                         ),
                       );
                     },
@@ -118,36 +114,17 @@ class _StudentsScreenState extends State<StudentsScreen> {
                       padding: const EdgeInsets.all(12.0),
                       child: Row(
                         children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: imageUrl.isNotEmpty
-                                ? Image.network(
-                              imageUrl,
-                              width: 80,
-                              height: 60,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) {
-                                return Container(
-                                  width: 80,
-                                  height: 60,
-                                  color: Colors.indigo.withOpacity(0.08),
-                                  child: const Icon(
-                                    Icons.person,
-                                    color: Colors.indigo,
-                                    size: 30,
-                                  ),
-                                );
-                              },
-                            )
-                                : Container(
-                              width: 80,
-                              height: 60,
+                          Container(
+                            width: 50,
+                            height: 64,
+                            decoration: BoxDecoration(
                               color: Colors.indigo.withOpacity(0.08),
-                              child: const Icon(
-                                Icons.person,
-                                color: Colors.indigo,
-                                size: 30,
-                              ),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const Icon(
+                              Icons.school_outlined,
+                              color: Colors.indigo,
+                              size: 26,
                             ),
                           ),
                           const SizedBox(width: 16),
@@ -156,7 +133,7 @@ class _StudentsScreenState extends State<StudentsScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  student['name']?.toString() ?? 'Unknown',
+                                  course['title']?.toString() ?? 'N/A',
                                   style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
@@ -165,30 +142,54 @@ class _StudentsScreenState extends State<StudentsScreen> {
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  student['email']?.toString() ?? 'No email',
+                                  course['code']?.toString() ?? '',
                                   style: TextStyle(
                                     fontSize: 13,
+                                    fontWeight: FontWeight.w500,
                                     color: Colors.grey[600],
                                   ),
                                 ),
-                                const SizedBox(height: 6),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 8,
-                                    vertical: 2,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.indigo.withOpacity(0.08),
-                                    borderRadius: BorderRadius.circular(6),
-                                  ),
-                                  child: Text(
-                                    'Program: ${student['degreeProgramName'] ?? 'N/A'}',
-                                    style: const TextStyle(
-                                      color: Colors.indigo,
-                                      fontSize: 11,
-                                      fontWeight: FontWeight.w600,
+                                const SizedBox(height: 8),
+                                Row(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 8,
+                                        vertical: 2,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: Colors.indigo.withOpacity(0.08),
+                                        borderRadius: BorderRadius.circular(6),
+                                      ),
+                                      child: Text(
+                                        'Credits: ${course['credits'] ?? 'N/A'}',
+                                        style: const TextStyle(
+                                          color: Colors.indigo,
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                    const SizedBox(width: 8),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 8,
+                                        vertical: 2,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: booksColor.withOpacity(0.08),
+                                        borderRadius: BorderRadius.circular(6),
+                                      ),
+                                      child: Text(
+                                        'Books: $booksCount',
+                                        style: TextStyle(
+                                          color: booksColor,
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
