@@ -1,9 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:universitymobileapp/App1/app/screens/enrollmentScreen.dart';
 import 'package:universitymobileapp/App1/app/screens/loginScreen.dart';
 
+// void main() {
+//   runApp(const MyApp());
+// }
+
+
 void main() {
-  runApp(const MyApp());
+  runApp(
+      MultiProvider(
+        providers: [
+
+        ],
+        child:   const MyApp(),
+      )
+  );
 }
 
 class MyApp extends StatelessWidget {
