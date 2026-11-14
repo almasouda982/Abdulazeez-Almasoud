@@ -24,11 +24,11 @@ class UserService {
     );
 
     if (response.statusCode == 200) {
-      return json.decode(response.body);;
+      return json.decode(response.body);
     } else if (response.statusCode == 401) {
       return null;
     } else {
-      throw Exception('Failed to login');
+      throw Exception('Failed to login: ');
     }
   }
 

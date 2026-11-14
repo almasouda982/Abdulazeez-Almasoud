@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../App1/data/UserService.dart';
+import '../../App2/data/UserService.dart';
 
 class UserProvider extends ChangeNotifier {
 
@@ -18,8 +18,8 @@ class UserProvider extends ChangeNotifier {
 
   Future<bool> register(
       String name,
-      String email,
       String username,
+      String email,
       String password,
       ) async {
 

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:universitymobileapp/App1/app/screens/enrollmentScreen.dart';
-import 'package:universitymobileapp/App1/app/screens/loginScreen.dart';
+import 'package:universitymobileapp/App2/app/screens/homeScreen.dart';
+import 'package:universitymobileapp/App2/app/screens/loginScreen.dart';
+
+import 'App2/providers/UserProvider.dart';
 
 // void main() {
 //   runApp(const MyApp());
@@ -12,9 +14,9 @@ void main() {
   runApp(
       MultiProvider(
         providers: [
-
+          ChangeNotifierProvider(create: (_) => UserProvider()),
         ],
-        child:   const MyApp(),
+        child: const MyApp(),
       )
   );
 }

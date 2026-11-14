@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../data/UserService.dart';
+import 'package:provider/provider.dart';
+import '../../providers/UserProvider.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -15,58 +16,38 @@ class _SignupScreenState extends State<SignupScreen> {
   final passwordcontroller = TextEditingController();
 
   final formKey = GlobalKey<FormState>();
-  final UserService userService = UserService();
-  bool isLoading = false;
 
   void register() async {
     if (!formKey.currentState!.validate()) {
       return;
     }
 
-    setState(() {
-      isLoading = true;
-    });
+    final userProvider = context.read<UserProvider>();
 
-    try {
-      final user = await userService.register(
-        namecontroller.text.trim(),
-        usernamecontroller.text.trim(),
-        emailcontroller.text.trim(),
-        passwordcontroller.text,
-      );
+    final success = await userProvider.register(
+      namecontroller.text.trim(),
+      emailcontroller.text.trim(),
+      usernamecontroller.text.trim(),
+      passwordcontroller.text,
+    );
 
-      if (!mounted) return;
+    if (!mounted) return;
 
-      if (user != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Registration Successful'),
-            backgroundColor: Colors.green,
-          ),
-        );
-        Navigator.pop(context);
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Username or Email already exists'),
-            backgroundColor: Colors.red,
-          ),
-        );
-      }
-    } catch (e) {
-      if (!mounted) return;
+    if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error: $e'),
+        const SnackBar(
+          content: Text('Registration Successful'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      Navigator.pop(context);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Username or Email already exists'),
           backgroundColor: Colors.red,
         ),
       );
-    } finally {
-      if (mounted) {
-        setState(() {
-          isLoading = false;
-        });
-      }
     }
   }
 
@@ -282,34 +263,40 @@ class _SignupScreenState extends State<SignupScreen> {
                     },
                   ),
                   const SizedBox(height: 28),
-                  ElevatedButton(
-                    onPressed: isLoading ? null : register,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.indigo,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      elevation: 2,
-                    ),
-                    child: isLoading
-                        ? const SizedBox(
-                      height: 20,
-                      width: 20,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: Colors.white,
-                      ),
-                    )
-                        : const Text(
-                      'Sign up',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+
+                  Consumer<UserProvider>(
+                    builder: (context, userProvider, child) {
+                      return ElevatedButton(
+                        onPressed: userProvider.isLoading ? null : register,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.indigo,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          elevation: 2,
+                        ),
+                        child: userProvider.isLoading
+                            ? const SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
+                            : const Text(
+                          'Sign up',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      );
+                    },
                   ),
+
                   const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
