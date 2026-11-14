@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../data/waitlistEntryService.dart';
+import 'package:provider/provider.dart';
+import '../../providers/WaitlistEntryProvider.dart';
 import 'detailScreens/waitlistEntryDetailsScreen.dart';
 
 class WaitlistEntryScreen extends StatefulWidget {
@@ -10,13 +11,12 @@ class WaitlistEntryScreen extends StatefulWidget {
 }
 
 class _WaitlistEntryScreenState extends State<WaitlistEntryScreen> {
-  final WaitlistEntryService waitlistService = WaitlistEntryService();
-  late Future<List<dynamic>> waitlistEntries;
-
   @override
   void initState() {
     super.initState();
-    waitlistEntries = waitlistService.getWaitlistEntrys();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<WaitlistEntryProvider>().fetchWaitlistEntries();
+    });
   }
 
   Map<String, dynamic> _getStatusDetails(dynamic rawStatus) {
@@ -47,25 +47,24 @@ class _WaitlistEntryScreenState extends State<WaitlistEntryScreen> {
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: FutureBuilder<List<dynamic>>(
-        future: waitlistEntries,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+      body: Consumer<WaitlistEntryProvider>(
+        builder: (context, provider, child) {
+          if (provider.isLoading) {
             return const Center(
               child: CircularProgressIndicator(color: Colors.indigo),
             );
           }
 
-          if (snapshot.hasError) {
+          if (provider.error != null) {
             return Center(
               child: Text(
-                'Error: ${snapshot.error}',
+                'Error: ${provider.error}',
                 style: const TextStyle(color: Colors.redAccent),
               ),
             );
           }
 
-          final entriesList = snapshot.data ?? [];
+          final entriesList = provider.waitlistEntries;
 
           if (entriesList.isEmpty) {
             return Center(

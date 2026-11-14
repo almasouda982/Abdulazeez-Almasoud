@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../data/bookService.dart';
+import 'package:provider/provider.dart';
+import '../../providers/BookProvider.dart';
 import '../../data/connection.dart';
 import 'detailScreens/bookDetailsScreen.dart';
 
@@ -11,13 +12,12 @@ class BooksScreen extends StatefulWidget {
 }
 
 class _BooksScreenState extends State<BooksScreen> {
-  final BookService bookService = BookService();
-  late Future<List<dynamic>> books;
-
   @override
   void initState() {
     super.initState();
-    books = bookService.getBooks();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<BookProvider>().fetchBooks();
+    });
   }
 
   @override
@@ -34,25 +34,24 @@ class _BooksScreenState extends State<BooksScreen> {
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: FutureBuilder<List<dynamic>>(
-        future: books,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+      body: Consumer<BookProvider>(
+        builder: (context, bookProvider, child) {
+          if (bookProvider.isLoading) {
             return const Center(
               child: CircularProgressIndicator(color: Colors.indigo),
             );
           }
 
-          if (snapshot.hasError) {
+          if (bookProvider.error != null) {
             return Center(
               child: Text(
-                'Error: ${snapshot.error}',
+                'Error: ${bookProvider.error}',
                 style: const TextStyle(color: Colors.redAccent),
               ),
             );
           }
 
-          final booksList = snapshot.data ?? [];
+          final booksList = bookProvider.books;
 
           if (booksList.isEmpty) {
             return Center(

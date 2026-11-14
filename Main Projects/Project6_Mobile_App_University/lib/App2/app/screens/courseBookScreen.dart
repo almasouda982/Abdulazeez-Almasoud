@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../data/bookService.dart';
+import 'package:provider/provider.dart';
+import '../../providers/CourseBookProvider.dart';
+import '../../providers/BookProvider.dart';
 import '../../data/connection.dart';
-import '../../data/courseBookService.dart';
 import 'detailScreens/courseBookDetailsScreen.dart';
 
 class CourseBookScreen extends StatefulWidget {
@@ -15,148 +16,128 @@ class CourseBookScreen extends StatefulWidget {
 }
 
 class _CourseBookScreenState extends State<CourseBookScreen> {
-  final CourseBookService courseBookService = CourseBookService();
-  final BookService bookService = BookService();
-  late Future<List<dynamic>> courseBooks;
-
   @override
   void initState() {
     super.initState();
-    loadBooks();
-  }
-
-  void loadBooks() {
-    courseBooks = courseBookService.getBooksForCourse(widget.courseId);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<CourseBookProvider>().fetchBooksForCourse(widget.courseId);
+      context.read<BookProvider>().fetchBooks();
+    });
   }
 
   Future<void> deleteBook(int bookId) async {
-    try {
-      await courseBookService.removeBookFromCourse(widget.courseId, bookId);
+    final success = await context.read<CourseBookProvider>().removeBookFromCourse(widget.courseId, bookId);
 
-      if (!mounted) return;
+    if (!mounted) return;
 
-      setState(() {
-        loadBooks();
-      });
-
+    if (success) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Book successfully removed from course')),
       );
-    } catch (e) {
-      if (!mounted) return;
+    } else {
+      final err = context.read<CourseBookProvider>().error ?? 'Error removing book';
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
+        SnackBar(content: Text(err)),
       );
     }
   }
 
-  void _showAddBookDialog(List<dynamic> currentAssignedBooks) async {
-    try {
-      final allBooks = await bookService.getBooks();
+  void _showAddBookDialog(List<dynamic> currentAssignedBooks) {
+    final bookProvider = context.read<BookProvider>();
+    final allBooks = bookProvider.books;
 
-      final assignedBookIds = currentAssignedBooks.map((cb) {
-        final bData = cb['book'] ?? cb['Book'] ?? {};
-        return cb['bookId'] ?? cb['BookId'] ?? bData['id'] ?? bData['Id'];
-      }).toSet();
+    final assignedBookIds = currentAssignedBooks.map((cb) {
+      final bData = cb['book'] ?? cb['Book'] ?? {};
+      return cb['bookId'] ?? cb['BookId'] ?? bData['id'] ?? bData['Id'];
+    }).toSet();
 
-      final availableBooks = allBooks.where((book) {
-        final bookId = book['id'] ?? book['Id'];
-        return !assignedBookIds.contains(bookId);
-      }).toList();
+    final availableBooks = allBooks.where((book) {
+      final bookId = book['id'] ?? book['Id'];
+      return !assignedBookIds.contains(bookId);
+    }).toList();
 
-      if (!mounted) return;
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          title: const Text(
+            'Assign Book to Course',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+          ),
+          content: SizedBox(
+            width: double.maxFinite,
+            height: 350,
+            child: availableBooks.isEmpty
+                ? const Center(
+              child: Text(
+                'All available books are already assigned to this course.',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.grey),
+              ),
+            )
+                : ListView.builder(
+              itemCount: availableBooks.length,
+              itemBuilder: (context, index) {
+                final book = availableBooks[index];
+                final bookId = book['id'] ?? book['Id'];
+                final bookTitle = book['title'] ?? book['Title'] ?? 'Unknown Book';
+                final bookAuthor = book['author'] ?? book['Author'] ?? 'N/A';
 
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            title: const Text(
-              'Assign Book to Course',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-            ),
-            content: SizedBox(
-              width: double.maxFinite,
-              height: 350,
-              child: availableBooks.isEmpty
-                  ? const Center(
-                child: Text(
-                  'All available books are already assigned to this course.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.grey),
-                ),
-              )
-                  : ListView.builder(
-                itemCount: availableBooks.length,
-                itemBuilder: (context, index) {
-                  final book = availableBooks[index];
-                  final bookId = book['id'] ?? book['Id'];
-                  final bookTitle = book['title'] ?? book['Title'] ?? 'Unknown Book';
-                  final bookAuthor = book['author'] ?? book['Author'] ?? 'N/A';
-
-                  return Container(
-                    margin: const EdgeInsets.symmetric(vertical: 4),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: Colors.grey.shade200),
+                return Container(
+                  margin: const EdgeInsets.symmetric(vertical: 4),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.grey.shade200),
+                  ),
+                  child: ListTile(
+                    title: Text(
+                      bookTitle,
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                     ),
-                    child: ListTile(
-                      title: Text(
-                        bookTitle,
-                        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-                      ),
-                      subtitle: Text('Author: $bookAuthor', style: TextStyle(fontSize: 12, color: Colors.grey[600])),
-                      trailing: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.indigo,
-                          foregroundColor: Colors.white,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
+                    subtitle: Text('Author: $bookAuthor', style: TextStyle(fontSize: 12, color: Colors.grey[600])),
+                    trailing: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.indigo,
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
                         ),
-                        onPressed: () async {
-                          try {
-                            await courseBookService.addBookToCourse(widget.courseId, bookId);
-
-                            if (!mounted) return;
-                            Navigator.pop(context);
-
-                            setState(() {
-                              loadBooks();
-                            });
-
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Book successfully added to course')),
-                            );
-                          } catch (e) {
-                            Navigator.pop(context);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Error adding book: $e')),
-                            );
-                          }
-                        },
-                        child: const Text('Add', style: TextStyle(fontSize: 12)),
                       ),
+                      onPressed: () async {
+                        final success = await context.read<CourseBookProvider>().addBookToCourse(widget.courseId, bookId);
+
+                        if (!mounted) return;
+                        Navigator.pop(context);
+
+                        if (success) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Book successfully added to course')),
+                          );
+                        } else {
+                          final err = context.read<CourseBookProvider>().error ?? 'Error adding book';
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text(err)),
+                          );
+                        }
+                      },
+                      child: const Text('Add', style: TextStyle(fontSize: 12)),
                     ),
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
-              ),
-            ],
-          );
-        },
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to load available books: $e')),
-      );
-    }
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -173,25 +154,24 @@ class _CourseBookScreenState extends State<CourseBookScreen> {
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: FutureBuilder<List<dynamic>>(
-        future: courseBooks,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+      body: Consumer<CourseBookProvider>(
+        builder: (context, courseBookProvider, child) {
+          if (courseBookProvider.isLoading) {
             return const Center(
               child: CircularProgressIndicator(color: Colors.indigo),
             );
           }
 
-          if (snapshot.hasError) {
+          if (courseBookProvider.error != null) {
             return Center(
               child: Text(
-                'Error: ${snapshot.error}',
+                'Error: ${courseBookProvider.error}',
                 style: const TextStyle(color: Colors.redAccent),
               ),
             );
           }
 
-          final booksList = snapshot.data ?? [];
+          final booksList = courseBookProvider.courseBooks;
 
           return Scaffold(
             backgroundColor: Colors.grey[50],

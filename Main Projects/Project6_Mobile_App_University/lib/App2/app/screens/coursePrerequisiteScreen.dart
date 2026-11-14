@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../data/coursePrerequisiteService.dart';
+import 'package:provider/provider.dart';
+import '../../providers/CoursePrerequisiteProvider.dart';
 import 'detailScreens/coursePrerequisiteDetailsScreen.dart';
 
 class CoursePrerequisiteScreen extends StatefulWidget {
@@ -10,13 +11,12 @@ class CoursePrerequisiteScreen extends StatefulWidget {
 }
 
 class _CoursePrerequisiteScreenState extends State<CoursePrerequisiteScreen> {
-  final CoursePrerequisiteService prerequisiteService = CoursePrerequisiteService();
-  late Future<List<dynamic>> prerequisites;
-
   @override
   void initState() {
     super.initState();
-    prerequisites = prerequisiteService.getCoursePrerequisites();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<CoursePrerequisiteProvider>().fetchCoursePrerequisites();
+    });
   }
 
   @override
@@ -33,25 +33,24 @@ class _CoursePrerequisiteScreenState extends State<CoursePrerequisiteScreen> {
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: FutureBuilder<List<dynamic>>(
-        future: prerequisites,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+      body: Consumer<CoursePrerequisiteProvider>(
+        builder: (context, provider, child) {
+          if (provider.isLoading) {
             return const Center(
               child: CircularProgressIndicator(color: Colors.indigo),
             );
           }
 
-          if (snapshot.hasError) {
+          if (provider.error != null) {
             return Center(
               child: Text(
-                'Error: ${snapshot.error}',
+                'Error: ${provider.error}',
                 style: const TextStyle(color: Colors.redAccent),
               ),
             );
           }
 
-          final prereqsList = snapshot.data ?? [];
+          final prereqsList = provider.prerequisites;
 
           if (prereqsList.isEmpty) {
             return Center(

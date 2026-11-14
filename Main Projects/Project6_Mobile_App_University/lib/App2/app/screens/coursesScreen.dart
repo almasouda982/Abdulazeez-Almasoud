@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../data/CourseService.dart';
+import 'package:provider/provider.dart';
+import '../../providers/CourseProvider.dart';
 import 'detailScreens/courseDetailsScreen.dart';
 
 class CoursesScreen extends StatefulWidget {
@@ -10,13 +11,12 @@ class CoursesScreen extends StatefulWidget {
 }
 
 class _CoursesScreenState extends State<CoursesScreen> {
-  final CourseService courseService = CourseService();
-  late Future<List<dynamic>> courses;
-
   @override
   void initState() {
     super.initState();
-    courses = courseService.getCourses();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<CourseProvider>().fetchCourses();
+    });
   }
 
   @override
@@ -33,25 +33,24 @@ class _CoursesScreenState extends State<CoursesScreen> {
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: FutureBuilder<List<dynamic>>(
-        future: courses,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+      body: Consumer<CourseProvider>(
+        builder: (context, courseProvider, child) {
+          if (courseProvider.isLoading) {
             return const Center(
               child: CircularProgressIndicator(color: Colors.indigo),
             );
           }
 
-          if (snapshot.hasError) {
+          if (courseProvider.error != null) {
             return Center(
               child: Text(
-                'Error: ${snapshot.error}',
+                'Error: ${courseProvider.error}',
                 style: const TextStyle(color: Colors.redAccent),
               ),
             );
           }
 
-          final coursesList = snapshot.data ?? [];
+          final coursesList = courseProvider.courses;
 
           if (coursesList.isEmpty) {
             return Center(

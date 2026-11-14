@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:universitymobileapp/App2/app/screens/detailScreens/enrollmentDetailsScreen.dart';
-import '../../data/EnrollmentService.dart';
+import 'package:provider/provider.dart';
+import '../../providers/EnrollmentProvider.dart';
+import 'detailScreens/enrollmentDetailsScreen.dart';
 import '../../data/connection.dart';
 
 class EnrollmentScreen extends StatefulWidget {
@@ -11,13 +12,12 @@ class EnrollmentScreen extends StatefulWidget {
 }
 
 class _EnrollmentScreenState extends State<EnrollmentScreen> {
-  final EnrollmentService enrollmentService = EnrollmentService();
-  late Future<List<dynamic>> enrollments;
-
   @override
   void initState() {
     super.initState();
-    enrollments = enrollmentService.getEnrollments();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<EnrollmentProvider>().fetchEnrollments();
+    });
   }
 
   Color _getGradeColor(String? grade) {
@@ -60,25 +60,24 @@ class _EnrollmentScreenState extends State<EnrollmentScreen> {
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: FutureBuilder<List<dynamic>>(
-        future: enrollments,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+      body: Consumer<EnrollmentProvider>(
+        builder: (context, provider, child) {
+          if (provider.isLoading) {
             return const Center(
               child: CircularProgressIndicator(color: Colors.indigo),
             );
           }
 
-          if (snapshot.hasError) {
+          if (provider.error != null) {
             return Center(
               child: Text(
-                'Error: ${snapshot.error}',
+                'Error: ${provider.error}',
                 style: const TextStyle(color: Colors.redAccent),
               ),
             );
           }
 
-          final enrollmentsList = snapshot.data ?? [];
+          final enrollmentsList = provider.enrollments;
 
           if (enrollmentsList.isEmpty) {
             return Center(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../data/courseSectionService.dart';
+import 'package:provider/provider.dart';
+import '../../providers/CourseSectionProvider.dart';
 import 'detailScreens/courseSectionDetailsScreen.dart';
 
 class CourseSectionScreen extends StatefulWidget {
@@ -10,13 +11,12 @@ class CourseSectionScreen extends StatefulWidget {
 }
 
 class _CourseSectionScreenState extends State<CourseSectionScreen> {
-  final CourseSectionService sectionService = CourseSectionService();
-  late Future<List<dynamic>> courseSections;
-
   @override
   void initState() {
     super.initState();
-    courseSections = sectionService.getCourseSections();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<CourseSectionProvider>().fetchCourseSections();
+    });
   }
 
   @override
@@ -33,25 +33,24 @@ class _CourseSectionScreenState extends State<CourseSectionScreen> {
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: FutureBuilder<List<dynamic>>(
-        future: courseSections,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+      body: Consumer<CourseSectionProvider>(
+        builder: (context, provider, child) {
+          if (provider.isLoading) {
             return const Center(
               child: CircularProgressIndicator(color: Colors.indigo),
             );
           }
 
-          if (snapshot.hasError) {
+          if (provider.error != null) {
             return Center(
               child: Text(
-                'Error: ${snapshot.error}',
+                'Error: ${provider.error}',
                 style: const TextStyle(color: Colors.redAccent),
               ),
             );
           }
 
-          final sectionsList = snapshot.data ?? [];
+          final sectionsList = provider.courseSections;
 
           if (sectionsList.isEmpty) {
             return Center(
