@@ -1,49 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:universitymobileapp/app/screens/detailScreens/enrollmentDetailsScreen.dart';
-import '../../data/EnrollmentService.dart';
-import '../../data/connection.dart';
+import 'package:provider/provider.dart';
+import '../../providers/CourseSectionProvider.dart';
+import 'detailScreens/courseSectionDetailsScreen.dart';
 
-class EnrollmentScreen extends StatefulWidget {
-  const EnrollmentScreen({super.key});
+class CourseSectionScreen extends StatefulWidget {
+  const CourseSectionScreen({super.key});
 
   @override
-  State<EnrollmentScreen> createState() => _EnrollmentScreenState();
+  State<CourseSectionScreen> createState() => _CourseSectionScreenState();
 }
 
-class _EnrollmentScreenState extends State<EnrollmentScreen> {
-  final EnrollmentService enrollmentService = EnrollmentService();
-  late Future<List<dynamic>> enrollments;
-
+class _CourseSectionScreenState extends State<CourseSectionScreen> {
   @override
   void initState() {
     super.initState();
-    enrollments = enrollmentService.getEnrollments();
-  }
-
-  Color _getGradeColor(String? grade) {
-    if (grade == null) return Colors.grey;
-    final cleanGrade = grade.trim().toUpperCase();
-    const greenGrades = ['A+', 'A', 'A-', 'B+', 'B'];
-    const amberGrades = ['B-', 'C+', 'C', 'C-'];
-
-    if (greenGrades.contains(cleanGrade)) {
-      return Colors.green;
-    } else if (amberGrades.contains(cleanGrade)) {
-      return Colors.amber.shade700;
-    } else {
-      return Colors.red;
-    }
-  }
-
-  String _formatStatus(dynamic rawStatus) {
-    if (rawStatus == null) return 'N/A';
-    if (rawStatus is bool) {
-      return rawStatus ? 'Enrolled' : 'Not Enrolled';
-    }
-    final str = rawStatus.toString().toLowerCase();
-    if (str == 'true') return 'Enrolled';
-    if (str == 'false') return 'Not Enrolled';
-    return rawStatus.toString();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<CourseSectionProvider>().fetchCourseSections();
+    });
   }
 
   @override
@@ -52,7 +25,7 @@ class _EnrollmentScreenState extends State<EnrollmentScreen> {
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
         title: const Text(
-          'Enrollments Management',
+          'Course Sections',
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
         backgroundColor: Colors.indigo,
@@ -60,35 +33,34 @@ class _EnrollmentScreenState extends State<EnrollmentScreen> {
         centerTitle: true,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: FutureBuilder<List<dynamic>>(
-        future: enrollments,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+      body: Consumer<CourseSectionProvider>(
+        builder: (context, provider, child) {
+          if (provider.isLoading) {
             return const Center(
               child: CircularProgressIndicator(color: Colors.indigo),
             );
           }
 
-          if (snapshot.hasError) {
+          if (provider.error != null) {
             return Center(
               child: Text(
-                'Error: ${snapshot.error}',
+                'Error: ${provider.error}',
                 style: const TextStyle(color: Colors.redAccent),
               ),
             );
           }
 
-          final enrollmentsList = snapshot.data ?? [];
+          final sectionsList = provider.courseSections;
 
-          if (enrollmentsList.isEmpty) {
+          if (sectionsList.isEmpty) {
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.app_registration_rounded, size: 64, color: Colors.grey[400]),
+                  Icon(Icons.bookmark_add_outlined, size: 64, color: Colors.grey[400]),
                   const SizedBox(height: 16),
                   Text(
-                    'No Enrollments Found',
+                    'No Course Sections Found',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
@@ -102,12 +74,9 @@ class _EnrollmentScreenState extends State<EnrollmentScreen> {
 
           return ListView.builder(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            itemCount: enrollmentsList.length,
+            itemCount: sectionsList.length,
             itemBuilder: (context, index) {
-              final enrollment = enrollmentsList[index];
-              final gradeStr = enrollment['finalGrade']?.toString() ?? 'N/A';
-              final gradeColor = _getGradeColor(gradeStr);
-              final statusText = _formatStatus(enrollment['status']);
+              final section = sectionsList[index];
 
               return Container(
                 margin: const EdgeInsets.symmetric(vertical: 6),
@@ -132,7 +101,7 @@ class _EnrollmentScreenState extends State<EnrollmentScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => EnrollmentDetailsScreen(enrollment),
+                          builder: (context) => CourseSectionDetailsScreen(section),
                         ),
                       );
                     },
@@ -147,7 +116,7 @@ class _EnrollmentScreenState extends State<EnrollmentScreen> {
                               shape: BoxShape.circle,
                             ),
                             child: const Icon(
-                              Icons.bookmark_outlined,
+                              Icons.bookmark_add_outlined,
                               color: Colors.indigo,
                               size: 24,
                             ),
@@ -158,7 +127,7 @@ class _EnrollmentScreenState extends State<EnrollmentScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  enrollment['lastName']?.toString() ?? 'N/A',
+                                  'Course: ${section['course']?.toString() ?? 'N/A'}',
                                   style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
@@ -167,7 +136,7 @@ class _EnrollmentScreenState extends State<EnrollmentScreen> {
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  'Section: ${enrollment['sectionNumber']?.toString() ?? 'N/A'}',
+                                  'Semester: ${section['semester']?.toString() ?? 'N/A'}',
                                   style: TextStyle(
                                     fontSize: 13,
                                     color: Colors.grey[600],
@@ -182,35 +151,28 @@ class _EnrollmentScreenState extends State<EnrollmentScreen> {
                                         vertical: 2,
                                       ),
                                       decoration: BoxDecoration(
-                                        color: gradeColor.withOpacity(0.1),
+                                        color: Colors.indigo.withOpacity(0.08),
                                         borderRadius: BorderRadius.circular(6),
                                       ),
                                       child: Text(
-                                        'Grade: $gradeStr',
-                                        style: TextStyle(
-                                          color: gradeColor,
+                                        'Section: ${section['sectionNumber']?.toString() ?? 'N/A'}',
+                                        style: const TextStyle(
+                                          color: Colors.indigo,
                                           fontSize: 11,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                     ),
                                     const SizedBox(width: 8),
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 8,
-                                        vertical: 2,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: Colors.blue.withOpacity(0.08),
-                                        borderRadius: BorderRadius.circular(6),
-                                      ),
+                                    Expanded(
                                       child: Text(
-                                        'Status: $statusText',
-                                        style: const TextStyle(
-                                          color: Colors.blue,
+                                        '${section['timeSlot']?.toString() ?? 'N/A'} (${section['daysOfWeek']?.toString() ?? 'N/A'})',
+                                        style: TextStyle(
+                                          color: Colors.grey[600],
                                           fontSize: 11,
-                                          fontWeight: FontWeight.w600,
+                                          fontWeight: FontWeight.w500,
                                         ),
+                                        overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
                                   ],

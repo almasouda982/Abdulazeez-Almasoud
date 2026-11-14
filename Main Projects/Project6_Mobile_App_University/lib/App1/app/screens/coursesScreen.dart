@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:universitymobileapp/data/CourseService.dart';
+import '../../data/CourseService.dart';
 import 'detailScreens/courseDetailsScreen.dart';
 
 class CoursesScreen extends StatefulWidget {
