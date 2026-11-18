@@ -115,7 +115,6 @@ class CourseDetailsScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              // Manage course books action button
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.indigo,
@@ -146,7 +145,6 @@ class CourseDetailsScreen extends StatelessWidget {
 
               const SizedBox(height: 28),
 
-              // Books Section Header
               const Text(
                 'Assigned Books List',
                 style: TextStyle(

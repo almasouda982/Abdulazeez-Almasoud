@@ -20,7 +20,6 @@ namespace University.Controllers
             _bookService = bookService;
         }
 
-        // View stacked books for a specific course
         [HttpGet]
         public IActionResult Index(int courseId)
         {
